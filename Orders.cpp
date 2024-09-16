@@ -1,212 +1,113 @@
 #include "Orders.h"
 
-// Base class Order implementation
-Order::Order() : isExecuted(false), OrderDescription("Order is undefined"), OrderEffect("None") {}
-
-// Copy constructor and assignment operator for Order
-Order::Order(const Order& other)
-    : OrderDescription(other.OrderDescription),
-      OrderEffect(other.OrderEffect),
-      isExecuted(other.isExecuted) {}
-
-Order& Order::operator=(const Order& other) {
-    if (this != &other) {
-        OrderDescription = other.OrderDescription;
-        OrderEffect = other.OrderEffect;
-        isExecuted = other.isExecuted;
-    }
-    return *this;
+void DeployOrder::executeOrder() {
+    std::cout << "Deploy Order executed." << std::endl;
 }
 
-std::ostream& operator<<(std::ostream& out, const Order& order) {
-    out << "Order Description: " << order.OrderDescription;
-    if (order.isExecuted) {
-        out << " | Order Effect: " << order.OrderEffect;
-    }
+bool DeployOrder::validateOrder() {
+    return true;
+}
+
+std::ostream& DeployOrder::print(std::ostream &out) const {
+    out << "Deploy Order Description";
     return out;
 }
 
-// DeployOrder class implementation
-DeployOrder::DeployOrder() {
-    OrderDescription = "Deploy Order";
-}
-
-DeployOrder::~DeployOrder() {}
-
-bool DeployOrder::validateOrder() const {
-    return true; // Placeholder for actual validation
-}
-
-void DeployOrder::executeOrder() {
-    if (validateOrder()) {
-        isExecuted = true;
-        OrderEffect = "Armies have been deployed";
-    }
-}
-
-std::unique_ptr<Order> DeployOrder::clone() const {
-    return std::make_unique<DeployOrder>(*this);
-}
-
-// AdvanceOrder class implementation
-AdvanceOrder::AdvanceOrder() {
-    OrderDescription = "Advance Order";
-}
-
-AdvanceOrder::~AdvanceOrder() {}
-
-bool AdvanceOrder::validateOrder() const {
-    return true; // Placeholder for actual validation
-}
-
 void AdvanceOrder::executeOrder() {
-    if (validateOrder()) {
-        isExecuted = true;
-        OrderEffect = "Armies have advanced";
-    }
+    std::cout << "Advance Order executed." << std::endl;
 }
 
-std::unique_ptr<Order> AdvanceOrder::clone() const {
-    return std::make_unique<AdvanceOrder>(*this);
+bool AdvanceOrder::validateOrder() {
+    return true;
 }
 
-// BombOrder class implementation
-BombOrder::BombOrder() {
-    OrderDescription = "Bomb Order";
-}
-
-BombOrder::~BombOrder() {}
-
-bool BombOrder::validateOrder() const {
-    return true; // Placeholder for actual validation
+std::ostream& AdvanceOrder::print(std::ostream &out) const {
+    out << "Advance Order Description";
+    return out;
 }
 
 void BombOrder::executeOrder() {
-    if (validateOrder()) {
-        isExecuted = true;
-        OrderEffect = "Territory has been bombed";
-    }
+    std::cout << "Bomb Order executed." << std::endl;
 }
 
-std::unique_ptr<Order> BombOrder::clone() const {
-    return std::make_unique<BombOrder>(*this);
+bool BombOrder::validateOrder() {
+    return true;
 }
 
-// BlockadeOrder class implementation
-BlockadeOrder::BlockadeOrder() {
-    OrderDescription = "Blockade Order";
-}
-
-BlockadeOrder::~BlockadeOrder() {}
-
-bool BlockadeOrder::validateOrder() const {
-    return true; // Placeholder for actual validation
+std::ostream& BombOrder::print(std::ostream &out) const {
+    out << "Bomb Order Description";
+    return out;
 }
 
 void BlockadeOrder::executeOrder() {
-    if (validateOrder()) {
-        isExecuted = true;
-        OrderEffect = "Territory has been blockaded";
-    }
+    std::cout << "Blockade Order executed." << std::endl;
 }
 
-std::unique_ptr<Order> BlockadeOrder::clone() const {
-    return std::make_unique<BlockadeOrder>(*this);
+bool BlockadeOrder::validateOrder() {
+    return true;
 }
 
-// AirliftOrder class implementation
-AirliftOrder::AirliftOrder() {
-    OrderDescription = "Airlift Order";
-}
-
-AirliftOrder::~AirliftOrder() {}
-
-bool AirliftOrder::validateOrder() const {
-    return true; // Placeholder for actual validation
+std::ostream& BlockadeOrder::print(std::ostream &out) const {
+    out << "Blockade Order Description";
+    return out;
 }
 
 void AirliftOrder::executeOrder() {
-    if (validateOrder()) {
-        isExecuted = true;
-        OrderEffect = "Armies have been airlifted";
-    }
+    std::cout << "Airlift Order executed." << std::endl;
 }
 
-std::unique_ptr<Order> AirliftOrder::clone() const {
-    return std::make_unique<AirliftOrder>(*this);
+bool AirliftOrder::validateOrder() {
+    return true;
 }
 
-// NegotiateOrder class implementation
-NegotiateOrder::NegotiateOrder() {
-    OrderDescription = "Negotiate Order";
-}
-
-NegotiateOrder::~NegotiateOrder() {}
-
-bool NegotiateOrder::validateOrder() const {
-    return true; // Placeholder for actual validation
+std::ostream& AirliftOrder::print(std::ostream &out) const {
+    out << "Airlift Order Description";
+    return out;
 }
 
 void NegotiateOrder::executeOrder() {
-    if (validateOrder()) {
-        isExecuted = true;
-        OrderEffect = "A truce has been negotiated";
-    }
+    std::cout << "Negotiate Order executed." << std::endl;
 }
 
-std::unique_ptr<Order> NegotiateOrder::clone() const {
-    return std::make_unique<NegotiateOrder>(*this);
+bool NegotiateOrder::validateOrder() {
+    return true;
 }
 
-// OrdersList class implementation
-OrdersList::OrdersList() {}
-
-OrdersList::~OrdersList() {}
+std::ostream& NegotiateOrder::print(std::ostream &out) const {
+    out << "Negotiate Order Description";
+    return out;
+}
 
 void OrdersList::addOrder(std::unique_ptr<Order> order) {
     orders.push_back(std::move(order));
 }
 
-void OrdersList::moveOrder(int fromIndex, int toIndex) {
-    if (fromIndex >= 0 && fromIndex < orders.size() && toIndex >= 0 && toIndex < orders.size()) {
-        std::swap(orders[fromIndex], orders[toIndex]);
-    }
+std::unique_ptr<Order>& OrdersList::getOrder(size_t index) {
+    return orders[index];
 }
 
-void OrdersList::removeOrder(int index) {
-    if (index >= 0 && index < orders.size()) {
-        orders.erase(orders.begin() + index);
-    }
+void OrdersList::moveOrder(size_t from, size_t to) {
+    if (from >= orders.size() || to >= orders.size()) return;
+    auto order = std::move(orders[from]);
+    orders.erase(orders.begin() + from);
+    orders.insert(orders.begin() + to, std::move(order));
 }
 
-std::unique_ptr<Order> OrdersList::getOrder(int index) const {
-    if (index >= 0 && index < orders.size()) {
-        return orders[index]->clone();
-    }
-    return nullptr;
+void OrdersList::removeOrder(size_t index) {
+    if (index >= orders.size()) return;
+    orders.erase(orders.begin() + index);
 }
 
-std::ostream& operator<<(std::ostream& out, const OrdersList& ordersList) {
-    for (const auto& order : ordersList.orders) {
+std::ostream& operator<<(std::ostream &out, const OrdersList &list) {
+    for (const auto &order : list.orders) {
         out << *order << std::endl;
     }
     return out;
 }
 
-// Copy constructor for OrdersList
-OrdersList::OrdersList(const OrdersList& other) {
-    for (const auto& order : other.orders) {
-        orders.push_back(order->clone());
-    }
+
+std::ostream& operator<<(std::ostream &out, const Order &order) {
+    return order.print(out);
 }
 
-// Assignment operator for OrdersList
-OrdersList& OrdersList::operator=(const OrdersList& other) {
-    if (this != &other) {
-        orders.clear();
-        for (const auto& order : other.orders) {
-            orders.push_back(order->clone());
-        }
-    }
-    return *this;
-}
+

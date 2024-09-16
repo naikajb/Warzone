@@ -1,55 +1,62 @@
 #include "Orders.h"
 #include <iostream>
-#include <memory>
 
-void testOrdersLists() {
-    // Create an OrdersList instance
-    OrdersList ordersList;
+// Test function to demonstrate various scenarios
+void testOrdersList() {
+    OrdersList list;
+    
+    // Adding orders to the list
+    list.addOrder(std::make_unique<DeployOrder>());
+    list.addOrder(std::make_unique<AdvanceOrder>());
+    list.addOrder(std::make_unique<BombOrder>());
+    list.addOrder(std::make_unique<BlockadeOrder>());
+    list.addOrder(std::make_unique<AirliftOrder>());
+    list.addOrder(std::make_unique<NegotiateOrder>());
 
-    // Create instances of each order type and add them to the OrdersList
-    ordersList.addOrder(std::make_unique<DeployOrder>());
-    ordersList.addOrder(std::make_unique<AdvanceOrder>());
-    ordersList.addOrder(std::make_unique<BombOrder>());
-    ordersList.addOrder(std::make_unique<BlockadeOrder>());
-    ordersList.addOrder(std::make_unique<AirliftOrder>());
-    ordersList.addOrder(std::make_unique<NegotiateOrder>());
+    std::cout << "Initial OrdersList:\n" << list << std::endl;
 
-    // Print the initial state of the OrdersList
-    std::cout << "Initial OrdersList:" << std::endl;
-    std::cout << ordersList << std::endl;
-
-    // Validate and execute orders
-    std::cout << "Executing orders:" << std::endl;
+    std::cout << "Executing orders:\n";
     for (size_t i = 0; i < 6; ++i) {
-        // Get a copy of the order at index i
-        std::unique_ptr<Order> order = ordersList.getOrder(static_cast<int>(i));
-        
-        // Validate and execute the order
-        if (order) {
-            if (order->validateOrder()) {
-                order->executeOrder();
-                std::cout << *order << std::endl;
-            } else {
-                std::cout << "Order at index " << i << " is invalid and cannot be executed." << std::endl;
-            }
-        } else {
-            std::cout << "Order at index " << i << " does not exist." << std::endl;
-        }
+        list.getOrder(i)->executeOrder();
     }
+    std::cout << std::endl;
+
+    std::cout << "Before Validation:\n";
+    for (size_t i = 0; i < 6; ++i) {
+    std::cout << *list.getOrder(i) << std::endl;
+    }
+    std::cout << std::endl;
+
 
     // Move the second order to the last position
-    ordersList.moveOrder(1, 5);
-    std::cout << "After moving the second order to the last position:" << std::endl;
-    std::cout << ordersList << std::endl;
+    list.moveOrder(1, 5);
+
+    std::cout << "After moving the second order to the last position:\n" << list << std::endl;
 
     // Remove the first order
-    ordersList.removeOrder(0);
-    std::cout << "After removing the first order:" << std::endl;
-    std::cout << ordersList << std::endl;
+    list.removeOrder(0);
+
+    std::cout << "After removing the first order:\n" << list << std::endl;
+
+    // Demonstrate orders before execution and validation
+    std::cout << "Testing specific cases:\n";
+
+    std::cout << "Testing DeployOrder:\n";
+    auto deployOrder = std::make_unique<DeployOrder>();
+    std::cout << "Validating DeployOrder: " << deployOrder->validateOrder() << std::endl;
+    std::cout << "Executing DeployOrder:\n";
+    deployOrder->executeOrder();
+    std::cout << *deployOrder << std::endl;
+
+    std::cout << "Testing AdvanceOrder:\n";
+    auto advanceOrder = std::make_unique<AdvanceOrder>();
+    std::cout << "Validating AdvanceOrder: " << advanceOrder->validateOrder() << std::endl;
+    std::cout << "Executing AdvanceOrder:\n";
+    advanceOrder->executeOrder();
+    std::cout << *advanceOrder << std::endl;
 }
 
 int main() {
-    // Run the test function
-    testOrdersLists();
+    testOrdersList();
     return 0;
 }
