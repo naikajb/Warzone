@@ -3,16 +3,6 @@
 // Base class Order implementation
 Order::Order() : isExecuted(false), OrderDescription("Order is undefined"), OrderEffect("None") {}
 
-Order::~Order() {}
-
-std::ostream& operator<<(std::ostream& out, const Order& order) {
-    out << "Order Description: " << order.OrderDescription;
-    if (order.isExecuted) {
-        out << " | Order Effect: " << order.OrderEffect;
-    }
-    return out;
-}
-
 // Copy constructor and assignment operator for Order
 Order::Order(const Order& other)
     : OrderDescription(other.OrderDescription),
@@ -26,6 +16,14 @@ Order& Order::operator=(const Order& other) {
         isExecuted = other.isExecuted;
     }
     return *this;
+}
+
+std::ostream& operator<<(std::ostream& out, const Order& order) {
+    out << "Order Description: " << order.OrderDescription;
+    if (order.isExecuted) {
+        out << " | Order Effect: " << order.OrderEffect;
+    }
+    return out;
 }
 
 // DeployOrder class implementation
@@ -163,9 +161,7 @@ std::unique_ptr<Order> NegotiateOrder::clone() const {
 // OrdersList class implementation
 OrdersList::OrdersList() {}
 
-OrdersList::~OrdersList() {
-    // Unique pointers manage memory automatically
-}
+OrdersList::~OrdersList() {}
 
 void OrdersList::addOrder(std::unique_ptr<Order> order) {
     orders.push_back(std::move(order));
@@ -181,6 +177,13 @@ void OrdersList::removeOrder(int index) {
     if (index >= 0 && index < orders.size()) {
         orders.erase(orders.begin() + index);
     }
+}
+
+std::unique_ptr<Order> OrdersList::getOrder(int index) const {
+    if (index >= 0 && index < orders.size()) {
+        return orders[index]->clone();
+    }
+    return nullptr;
 }
 
 std::ostream& operator<<(std::ostream& out, const OrdersList& ordersList) {
