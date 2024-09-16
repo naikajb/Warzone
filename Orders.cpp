@@ -154,3 +154,18 @@ std::ostream& operator<<(std::ostream& out, const OrdersList& ordersList) {
     }
     return out;
 }
+
+std::ostream& operator<<(std::ostream& out, const Order& order){
+    out << "The order is: " << order.OrderDescription;
+    if(order.isExecuted){
+        out<< " | The effect is: " << order.OrderEffect;
+    }
+    return out;
+}
+
+std::ostream& operator<<(std::ostream& out, const OrdersList& ordersList) {
+    for (size_t i = 0; i < ordersList.orders.size(); ++i) {
+        out << *ordersList.orders[i] << std::endl;
+    }
+    return out;
+}
