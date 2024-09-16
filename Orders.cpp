@@ -46,7 +46,7 @@ bool AdvanceOrder::validateOrder() const{
 void AdvanceOrder::executeOrder(){
     if(validateOrder()){
         isExecuted = true;
-        OrderEffect = "Armies are advanced";
+        OrderEffect = "Armies have advanced";
     }
 }
 
@@ -64,8 +64,63 @@ bool BombOrder::validateOrder() const{
 void BombOrder::executeOrder(){
     if(validateOrder()){
         isExecuted = true;
-        OrderEffect = "Territory is bombed";
+        OrderEffect = "Territory has been bombed";
     }
 }
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+BlockadeOrder::BlockadeOrder(){
+    OrderDescription = "Blockade Order";
+}
+
+BlockadeOrder::~BlockadeOrder() {}
+
+bool BlockadeOrder::validateOrder() const{
+    return true;
+}
+
+void BlockadeOrder::executeOrder(){
+    if(validateOrder()){
+        isExecuted = true;
+        OrderEffect = "Territory has been blockaded";
+    }
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+AirliftOrder::AirliftOrder(){
+    OrderDescription = "Airlift Order";
+}
+
+AirliftOrder::~AirliftOrder() {}
+
+bool AirliftOrder::validateOrder() const{
+    return true;
+}
+
+void AirliftOrder::executeOrder(){
+    if(validateOrder()){
+        isExecuted = true;
+        OrderEffect = "Armies have been airlifted";
+    }
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+NegotiateOrder::NegotiateOrder(){
+    OrderDescription = "Negotiate Order";
+}
+
+NegotiateOrder::~NegotiateOrder() {}
+
+bool NegotiateOrder::validateOrder() const{
+    return true;
+}
+
+void NegotiateOrder::executeOrder(){
+    if(validateOrder()){
+        isExecuted = true;
+        OrderEffect = "A truce has been negotiated";
+    }
+}
+
 
 
