@@ -13,6 +13,9 @@ public:
     virtual bool validateOrder() const = 0; //pure virtual method for validation
     virtual void executeOrder() = 0; //pure virtual method for execution
 
+    // Clone method for copying orders
+    virtual std::unique_ptr<Order> clone() const = 0;
+
     friend std::ostream& operator<<(std::ostream& out, const Order& order);
 
 protected:
@@ -27,6 +30,8 @@ public:
     ~DeployOrder();
     bool validateOrder() const override;
     void executeOrder() override;
+    std::unique_ptr<Order> clone() const override;
+
 };
 
 class AdvanceOrder : public Order {
@@ -35,6 +40,8 @@ public:
     ~AdvanceOrder();
     bool validateOrder() const override;
     void executeOrder() override;
+    std::unique_ptr<Order> clone() const override;
+
 };
 
 class BombOrder : public Order {
@@ -43,6 +50,8 @@ public:
     ~BombOrder();
     bool validateOrder() const override;
     void executeOrder() override;
+    std::unique_ptr<Order> clone() const override;
+
 };
 
 class BlockadeOrder : public Order {
@@ -51,6 +60,8 @@ public:
     ~BlockadeOrder();
     bool validateOrder() const override;
     void executeOrder() override;
+    std::unique_ptr<Order> clone() const override;
+
 };
 
 class AirliftOrder : public Order {
@@ -59,6 +70,8 @@ public:
     ~AirliftOrder();
     bool validateOrder() const override;
     void executeOrder() override;
+    std::unique_ptr<Order> clone() const override;
+
 };
 
 class NegotiateOrder : public Order {
@@ -67,6 +80,8 @@ public:
     ~NegotiateOrder();
     bool validateOrder() const override;
     void executeOrder() override;
+    std::unique_ptr<Order> clone() const override;
+
 };
 
 class OrdersList {
