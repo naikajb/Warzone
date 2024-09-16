@@ -2,6 +2,7 @@
 #include <iostream>
 #include <vector>
 #include <algorithm>
+#include <memory>
 
 Order::Order() : isExecuted(false), OrderDescription("order is undefined"), OrderEffect("none") {}
 
@@ -122,5 +123,34 @@ void NegotiateOrder::executeOrder(){
     }
 }
 
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+//OrdersList Class Implementation
+OrdersList::OrdersList(){}
+OrdersList::~OrdersList(){
+    for(auto& order : orders){
 
+    }
+}
 
+void OrdersList::addOrder(std::unique_ptr<Order> order) {
+    orders.push_back(std::move(order));
+}
+
+void OrdersList::moveOrder(int fromIndex, int toIndex) {
+    if (fromIndex >= 0 && fromIndex < orders.size() && toIndex >= 0 && toIndex < orders.size()) {
+        std::swap(orders[fromIndex], orders[toIndex]);
+    }
+}
+
+void OrdersList::removeOrder(int index) {
+    if (index >= 0 && index < orders.size()) {
+        orders.erase(orders.begin() + index);
+    }
+}
+
+std::ostream& operator<<(std::ostream& out, const OrdersList& ordersList) {
+    for (size_t i = 0; i < ordersList.orders.size(); ++i) {
+        out << *ordersList.orders[i] << std::endl;
+    }
+    return out;
+}

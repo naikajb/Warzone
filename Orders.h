@@ -74,15 +74,15 @@ public:
     OrdersList();
     ~OrdersList();
 
-    void addOrder(Order* order); //add an order to the list
-    void moverOrder(int fromIndex, int toIndex); //move an order in the list
+    void addOrder(std::unique_ptr<Order> order); //add an order to the list
+    void moveOrder(int fromIndex, int toIndex); //move an order in the list
     void removeOrder(int index); //delete an order from the list
 
     //stream insertion operator to output the list of orders
     friend std::ostream& operator<<(std::ostream& out, const OrdersList& ordersList);
 
 private:
-    std::vector<Order*> orders; //list of orders
+    std::vector<std::unique_ptr<Order>> orders; //list of orders
 
 };
 
