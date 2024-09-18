@@ -1,6 +1,7 @@
 #include "Map.h"
 
 
+
 Territory::Territory(string name, int numArmies, int coordX, int coordY, string continent, vector<Territory*> adjTerritories): 
     name(new string(name)), 
     numArmies(new int(numArmies)),
@@ -45,23 +46,40 @@ vector<Territory*> Continent::getTerritories(){ return *territories; }
 
 void Continent::addTerritory(Territory* t){ territories->push_back(t);}
 
+Map::Map():
+    continents(new vector<Continent*>()),
+    territories(new vector<Territory*>())
+{}
 
+vector<Territory*> Map::getTerritories(){ return *territories; }
+vector<Continent*> Map::getContinents(){ return *continents; }
 
+void Map::addTerritory(Territory* t){
+    territories->push_back(t);
+}
 
+void Map::addContinent(Continent* c){
+    continents->push_back(c);
+}
 
-int main(){
+bool Map::territoryExists(Territory *t){
 
-    Continent* c = new Continent("Continent1",5);
+    for(Territory* t2: this->getTerritories()){
 
-    Territory* t = new Territory("Terr1");
-    Territory* t2 = new Territory("Terr2");
+        if((t->getName().compare(t2->getName()) == 0)){
+            return true;
+        }
+    }
+    return false;
+}
 
-    c->addTerritory(t);
-    c->addTerritory(t2);
+void Map::addTerrToCont(Territory *t){
 
+    for(Continent* c: this->getContinents()){
 
+        if(c->getName().compare(t->getContinent()) == 0){
 
-    std::cout << c->getTerritories().at(1)->getName() << std::endl;
-
-    return 0;
+            c->addTerritory(t);
+        }
+    }
 }

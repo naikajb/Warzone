@@ -1,7 +1,11 @@
+#ifndef MAP_H
+#define MAP_H
+
 #include <iostream>
 #include <string>
 #include <vector>
 #include <list>
+
 
 using std::string;
 using std::vector;
@@ -67,19 +71,24 @@ class Map {
 
     private:
 
+    vector<Territory*>* territories;
+    vector<Continent*>* continents;
 
     public:
 
-
-
     Map();
 
-    
+    vector<Territory*> getTerritories();
+    vector<Continent*> getContinents();
 
+    void addTerritory(Territory* t);
+    void addContinent(Continent* c);
 
+    bool territoryExists(Territory *t);
 
+    void addTerrToCont(Territory *t);
 };
 
-int main();
+#endif
 
 
