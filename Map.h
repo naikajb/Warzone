@@ -6,43 +6,33 @@
 #include <vector>
 #include <list>
 
-
 using std::string;
 using std::vector;
-
-
 
 class Territory {
 
     private:
 
-    string* name;
-    int* numArmies;
-    int* coordX;
-    int* coordY;
-    string* continent;
-    vector<Territory*>* adjTerritories;
-
+    string name;
+    int numArmies;
+    string continent;
+    vector<Territory*> adjTerritories;
 
     public:
 
-    Territory(string name, int numArmies, int coordX, int coordY, string continent, vector<Territory*> adjTerritories);
-    Territory(string name);
+    Territory(string name, string continent);
 
     //Territory(Territory t); copy constructor ??
 
     string getName();
     int getNumArmies();
-    int getCoordX();
-    int getCoordY();
     string getContinent();
     vector<Territory*> getAdjTerritories();
 
     void setNumArmies(int numArmies);
-    void setCoordX(int coordX);
-    void setCoordY(int coordY);
+
     void setContinent(string continent);
-    void setAdjTerritories(vector<Territory*> adjTerritories);
+    void addAdjTerritories(Territory* adjTerritory);
 
 };
 
@@ -50,9 +40,9 @@ class Continent {
 
     private:
 
-    string* name;
-    int* bonus;
-    vector<Territory*>* territories;
+    string name;
+    int bonus;
+    vector<Territory*> territories;
 
     public:
 
@@ -63,32 +53,26 @@ class Continent {
     vector<Territory*> getTerritories();
 
     void addTerritory(Territory* t);
-
-    
 };
 
 class Map {
 
     private:
 
-    vector<Territory*>* territories;
-    vector<Continent*>* continents;
+    string fileName;
+    vector<Territory*> territories;
+    vector<Continent*> continents;
 
     public:
 
-    Map();
+    Map(string fileName);
 
     vector<Territory*> getTerritories();
     vector<Continent*> getContinents();
 
     void addTerritory(Territory* t);
     void addContinent(Continent* c);
-
-    bool territoryExists(Territory *t);
-
-    void addTerrToCont(Territory *t);
 };
 
 #endif
-
 
