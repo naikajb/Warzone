@@ -2,74 +2,89 @@
 #define ORDERS_H
 
 #include <iostream>
-#include <memory>
 #include <vector>
+#include <string>
 
-// Base class
+// Base class Order
 class Order {
 public:
-    virtual ~Order() = default;  // Declare the destructor once
-    virtual void executeOrder() = 0;
-    virtual bool validateOrder() = 0;
-    virtual std::ostream& print(std::ostream &out) const = 0;
-    // Other methods and members
+    Order(); //default constructor
+    Order(const Order& origal); //copy constructor
+    virtual ~Order(); //destructor
+    virtual bool validateOrder() = 0;    // Pure virtual method for validation
+    virtual void executeOrder() = 0;     // Pure virtual method for execution
+    friend std::ostream& operator<<(std::ostream& outputStream, const Order& order); //overloaded stream insertion operator
+    Order& operator = (const Order& orginal); //assignment operator
+
+protected:
+    //private constant string members for the description and effect of the order
+    std::string orderDescription; 
+    std::string orderEffect;
+    bool executed; //track if the order is executed
 };
 
-std::ostream& operator<<(std::ostream &out, const Order &order);
-
-// Derived classes
-class DeployOrder : public Order {
+// Derived classes for each type of order
+class Deploy : public Order {
 public:
-    void executeOrder() override;
+    Deploy();
+    ~Deploy();
     bool validateOrder() override;
-    std::ostream& print(std::ostream &out) const override;
+    void executeOrder() override;
 };
 
-class AdvanceOrder : public Order {
+class Advance : public Order {
 public:
-    void executeOrder() override;
+    Advance();
+    ~Advance();
     bool validateOrder() override;
-    std::ostream& print(std::ostream &out) const override;
+    void executeOrder() override;
 };
 
-class BombOrder : public Order {
+class Bomb : public Order {
 public:
-    void executeOrder() override;
+    Bomb();
+    ~Bomb();
     bool validateOrder() override;
-    std::ostream& print(std::ostream &out) const override;
+    void executeOrder() override;
 };
 
-class BlockadeOrder : public Order {
+class Blockade : public Order {
 public:
-    void executeOrder() override;
+    Blockade();
+    ~Blockade();
     bool validateOrder() override;
-    std::ostream& print(std::ostream &out) const override;
+    void executeOrder() override;
 };
 
-class AirliftOrder : public Order {
+class Airlift : public Order {
 public:
-    void executeOrder() override;
+    Airlift();
+    ~Airlift();
     bool validateOrder() override;
-    std::ostream& print(std::ostream &out) const override;
+    void executeOrder() override;
 };
 
-class NegotiateOrder : public Order {
+class Negotiate : public Order {
 public:
-    void executeOrder() override;
+    Negotiate();
+    ~Negotiate();
     bool validateOrder() override;
-    std::ostream& print(std::ostream &out) const override;
+    void executeOrder() override;
 };
 
+// Class to manage a list of orders
 class OrdersList {
 public:
-    void addOrder(std::unique_ptr<Order> order);
-    std::unique_ptr<Order>& getOrder(size_t index);
-    void moveOrder(size_t from, size_t to);
-    void removeOrder(size_t index);
-    friend std::ostream& operator<<(std::ostream &out, const OrdersList &list);
+    OrdersList();
+    ~OrdersList();
+    
+    void addOrder(Order* order);
+    void move(int fromIndex, int toIndex);
+    void remove(int index);
+    friend std::ostream& operator<<(std::ostream& outputStream, const OrdersList& ordersList);
 
 private:
-    std::vector<std::unique_ptr<Order>> orders;
+    std::vector<Order*> orders;
 };
 
 #endif // ORDERS_H

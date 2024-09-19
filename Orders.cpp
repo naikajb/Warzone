@@ -1,113 +1,159 @@
 #include "Orders.h"
+#include <iostream>
+#include <algorithm>
 
-void DeployOrder::executeOrder() {
-    std::cout << "Deploy Order executed." << std::endl;
+// Base class order implementation
+Order::Order() : orderDescription("undefined"), orderEffect("none"), executed(false) {}
+
+//Destructor
+Order::~Order() {}
+
+//Assignment operator
+Order& Order::operator = (const Order& original){
+    if(this != &original){
+        this->orderDescription = original.orderDescription;
+        this->orderEffect = original.orderEffect;
+        this->executed = original.executed;
+    }
+    return *this;
 }
 
-bool DeployOrder::validateOrder() {
+//Overloaded stream isnertion operator
+std::ostream& operator<<(std::ostream& outputStream, const Order& order) {
+    outputStream << "The order: " << order.orderDescription;
+    if (order.executed) {
+        outputStream << " ~~~ The effect: " << order.orderEffect;
+    }
+    return outputStream;
+}
+
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// Deploy Order - derived class Deploy implementation
+Deploy::Deploy() {
+    orderDescription = "Deploy order - place armies on a territory";
+}
+Deploy::~Deploy() {}
+
+bool Deploy::validateOrder() {
     return true;
 }
 
-std::ostream& DeployOrder::print(std::ostream &out) const {
-    out << "Deploy Order Description";
-    return out;
+void Deploy::executeOrder() {
+    executed = true;
+    orderEffect = "Armies have been deployed.";
 }
 
-void AdvanceOrder::executeOrder() {
-    std::cout << "Advance Order executed." << std::endl;
-}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-bool AdvanceOrder::validateOrder() {
+// Advance Order
+Advance::Advance() {
+    orderDescription = "Advance Order - move armies to an adjacent territory";
+}
+Advance::~Advance() {}
+bool Advance::validateOrder() {
+    // Placeholder logic for validation
     return true;
 }
-
-std::ostream& AdvanceOrder::print(std::ostream &out) const {
-    out << "Advance Order Description";
-    return out;
+void Advance::executeOrder() {
+    executed = true;
+    orderEffect = "Armies have advanced.";
 }
 
-void BombOrder::executeOrder() {
-    std::cout << "Bomb Order executed." << std::endl;
-}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-bool BombOrder::validateOrder() {
+// Bomb Order
+Bomb::Bomb() {
+    orderDescription = "Bomb Order - bomb a territory to weaken its defense";
+}
+Bomb::~Bomb() {}
+bool Bomb::validateOrder() {
+    // Placeholder logic for validation
     return true;
 }
-
-std::ostream& BombOrder::print(std::ostream &out) const {
-    out << "Bomb Order Description";
-    return out;
+void Bomb::executeOrder() {
+    executed = true;
+    orderEffect = "Territory has been bombed.";
 }
 
-void BlockadeOrder::executeOrder() {
-    std::cout << "Blockade Order executed." << std::endl;
-}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-bool BlockadeOrder::validateOrder() {
+// Blockade Order
+Blockade::Blockade() {
+    orderDescription = "Blockade Order - blockade a territory to prevent movement";
+}
+Blockade::~Blockade() {}
+bool Blockade::validateOrder() {
+    // Placeholder logic for validation
     return true;
 }
-
-std::ostream& BlockadeOrder::print(std::ostream &out) const {
-    out << "Blockade Order Description";
-    return out;
+void Blockade::executeOrder() {
+    executed = true;
+    orderEffect = "Territory has been blockaded.";
 }
 
-void AirliftOrder::executeOrder() {
-    std::cout << "Airlift Order executed." << std::endl;
-}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-bool AirliftOrder::validateOrder() {
+// Airlift Order
+Airlift::Airlift() {
+    orderDescription = "Airlift Order - move armies from one territory to another by air";
+}
+Airlift::~Airlift() {}
+bool Airlift::validateOrder() {
+    // Placeholder logic for validation
     return true;
 }
-
-std::ostream& AirliftOrder::print(std::ostream &out) const {
-    out << "Airlift Order Description";
-    return out;
+void Airlift::executeOrder() {
+    executed = true;
+    orderEffect = "Armies have been airlifted";
 }
 
-void NegotiateOrder::executeOrder() {
-    std::cout << "Negotiate Order executed." << std::endl;
-}
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-bool NegotiateOrder::validateOrder() {
+// Negotiate Order
+Negotiate::Negotiate() {
+    orderDescription = "Negotiate Order - negotiate a truce with another player";
+}
+Negotiate::~Negotiate() {}
+bool Negotiate::validateOrder() {
+    // Placeholder logic for validation
     return true;
 }
-
-std::ostream& NegotiateOrder::print(std::ostream &out) const {
-    out << "Negotiate Order Description";
-    return out;
+void Negotiate::executeOrder() {
+    executed = true;
+    orderEffect = "Truce has been negotiated.";
 }
 
-void OrdersList::addOrder(std::unique_ptr<Order> order) {
-    orders.push_back(std::move(order));
+//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
+// OrdersList class implementation
+OrdersList::OrdersList() {}
+OrdersList::~OrdersList() {
+    for (Order* order : orders) {
+        delete order;
+    }
 }
 
-std::unique_ptr<Order>& OrdersList::getOrder(size_t index) {
-    return orders[index];
+void OrdersList::addOrder(Order* order) {
+    orders.push_back(order);
 }
 
-void OrdersList::moveOrder(size_t from, size_t to) {
-    if (from >= orders.size() || to >= orders.size()) return;
-    auto order = std::move(orders[from]);
-    orders.erase(orders.begin() + from);
-    orders.insert(orders.begin() + to, std::move(order));
+void OrdersList::move(int fromIndex, int toIndex) {
+    if (fromIndex >= 0 && fromIndex < orders.size() && toIndex >= 0 && toIndex < orders.size()) {
+        std::swap(orders[fromIndex], orders[toIndex]);
+    }
 }
 
-void OrdersList::removeOrder(size_t index) {
-    if (index >= orders.size()) return;
-    orders.erase(orders.begin() + index);
+void OrdersList::remove(int index) {
+    if (index >= 0 && index < orders.size()) {
+        delete orders[index];
+        orders.erase(orders.begin() + index);
+    }
 }
 
-std::ostream& operator<<(std::ostream &out, const OrdersList &list) {
-    for (const auto &order : list.orders) {
-        out << *order << std::endl;
+std::ostream& operator<<(std::ostream& out, const OrdersList& ordersList) {
+    for (size_t i = 0; i < ordersList.orders.size(); ++i) {
+        out << *ordersList.orders[i] << std::endl;
     }
     return out;
 }
-
-
-std::ostream& operator<<(std::ostream &out, const Order &order) {
-    return order.print(out);
-}
-
-
