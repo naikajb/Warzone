@@ -4,10 +4,12 @@
 #include <iostream>
 #include <string>
 #include <vector>
-#include <list>
+#include <sstream>
+#include <fstream>
 
 using std::string;
 using std::vector;
+using std::ostream;
 
 class Territory {
 
@@ -22,7 +24,11 @@ class Territory {
 
     Territory(string name, string continent);
 
-    //Territory(Territory t); copy constructor ??
+    Territory(Territory& t);
+
+    Territory& operator=(Territory& o);
+
+    friend ostream& operator<<(ostream& out, Territory& o);
 
     string getName();
     int getNumArmies();
@@ -48,6 +54,12 @@ class Continent {
 
     Continent(string name, int bonus);
 
+    Continent(Continent&);
+
+    Continent& operator=(Continent& o);
+
+    friend ostream& operator<<(ostream& out, Continent& o);
+
     string getName();
     int getBonus();
     vector<Territory*> getTerritories();
@@ -67,11 +79,45 @@ class Map {
 
     Map(string fileName);
 
+    Map(Map&);
+
+    Map& operator=(Map& o);
+
+    friend ostream& operator<<(ostream& out, Map& o);
+
+    string getFileName();
     vector<Territory*> getTerritories();
     vector<Continent*> getContinents();
 
     void addTerritory(Territory* t);
     void addContinent(Continent* c);
+};
+
+class MapLoader {
+
+    private:
+
+    Map* map;
+    string fileName;
+
+    public:
+    
+    MapLoader(string fileName);
+
+    MapLoader(MapLoader&);
+
+    MapLoader& operator=(MapLoader& o);
+
+    friend ostream& operator<<(ostream& out, MapLoader& o);
+
+    string getFileName();
+
+    vector<string> splitString(string line, char splitter);
+
+    Map* loadMap(string fileName);
+
+    Map* getMap();
+   
 };
 
 #endif
