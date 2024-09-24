@@ -61,6 +61,22 @@
         "chrono": "cpp",
         "compare": "cpp",
         "concepts": "cpp",
-        "algorithm": "cpp"
+        "algorithm": "cpp",
+        "*.tcc": "cpp",
+        "charconv": "cpp",
+        "deque": "cpp",
+        "list": "cpp",
+        "set": "cpp",
+        "functional": "cpp",
+        "iterator": "cpp",
+        "memory_resource": "cpp",
+        "numeric": "cpp",
+        "random": "cpp",
+        "utility": "cpp",
+        "format": "cpp",
+        "fstream": "cpp",
+        "numbers": "cpp",
+        "span": "cpp",
+        "text_encoding": "cpp"
     }
 }

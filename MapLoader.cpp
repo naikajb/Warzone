@@ -14,9 +14,10 @@ vector<string> splitString(string line, char splitter)
     }
     return returnedVector;
 }
-
+// createMap() definition
 Map *createMap(string fileName)
-{ // createMap() definition
+{
+    std::cout << fileName << std::endl; // debug
 
     bool firstRead = true;
 
@@ -35,12 +36,18 @@ Map *createMap(string fileName)
 
         while (getline(file, line))
         {
-
-            if (line.length() > 1)
-            {
-
-                line.erase(line.size() - 1);
+            if (firstRead == false){
+            std::cout<<line<<std::endl;
+            std::cout<<"found"<<std::endl;
             }
+            // std::cout<<state<<std::endl;
+            // std::cout<<firstRead<<std::endl;
+
+            // if (line.length() > 1)
+            // {
+
+            //     line.erase(line.size() - 1);
+            // }
 
             if (line[0] == '[' && line[1] == 'C')
             {
@@ -57,7 +64,7 @@ Map *createMap(string fileName)
             if (state == 1 && firstRead)
             {
 
-                if (line.length() == 1)
+                if (line.length() == 0) // changed it from 1 to 0 because it was not reading after finishing Continents
                 {
                     continue;
                 }
@@ -67,10 +74,20 @@ Map *createMap(string fileName)
                 Continent *c = new Continent(v[0], std::stoi(v[1]));
 
                 map->addContinent(c);
+
+                // for (Continent* cc:map->getContinents()){
+                // std::cout << cc->getName() <<  std::endl;
+                // std::cout << cc->getBonus() <<  std::endl;
+                // } debug
             }
 
             if (state == 2 && firstRead)
             {
+                if (line.length() == 0)
+                {
+                    std::cout<<"skip"<<std::endl;
+                    continue;
+                }
 
                 vector<string> v = splitString(line, ',');
 
@@ -83,6 +100,13 @@ Map *createMap(string fileName)
 
                         map->addTerritory(t);
                         c->addTerritory(t);
+
+                        // for (Territory *tt : map->getTerritories())
+                        // {
+                        //     std::cout << tt->getName() << std::endl;}
+                        // } debug
+
+                        // std::cout<< c->getTerritories()[0]->getName() <<std::endl; debug
                     }
                 }
             }
@@ -148,11 +172,12 @@ bool DFS(Map *map)
     return (visited.size() == map->getTerritories().size());
 }
 
-Map* testLoadMaps()
+Map *testLoadMaps()
 {
 
     Map *map = createMap("USA.txt");
     // Map* map = createMap("Annys World.txt");
+    std::cout << "hiiii";
 
     if (DFS(map))
     {
@@ -165,21 +190,24 @@ Map* testLoadMaps()
         std::cout << "The map is NOT a connected Graph (Verification 1)." << std::endl;
     }
 
+    std::cout << "hi3";
 
     return map;
-
 }
 
 int main()
 {
+    std::cout << "Hello" << std::endl;
 
-    Map* map = testLoadMaps();
-    for (Continent* i:map->getContinents()){
+    Map *map = testLoadMaps();
+    for (Continent *i : map->getContinents())
+    {
         std::cout << i->getName() << std::endl;
     }
     std::cout << "" << std::endl;
 
-    for (Territory* i:map->getTerritories()){
+    for (Territory *i : map->getTerritories())
+    {
         std::cout << i->getName() << std::endl;
     }
 
