@@ -47,7 +47,7 @@ void testOrdersLists() {
 }
 
 // Main function to run the test
-int main() {
+int main_OrdersDriver() {
     testOrdersLists(); //Call the function to test OrdersList functionality
     return 0;
 }
