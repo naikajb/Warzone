@@ -39,7 +39,7 @@ Map *createMap(string fileName)
 
         while (getline(file, line))
         {
-  
+
             // std::cout<<state<<std::endl; debug
             // std::cout<<firstRead<<std::endl; debug
 
@@ -174,9 +174,11 @@ bool DFS(Map *map)
     return (visited.size() == map->getTerritories().size());
 }
 
-Map *testLoadMaps()
+Map *testLoadMaps() // changed the return statement to map pointer
 {
-    Map *map = createMap("USA.txt");
+    // Map *map = createMap("MapTextFiles/UK.map");
+    Map *map = createMap("MapTextFiles/South America.map");
+    // Map *map = createMap("MapTextFiles/USA.map");
     // Map* map = createMap("Annys World.txt");
 
     if (DFS(map))
@@ -196,21 +198,42 @@ Map *testLoadMaps()
 int main()
 {
 
-
-    Map *map = testLoadMaps();    
-    std::cout << "these are the continents" << std::endl;
+    Map *map = testLoadMaps();
+    // std::cout << "\nthese are the continents" << std::endl;
     for (Continent *i : map->getContinents())
     {
-        std::cout << i->getName() << std::endl;
+        std::cout << "\nCountry: " << i->getName() << std::endl;
+
+        std::cout << "\nthese are the territories of the continent: " << i->getName() << std::endl;
+
+        for (Territory *t : i->getTerritories())
+        {
+            std::cout << t->getName() << std::endl;
+        }
     }
-    std::cout << "\nthese are the territories" << std::endl;
+    std::cout << "\nthese are the territories: " << std::endl;
 
     for (Territory *i : map->getTerritories())
     {
-        std::cout << i->getName() << std::endl;
+        std::cout << "\nTerritory: " << i->getName() << std::endl;
+
+        cout << "\nthese are the adjacent territories to the territory: " << i->getName() << endl;
+
+        for (Territory *ii : i->getAdjTerritories())
+        {
+            std::cout << ii->getName() << std::endl;
+        }
     }
 
     return 0;
 }
 
 // g++ -std=c++11 MapLoader.cpp Map.cpp
+
+// THINGS TO BE ADDED:
+
+// - comments to every line
+// - test out for the max nb of territories that any territory can connect to (in the map file pdf)
+// - test out for the max nb of territories a map can have (in the map file pdf)
+// - test out for the max nb of continents a map can have (in the map file pdf)
+// - add the validate() method to the map.cpp and map.h (in the assign 1 pdf)
