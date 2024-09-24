@@ -137,6 +137,35 @@ Map *createMap(string fileName)
         firstRead = false;
         file.clear();
     }
+    // added code
+    if (map->getContinents().size() > 32)
+    {
+        cout << "Unacceptable map ! It has " << map->getContinents().size() << " continents which is bigger than 32. Try Another map!" << endl;
+        return NULL;
+    }
+
+    if (map->getTerritories().size() > 255)
+    {
+        cout << "Unacceptable map ! It has " << map->getTerritories().size() << " territories which is bigger than 255. Try Another map!" << endl;
+        return NULL;
+    }
+
+    for (Territory *tt : map->getTerritories())
+    {
+        bool acceptable = true;
+        for (Territory *ii : tt->getAdjTerritories())
+        {
+            if (ii->getAdjTerritories().size() > 10)
+                cout << "Unacceptable map ! It has " << ii->getAdjTerritories().size() << " adjacent territories to " << ii->getName() << " which is bigger than 10. Try Another map!" << endl;
+            acceptable = false;
+            break;
+        }
+        if (acceptable == false)
+        {
+            break;
+            return NULL;
+        }
+    }
     return map;
 }
 
@@ -199,6 +228,20 @@ int main()
 {
 
     Map *map = testLoadMaps();
+
+    cout << "Number of Continents: " << map->getContinents().size() << endl;
+    cout << "Number of Territories: " << map->getTerritories().size() << endl;
+    cout << "\n"
+         << endl;
+
+    for (Territory *tt : map->getTerritories())
+    {
+        for (Territory *ii : tt->getAdjTerritories())
+        {
+            cout << "Number of Adjacent Territories to " << ii->getName() << " : " << ii->getAdjTerritories().size() << endl;
+        }
+    }
+
     // std::cout << "\nthese are the continents" << std::endl;
     for (Continent *i : map->getContinents())
     {
@@ -232,8 +275,5 @@ int main()
 
 // THINGS TO BE ADDED:
 
-// - comments to every line
-// - test out for the max nb of territories that any territory can connect to (in the map file pdf)
-// - test out for the max nb of territories a map can have (in the map file pdf)
-// - test out for the max nb of continents a map can have (in the map file pdf)
+// - comments for MapLoader.cpp and MapLoader.h
 // - add the validate() method to the map.cpp and map.h (in the assign 1 pdf)

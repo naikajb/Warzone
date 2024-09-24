@@ -1,6 +1,6 @@
 #include "Map.h" // import Map.h header file
 
-class Continent;
+class Continent; // class Continent call for the Territory class
 
 // defines the Territory constructor with an initilizer list
 Territory::Territory(string name, Continent* continent): 
@@ -57,4 +57,8 @@ void Map::addTerritory(Territory* t){ // addTerritory definition
 
 void Map::addContinent(Continent* c){ // addContinent definition
     continents.push_back(c);
+}
+
+void validate(){ // validate() definition
+
 }

@@ -9,7 +9,7 @@
 using std::string; // class template add features support strings
 using std::vector; // class template that contains vector container and its member functions
 
-class Continent;
+class Continent; // class Continent call for the Territory class
 
 class Territory // creation of Territory class
 {
@@ -78,6 +78,8 @@ public: // access identifier
 
     void addTerritory(Territory *t); // Add pointer of type Territory in vector
     void addContinent(Continent *c); // Add pointer of type Continent in vector
+
+    void validate(); // checks if the Map Object is a connected graph, Continents are connected subgraphs and each Country belongs to one and only one Continent
 };
 
 #endif // end of if not defined statement MAP_H
