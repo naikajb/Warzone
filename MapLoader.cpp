@@ -1,4 +1,7 @@
 #include "MapLoader.h"
+#include <iostream> // import library that provides objects which can read user input and output data to the console or to a file
+using std::cout;
+using std::endl;
 
 vector<string> splitString(string line, char splitter)
 { // splitString free function definition where splitter is the char delimiter
@@ -17,7 +20,7 @@ vector<string> splitString(string line, char splitter)
 // createMap() definition
 Map *createMap(string fileName)
 {
-    std::cout << fileName << std::endl; // debug
+    // std::cout << fileName << std::endl; // debug
 
     bool firstRead = true;
 
@@ -36,14 +39,11 @@ Map *createMap(string fileName)
 
         while (getline(file, line))
         {
-            if (firstRead == false){
-            std::cout<<line<<std::endl;
-            std::cout<<"found"<<std::endl;
-            }
-            // std::cout<<state<<std::endl;
-            // std::cout<<firstRead<<std::endl;
+  
+            // std::cout<<state<<std::endl; debug
+            // std::cout<<firstRead<<std::endl; debug
 
-            // if (line.length() > 1)
+            // if (line.length() > 1) // this caused issues so that it would stop after the first continent
             // {
 
             //     line.erase(line.size() - 1);
@@ -85,7 +85,6 @@ Map *createMap(string fileName)
             {
                 if (line.length() == 0)
                 {
-                    std::cout<<"skip"<<std::endl;
                     continue;
                 }
 
@@ -112,7 +111,10 @@ Map *createMap(string fileName)
             }
             else if (state == 2)
             {
-
+                if (line.length() == 0) // added this code
+                {
+                    continue;
+                }
                 vector<string> v = splitString(line, ',');
 
                 for (int j = 0; j < v.size() - 4; j++)
@@ -174,10 +176,8 @@ bool DFS(Map *map)
 
 Map *testLoadMaps()
 {
-
     Map *map = createMap("USA.txt");
     // Map* map = createMap("Annys World.txt");
-    std::cout << "hiiii";
 
     if (DFS(map))
     {
@@ -190,21 +190,20 @@ Map *testLoadMaps()
         std::cout << "The map is NOT a connected Graph (Verification 1)." << std::endl;
     }
 
-    std::cout << "hi3";
-
     return map;
 }
 
 int main()
 {
-    std::cout << "Hello" << std::endl;
 
-    Map *map = testLoadMaps();
+
+    Map *map = testLoadMaps();    
+    std::cout << "these are the continents" << std::endl;
     for (Continent *i : map->getContinents())
     {
         std::cout << i->getName() << std::endl;
     }
-    std::cout << "" << std::endl;
+    std::cout << "\nthese are the territories" << std::endl;
 
     for (Territory *i : map->getTerritories())
     {
