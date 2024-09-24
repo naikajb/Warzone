@@ -56,7 +56,7 @@ public: // access identifier
     Continent(string name, int bonus);
 
     // Continent copy constructor declaration
-    Continent(const Continent&);
+    Continent(const Continent& c);
 
     Continent& operator=(Continent& o);
 
@@ -82,7 +82,7 @@ public: // access identifier
     Map(string fileName);
 
     // Map copy constructor declaration
-    Map(const Map&);
+    Map(const Map& m);
 
     Map& operator=(Map& o);
 
@@ -106,30 +106,10 @@ class MapLoader {
     string fileName;
 
     public:
-
-    Map(string fileName);
-
-    vector<Territory*> getTerritories();
-    vector<Continent*> getContinents();
-
-    void addTerritory(Territory *t); // Add pointer of type Territory in vector
-    void addContinent(Continent *c); // Add pointer of type Continent in vector
-
-    void validate(); // checks if the Map Object is a connected graph, Continents are connected subgraphs and each Country belongs to one and only one Continent
-};
-
-class MapLoader {
-
-    private:
-
-    Map* map;
-    string fileName;
-
-    public:
     
     MapLoader(string fileName);
 
-    MapLoader(MapLoader&);
+    MapLoader(MapLoader &ml);
 
     MapLoader& operator=(MapLoader& o);
 

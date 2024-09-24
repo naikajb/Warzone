@@ -206,8 +206,8 @@ bool DFS(Map *map)
 Map *testLoadMaps() // changed the return statement to map pointer
 {
     // Map *map = createMap("MapTextFiles/UK.map");
-    Map *map = createMap("MapTextFiles/South America.map");
-    // Map *map = createMap("MapTextFiles/USA.map");
+    // Map *map = createMap("MapTextFiles/South America.map");
+    Map *map = createMap("MapTextFiles/USA.map");
     // Map* map = createMap("Annys World.txt");
 
     if (DFS(map))
