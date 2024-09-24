@@ -9,7 +9,7 @@
 class Order {
 public:
     Order(); //default constructor
-    Order(const Order& origal); //copy constructor
+    Order(const Order& original); //copy constructor
     virtual ~Order(); //destructor to ensure proper cleanup in derived classes
 
     //A pure virtual method --> function in a base class that has no implementation and 
