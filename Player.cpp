@@ -11,7 +11,7 @@
 using namespace std;
 
 Player::Player() {
-    orders = new OrderList(); 
+    orders = new OrdersList(); 
 }
 
 Player :: Player(const Player& orig){
@@ -22,12 +22,12 @@ Player :: Player(const Player& orig){
     }
 
     //copy every card from the original player to the new player
-    for (Cards* card: orig.hand){
+    for (Card* card: orig.hand){
         this->hand.push_back(card);
     }
 
     //copy every order from the original player to the new player
-    orders = new OrderList(*orig.orders);
+    orders = new OrdersList(*orig.orders);
 }
 
 // Player destructor

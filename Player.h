@@ -10,8 +10,8 @@ class Player{
     private: 
 
         std::vector<Territory*> territories; // collection of Territory objects
-        std::vector<Cards*> hand; // hand of Card objects
-        OrderList* orders; // list of Order objects
+        std::vector<Card*> hand; // hand of Card objects
+        OrdersList* orders; // list of Order objects
 
     public: 
         Player();
@@ -27,8 +27,8 @@ class Player{
         
         void issueOrder(Order* order);  //adds order to player's list of orders
         
-        void addCard(Cards* card);  //adds card to player's hand
-        void removeCard(Cards* card);  //removes card from player's hand
+        void addCard(Card* card);  //adds card to player's hand
+        void removeCard(Card* card);  //removes card from player's hand
         
         void printPlayer();  //prints player's information
         void printTerritories();  //prints player's territories
