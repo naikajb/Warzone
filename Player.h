@@ -1,4 +1,8 @@
+#ifndef PLAYER_H
+#define PLAYER_H
+
 #include <iostream> 
+#include <string>
 #include <vector> 
 #include "Territory.h"
 #include "Orders.h"
@@ -8,13 +12,13 @@
 class Player{
 
     private: 
-
+        std::string playerName; // name of the player
         std::vector<Territory*> territories; // collection of Territory objects
-        std::vector<Card*> hand; // hand of Card objects
+        Hand* hand; // hand of Card objects
         OrdersList* orders; // list of Order objects
 
     public: 
-        Player();
+        Player(string playerName); //constructor function
         Player(const Player& orig);
         ~Player(); //destructor function 
     
@@ -34,7 +38,8 @@ class Player{
         void printTerritories();  //prints player's territories
         void printOrders();  //prints player's orders
 
-        // Driver names testPlayers() method to test the Player class
-        void testPlayers();
+        std::string getPlayerName();  //returns player's name
         
 };
+
+#endif // PLAYER_H
