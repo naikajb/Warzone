@@ -3,6 +3,7 @@
 using std::cout;
 using std::endl;
 
+
 vector<string> splitString(string line, char splitter)
 { // splitString free function definition where splitter is the char delimiter
 
@@ -224,52 +225,52 @@ Map *testLoadMaps() // changed the return statement to map pointer
     return map;
 }
 
-int main()
-{
+// int main()
+// {
 
-    Map *map = testLoadMaps();
+//     Map *map = testLoadMaps();
 
-    cout << "Number of Continents: " << map->getContinents().size() << endl;
-    cout << "Number of Territories: " << map->getTerritories().size() << endl;
-    cout << "\n"
-         << endl;
+//     cout << "Number of Continents: " << map->getContinents().size() << endl;
+//     cout << "Number of Territories: " << map->getTerritories().size() << endl;
+//     cout << "\n"
+//          << endl;
 
-    for (Territory *tt : map->getTerritories())
-    {
-        for (Territory *ii : tt->getAdjTerritories())
-        {
-            cout << "Number of Adjacent Territories to " << ii->getName() << " : " << ii->getAdjTerritories().size() << endl;
-        }
-    }
+//     for (Territory *tt : map->getTerritories())
+//     {
+//         for (Territory *ii : tt->getAdjTerritories())
+//         {
+//             cout << "Number of Adjacent Territories to " << ii->getName() << " : " << ii->getAdjTerritories().size() << endl;
+//         }
+//     }
 
-    // std::cout << "\nthese are the continents" << std::endl;
-    for (Continent *i : map->getContinents())
-    {
-        std::cout << "\nCountry: " << i->getName() << std::endl;
+//     // std::cout << "\nthese are the continents" << std::endl;
+//     for (Continent *i : map->getContinents())
+//     {
+//         std::cout << "\nCountry: " << i->getName() << std::endl;
 
-        std::cout << "\nthese are the territories of the continent: " << i->getName() << std::endl;
+//         std::cout << "\nthese are the territories of the continent: " << i->getName() << std::endl;
 
-        for (Territory *t : i->getTerritories())
-        {
-            std::cout << t->getName() << std::endl;
-        }
-    }
-    std::cout << "\nthese are the territories: " << std::endl;
+//         for (Territory *t : i->getTerritories())
+//         {
+//             std::cout << t->getName() << std::endl;
+//         }
+//     }
+//     std::cout << "\nthese are the territories: " << std::endl;
 
-    for (Territory *i : map->getTerritories())
-    {
-        std::cout << "\nTerritory: " << i->getName() << std::endl;
+//     for (Territory *i : map->getTerritories())
+//     {
+//         std::cout << "\nTerritory: " << i->getName() << std::endl;
 
-        cout << "\nthese are the adjacent territories to the territory: " << i->getName() << endl;
+//         cout << "\nthese are the adjacent territories to the territory: " << i->getName() << endl;
 
-        for (Territory *ii : i->getAdjTerritories())
-        {
-            std::cout << ii->getName() << std::endl;
-        }
-    }
+//         for (Territory *ii : i->getAdjTerritories())
+//         {
+//             std::cout << ii->getName() << std::endl;
+//         }
+//     }
 
-    return 0;
-}
+//     return 0;
+// }
 
 // g++ -std=c++11 MapLoader.cpp Map.cpp
 

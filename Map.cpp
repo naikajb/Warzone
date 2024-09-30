@@ -144,7 +144,7 @@ void Map::addContinent(Continent *c)
 }
 
 MapLoader::MapLoader(string fileName) : fileName(fileName),
-                                        map(loadMap(fileName))
+                                        map(loadMap(fileName)) // as soon as you create a map loader and creates a map by using the loadmap function
 {
 }
 
@@ -176,7 +176,6 @@ Map *MapLoader::getMap() { return map; }
 
 Map *MapLoader::loadMap(string fileName)
 {
-
     bool firstRead = true;
 
     Map *map = new Map(fileName);
@@ -195,11 +194,12 @@ Map *MapLoader::loadMap(string fileName)
         while (getline(file, line))
         {
 
-            if (line.length() > 1)
-            {
+            // cout << line << endl;
+            // if (line.length() > 1) // creates issues here
+            // {
 
-                line.erase(line.size() - 1);
-            }
+            //     line.erase(line.size() - 1);
+            // }
 
             if (line[0] == '[' && line[1] == 'C')
             {
@@ -215,8 +215,7 @@ Map *MapLoader::loadMap(string fileName)
 
             if (state == 1 && firstRead)
             {
-
-                if (line.length() == 1)
+                if (line.length() == 0)
                 {
                     continue;
                 }
@@ -226,10 +225,19 @@ Map *MapLoader::loadMap(string fileName)
                 Continent *c = new Continent(v[0], std::stoi(v[1]));
 
                 map->addContinent(c);
+                // for (Continent *cc : map->getContinents())
+                // {
+                //     std::cout << cc->getName() << std::endl;
+                //     std::cout << cc->getBonus() << std::endl;
+                // }
             }
 
             if (state == 2 && firstRead)
             {
+                if (line.length() == 0)
+                {
+                    continue;
+                }
 
                 vector<string> v = splitString(line, ',');
 
@@ -241,11 +249,22 @@ Map *MapLoader::loadMap(string fileName)
                         Territory *t = new Territory(v[0], c);
                         map->addTerritory(t);
                         c->addTerritory(t);
+
+                        // for (Territory *tt : map->getTerritories())
+                        // {
+                        //     std::cout << tt->getName() << std::endl;
+                        // } //debug
+                        // std::cout << c->getTerritories()[0]->getName() << std::endl;
+                        // //debug
                     }
                 }
             }
             else if (state == 2)
             {
+                if (line.length() == 0) // added this code
+                {
+                    continue;
+                }
 
                 vector<string> v = splitString(line, ',');
 
@@ -268,7 +287,37 @@ Map *MapLoader::loadMap(string fileName)
         }
         firstRead = false;
         file.clear();
+        // added code
+        if (map->getContinents().size() > 32)
+        {
+            cout << "Unacceptable map ! It has " << map->getContinents().size() << " continents which is bigger than 32. Try Another map!" << endl;
+            return NULL;
+        }
+
+        if (map->getTerritories().size() > 255)
+        {
+            cout << "Unacceptable map ! It has " << map->getTerritories().size() << " territories which is bigger than 255. Try Another map!" << endl;
+            return NULL;
+        }
+
+        for (Territory *tt : map->getTerritories())
+        {
+            bool acceptable = true;
+            for (Territory *ii : tt->getAdjTerritories())
+            {
+                if (ii->getAdjTerritories().size() > 10)
+                    cout << "Unacceptable map ! It has " << ii->getAdjTerritories().size() << " adjacent territories to " << ii->getName() << " which is bigger than 10. Try Another map!" << endl;
+                acceptable = false;
+                break;
+            }
+            if (acceptable == false)
+            {
+                break;
+                return NULL;
+            }
+        }
     }
+
     return map;
 }
 

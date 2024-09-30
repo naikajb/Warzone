@@ -11,6 +11,8 @@
 using std::string; // class template add features support strings
 using std::vector; // class template that contains vector container and its member functions
 using std::ostream;
+using std::cout;
+using std::endl;
 
 class Continent; // class Continent call for the Territory class
 
