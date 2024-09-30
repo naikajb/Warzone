@@ -1,6 +1,7 @@
 #include "Orders.h"
 #include <iostream>
 #include <algorithm>
+using namespace std;
 
 // Base class order implementation
 // Default constructor --> initializes an Order with default values
@@ -207,4 +208,8 @@ std::ostream& operator<<(std::ostream& out, const OrdersList& ordersList) {
         out << *ordersList.orders[i] << std::endl;
     }
     return out;
+}
+
+vector<Order*> OrdersList::getOrders(){
+    return orders;
 }

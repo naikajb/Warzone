@@ -4,6 +4,7 @@
 #include <iostream>
 #include <vector>
 #include <string>
+#include <vector>
 
 // Base class representing a general order in the game
 class Order {
@@ -107,6 +108,7 @@ public:
     //Overload stream insertion operator for printing the lsit of orders
     friend std::ostream& operator<<(std::ostream& outputStream, const OrdersList& ordersList);
 
+    std::vector<Order*> getOrders(); //get the list of orders
 private:
     //Vector to store pointers to orders
     //Polymorphism - storing different order types
