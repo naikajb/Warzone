@@ -2,21 +2,14 @@
 #define MAPDRIVER_H
 
 #include <iostream>
+#include <vector>
+
+using std::vector;
 
 #include "Map.h"
 
-
-void testLoadMaps();
-
-void DFSHelper(Territory*,vector<Territory*>&);
-
-bool DFS(Map*);
-
-void DFSContinent(Territory*,vector<Territory*>&);
-
-bool DFSC(Continent*);
-
-bool uniqueCountry(Map* map);
+// receives a list of pointers of type map, returns a new list of pointers of type map but with only the valid maps
+vector<Map *> testLoadMaps(vector<Map *> mapSet);
 
 int main();
 
