@@ -52,18 +52,35 @@ void Player::addTerritory(Territory* territory){
     territories.push_back(territory);
 } 
 
-// returns list of territories to defend
+// returns ARBITRARY list of territories to defend
 vector<Territory*> Player::toDefend(){
     vector<Territory*> toDefend;
-
-    
+    if (territories.size() == 0){
+        cout << "Player has no territories to defend" << endl;
+        return toDefend;
+    }
+    for (int i = 0; i < territories.size(); i++){
+        if (i % 2 == 0){
+            toDefend.push_back(territories[i]);
+        }
+    } 
     return toDefend;
 }
 
-// returns list of territories to attack
+// returns ARBITRARY list of territories to attack
 vector<Territory*> Player::toAttack(){
     vector<Territory*> toAttack;
+    
+    if (territories.size() == 0){
+        cout << "Player has no territories to attack" << endl;
+        return toAttack;
+    }
 
+    for (int i = 0; i < territories.size(); i++){
+        if (i % 2 != 0){
+            toAttack.push_back(territories[i]);
+        }
+    } 
     return toAttack;
 }
 
@@ -89,8 +106,8 @@ void Player::removeTerritory(Territory* territory){
 
 void Player::printPlayer(){
     cout << "Player name: " << playerName 
-            << "\nNumber of Territories: " << territories.size() 
-            << "\nCurrent OrderList: " << orders->getOrders().size() 
+            << "\n  Number of Territories: " << territories.size() 
+            << "\n  Current OrderList: " << orders->getOrders().size() 
             << endl;
     
 }
