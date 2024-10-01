@@ -84,7 +84,6 @@ vector<Territory*> Player::toAttack(){
     return toAttack;
 }
 
-
 std::string Player::getPlayerName(){
     return playerName;
 }
