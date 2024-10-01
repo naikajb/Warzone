@@ -6,7 +6,7 @@ class Continent; // class Continent call for the Territory class
 
 // defines the Territory constructor with an initilizer list
 Territory::Territory(string name, Continent *continent) : name(name),
-                                                          continent(continent)
+                                                          continent(continent), numArmies(0)
 {
 }
 // defines the Territory copy constructor with an initilizer list
@@ -33,17 +33,15 @@ Territory &Territory::operator=(const Territory &o)
 ostream &operator<<(ostream &out, Territory &o)
 {
 
-    string adjString = "(";
+    string adjString;
 
     for (Territory *t : o.getAdjTerritories())
     {
-
-        adjString += (t->getName() + ",");
+        adjString += (t->getName() + "\n");
     }
 
-    adjString += ")";
-
-    out << "Name: " << o.getName() << ", Number of Armies: " << o.getNumArmies() << ", Continent: " << o.getContinent() << ", Adjacent Territories: " + adjString << std::endl;
+    out << "-----------------------------------------------------------------\n"
+        << "Territory Name: " << o.getName() << "\n\nNumber of Armies: " << o.getNumArmies() << "\n\nContinent: " << o.getContinent()->getName() << "\n\nAdjacent Territorie(s): \n" + adjString << "-----------------------------------------------------------------" << std::endl;
     return out;
 }
 
@@ -84,18 +82,16 @@ Continent &Continent::operator=(const Continent &o)
 // prints name of continent, the bonus, and its territories
 ostream &operator<<(ostream &out, Continent &o)
 {
-
-    string terrString = "(";
+    string terrString;
 
     for (Territory *t : o.getTerritories())
     {
 
-        terrString += (t->getName() + ",");
+        terrString += (t->getName() + "\n");
     }
 
-    terrString += ")";
-
-    out << "Name: " << o.getName() << ", Bonus: " << o.getBonus() << ", Territories: " + terrString << std::endl;
+    out << "-----------------------------------------------------------------\n"
+        << "Continent Name: " << o.getName() << "\n\nBonus: " << o.getBonus() << "\n\nTerritory(ies): \n" + terrString << "-----------------------------------------------------------------" << std::endl;
     return out;
 }
 
@@ -133,8 +129,25 @@ Map &Map::operator=(const Map &o)
 // prints name of the file
 ostream &operator<<(ostream &out, Map &o)
 {
+    string terrString;
 
-    out << "Name: " << o.getFileName() << std::endl;
+    for (Territory *t : o.getTerritories())
+    {
+
+        terrString += (t->getName() + "\n");
+    }
+
+    string contString;
+
+    for (Continent *c : o.getContinents())
+    {
+        contString += (c->getName() + "\n");
+    }
+
+    out << "-----------------------------------------------------------------\n"
+        << "File Name: " << o.getFileName() << "\n\nContinent(s): \n"
+        << contString << "\nTerritory(ies): \n"
+        << terrString << "-----------------------------------------------------------------" << std::endl;
     return out;
 }
 
@@ -157,7 +170,9 @@ void Map::addContinent(Continent *c)
 // static validate() definition
 bool Map::validate(Map *m)
 {
-    // MapLoader *ml = new MapLoader("MapTextFiles\\South America.map");
+    cout << "-----------------------------------------------------------------\n"<< "Validation for the " << m->getFileName() << " in session...\n"
+         << endl;
+
     if (DFS(m))
     {
 
@@ -166,7 +181,7 @@ bool Map::validate(Map *m)
     else
     {
 
-        std::cout << "Map is a NOT connected Graph (V1)." << std::endl;
+        std::cout << "Invalid map ! Map is a NOT connected Graph (V1).\n-----------------------------------------------------------------" << std::endl;
         return false;
     }
 
@@ -190,7 +205,7 @@ bool Map::validate(Map *m)
     else
     {
 
-        std::cout << "NOT all Continents are connected subgraphs (V2)." << std::endl;
+        std::cout << "Invalid map ! NOT all Continents are connected subgraphs (V2).\n-----------------------------------------------------------------" << std::endl;
         return false;
     }
 
@@ -202,21 +217,21 @@ bool Map::validate(Map *m)
     else
     {
 
-        std::cout << "At least one Territory belongs to more than one Continent (V3)." << std::endl;
+        std::cout << "Invalid map! At least one Territory belongs to more than one Continent (V3).\n-----------------------------------------------------------------" << std::endl;
         return false;
     }
 
     // if the map created has more than 32 countries, invalid map return a null map
     if (m->getContinents().size() > 32)
     {
-        cout << "Unacceptable map ! It has " << m->getContinents().size() << " continents which is bigger than 32. Try Another map!" << endl;
+        cout << "Invalid map ! It has " << m->getContinents().size() << " continents which is bigger than 32.\n-----------------------------------------------------------------" << endl;
         return false;
     }
 
     // if the map created has more than 255 territories, invalid map return a null map
     if (m->getTerritories().size() > 255)
     {
-        cout << "Unacceptable map ! It has " << m->getTerritories().size() << " territories which is bigger than 255. Try Another map!" << endl;
+        cout << "Invalid map ! It has " << m->getTerritories().size() << " territories which is bigger than 255.\n-----------------------------------------------------------------" << endl;
         return false;
     }
 
@@ -227,9 +242,11 @@ bool Map::validate(Map *m)
         for (Territory *ii : tt->getAdjTerritories())
         {
             if (ii->getAdjTerritories().size() > 10)
-                cout << "Unacceptable map ! It has " << ii->getAdjTerritories().size() << " adjacent territories to " << ii->getName() << " which is bigger than 10. Try Another map!" << endl;
-            acceptable = false;
-            break;
+            {
+                cout << "Invalid map ! It has " << ii->getAdjTerritories().size() << " adjacent territories to " << ii->getName() << " which is bigger than 10.\n-----------------------------------------------------------------" << endl;
+                acceptable = false;
+                break;
+            }
         }
         if (acceptable == false)
         {
@@ -237,6 +254,7 @@ bool Map::validate(Map *m)
         }
     }
 
+    cout << "\n" << m->getFileName() << " is a valid map !\n" << "-----------------------------------------------------------------\n" << endl;
     // if it has not return false, then valid map return true
     return true;
 }
@@ -513,12 +531,12 @@ bool uniqueCountry(Map *map)
 }
 
 // laundry List:
-// - fix the overloaded stream insertions for pointer objects
 // - remove the maploader files
 // - comment the dfs free functions, validate method, and testloadmap method
-// - test out the testloadmaps(), validate(), assignment operator,and overloaded stream insertions 
 
 // DONE:
-// - put all the functions from the mapdriver.cpp into the map.cpp 
-// - create the validate() function (take whats in the testloadmap and the last part of loadmap) 
-// - have the testloadmap() take in a verctor of pointers of type map object and use the validate method 
+// - put all the functions from the mapdriver.cpp into the map.cpp
+// - create the validate() function (take whats in the testloadmap and the last part of loadmap)
+// - have the testloadmap() take in a verctor of pointers of type map object and use the validate method
+// - fix the overloaded stream insertions for pointer objects
+// - test out the MapDriver, validate(), assignment operator,and overloaded stream insertions
