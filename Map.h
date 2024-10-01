@@ -5,14 +5,14 @@
 #include <string> // import library to use string features
 #include <vector> //import library to use vectors
 #include <list> // import library to use list features
-#include <sstream>
-#include <fstream>
+#include <sstream> // import library to use string streams
+#include <fstream> // import library to input and output stream class to operate on files
 
 using std::string; // class template add features support strings
 using std::vector; // class template that contains vector container and its member functions
-using std::ostream;
-using std::cout;
-using std::endl;
+using std::ostream; // class template that contains output stream objects to perform output operations
+using std::cout; // class template from the iostream that display the output to the standard output device
+using std::endl; // class template that inserts a new-line character
 
 class Continent; // class Continent call for the Territory class
 
@@ -21,7 +21,7 @@ class Territory // creation of Territory class
 private: // access identifier
     string name; 
     int numArmies;
-    Continent* continent; //pointer to user-defined class Continent
+    Continent* continent; // pointer to user-defined class Continent
     vector<Territory *> adjTerritories; // vector of pointers of user-defined type Territory
 
 public: // access identifier
@@ -31,8 +31,12 @@ public: // access identifier
     // Territory copy constructor declaration
     Territory(const Territory& t);
 
-    Territory& operator=(Territory& o);
+    // Overloaded assignment operator for the Territory class declaration
+    // (allows assignment of one Territory object to another with "=" operator)
+    Territory& operator=(const Territory& o);
 
+    // Overloaded Stream insertion operator for the Territory class declaration
+    // (allows to output the details of a Territory object using std::cout or any other output stream)
     friend ostream& operator<<(ostream& out, Territory& o);
 
     string getName(); // Getter Territory names
@@ -60,8 +64,10 @@ public: // access identifier
     // Continent copy constructor declaration
     Continent(const Continent& c);
 
-    Continent& operator=(Continent& o);
+    // Overloaded assignment operator for the Continent class declaration
+    Continent& operator=(const Continent& o);
 
+    // Overloaded Stream insertion operator for the Continent class declaration
     friend ostream& operator<<(ostream& out, Continent& o);
 
     string getName(); // Getter Continent names
@@ -86,44 +92,50 @@ public: // access identifier
     // Map copy constructor declaration
     Map(const Map& m);
 
-    Map& operator=(Map& o);
+    // Overloaded assignment operator for the Map class declaration
+    Map& operator=(const Map& o);
 
+    // Overloaded Stream insertion operator for the Map class declaration
     friend ostream& operator<<(ostream& out, Map& o);
 
-    string getFileName();
-    vector<Territory*> getTerritories();
-    vector<Continent*> getContinents();
+    string getFileName(); // Getter map file name
+    vector<Territory*> getTerritories(); // Getter territories part of the Map
+    vector<Continent*> getContinents(); // Getter continents part of the Map
 
     void addTerritory(Territory *t); // Add pointer of type Territory in vector
     void addContinent(Continent *c); // Add pointer of type Continent in vector
 
-    void validate(); // checks if the Map Object is a connected graph, Continents are connected subgraphs and each Country belongs to one and only one Continent
+    bool validate(); // checks if the Map Object is a connected graph, Continents are connected subgraphs and each Country belongs to one and only one Continent (declaration)
 };
 
 class MapLoader {
 
-    private:
+    private: // access identifier
 
-    Map* map;
+    Map* map; // pointer to user-defined class Map
     string fileName;
 
-    public:
-    
+    public: // access identifier
+
+    // MapLoader paramerized constructor declaration
     MapLoader(string fileName);
 
+    // MapLoader copy constructor declaration
     MapLoader(MapLoader &ml);
 
-    MapLoader& operator=(MapLoader& o);
+    // Overloaded assignment operator for the MapLoader class declaration
+    MapLoader& operator=(const MapLoader& o);
 
+    // Overloaded Stream insertion operator for the MapLoader class declaration
     friend ostream& operator<<(ostream& out, MapLoader& o);
 
-    string getFileName();
+    string getFileName(); // Getter map file name
 
-    vector<string> splitString(string line, char splitter);
+    vector<string> splitString(string line, char splitter); // function that allows to split strings for every line of the file and returns a vector of string
 
-    Map* loadMap(string fileName);
+    Map* loadMap(string fileName); // function to create a Map object using the map file as a parameter
 
-    Map* getMap();
+    Map* getMap(); // Getter Map object
    
 };
 

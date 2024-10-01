@@ -16,9 +16,9 @@ Territory::Territory(const Territory &t)
     adjTerritories = t.adjTerritories;
 }
 
-Territory &Territory::operator=(Territory &o)
+// Overloaded assignment operator for the Territory class definition
+Territory &Territory::operator=(const Territory &o)
 {
-
     this->name = o.name;
     this->numArmies = o.numArmies;
     this->continent = o.continent;
@@ -26,7 +26,8 @@ Territory &Territory::operator=(Territory &o)
 
     return *this;
 }
-
+// Overloaded Stream insertion operator for the Territory class definition
+// prints name of territory, the number of armies, the continent, and its adjacent territories
 ostream &operator<<(ostream &out, Territory &o)
 {
 
@@ -65,8 +66,8 @@ Continent::Continent(const Continent &c)
     bonus = c.bonus;
     territories = c.territories;
 }
-
-Continent &Continent::operator=(Continent &o)
+// Overloaded assignment operator for the Continent class definition
+Continent &Continent::operator=(const Continent &o)
 {
 
     this->name = o.name;
@@ -75,7 +76,8 @@ Continent &Continent::operator=(Continent &o)
 
     return *this;
 }
-
+// Overloaded Stream insertion operator for the Continent class definition
+// prints name of continent, the bonus, and its territories
 ostream &operator<<(ostream &out, Continent &o)
 {
 
@@ -111,8 +113,8 @@ Map::Map(const Map &m)
     territories = m.territories;
     continents = m.continents;
 }
-
-Map &Map::operator=(Map &o)
+// Overloaded assignment operator for the Map class definition
+Map &Map::operator=(const Map &o)
 {
 
     this->fileName = o.fileName;
@@ -121,7 +123,8 @@ Map &Map::operator=(Map &o)
 
     return *this;
 }
-
+// Overloaded Stream insertion operator for the Map class definition
+// prints name of the file
 ostream &operator<<(ostream &out, Map &o)
 {
 
@@ -129,9 +132,9 @@ ostream &operator<<(ostream &out, Map &o)
     return out;
 }
 
-string Map::getFileName() { return fileName; }
-vector<Territory *> Map::getTerritories() { return territories; }
-vector<Continent *> Map::getContinents() { return continents; }
+string Map::getFileName() { return fileName; } // getFileName definition
+vector<Territory *> Map::getTerritories() { return territories; } // getTerritories definition
+vector<Continent *> Map::getContinents() { return continents; } // getContinents definition
 
 void Map::addTerritory(Territory *t)
 { // addTerritory definition
@@ -143,18 +146,21 @@ void Map::addContinent(Continent *c)
     continents.push_back(c);
 }
 
+bool Map::validate(){return false;}// validate() definition
+
+// defines the MapLoader constructor with an initilizer list
 MapLoader::MapLoader(string fileName) : fileName(fileName),
                                         map(loadMap(fileName)) // as soon as you create a map loader and creates a map by using the loadmap function
 {
 }
-
+// defines the MapLoader copy constructor with an initilizer list
 MapLoader::MapLoader(MapLoader &ml)
 {
     map = ml.map;
     fileName = ml.fileName;
 }
 
-MapLoader &MapLoader::operator=(MapLoader &o)
+MapLoader &MapLoader::operator=(const MapLoader &o)
 {
 
     this->map = o.map;
@@ -334,8 +340,4 @@ vector<string> MapLoader::splitString(string line, char splitter)
         returnedVector.push_back(x);
     }
     return returnedVector;
-}
-
-void validate()
-{ // validate() definition
 }
