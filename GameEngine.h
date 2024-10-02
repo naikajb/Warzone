@@ -212,6 +212,9 @@ public:
     // contructor of the class and member initializer list → initlializes pointer that points to GameEngine object
     CommandParser(GameEngine* engine) : engine(engine) {}
 
+    //copy constructor
+    CommandParser(const CommandParser& commandParser){};
+
     //destructor
     virtual ~CommandParser(){}
     

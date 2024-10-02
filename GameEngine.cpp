@@ -5,12 +5,12 @@
 //handleCommand function implementation, command processing happens and each state decides what to do with the received command
 void StartState::handleCommand(GameEngine* engine, const std::string& command) {
     if (command == "loadmap"){
-            std::cout << "Loading map..." << std::endl;
-            engine->changeState(engine->getMapLoadedState()); //transition to next state
+        std::cout << "Loading map..." << std::endl;
+        engine->changeState(engine->getMapLoadedState()); //transition to next state
 
-        } else {
-            std::cout << "Invalid command. Try <loadmap> to move to next step." << std::endl;
-        }
+    } else {
+        std::cout << "Invalid command. Try <loadmap> to move to next step." << std::endl;
+    }
 };
 
 //StartState's getstatename: returns the name of the state

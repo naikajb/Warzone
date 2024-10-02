@@ -3,7 +3,7 @@
 // free function, it controls the command loop that interacts with the GameEngine through the CommandParser
 void testGameStates(GameEngine& engine, CommandParser& parser) {
 
-    std::cout << "Starting Game Engine, Please Type A Command\n";
+    std::cout << "Starting Game Engine, Please Type A Command\n\n";
 
     while (true) {
         std::string input;
