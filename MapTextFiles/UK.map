@@ -1,0 +1,41 @@
+[Map]
+author=Franswa Tournier
+image=bretagne arrondissements.bmp
+wrap=no
+scroll=horizontal
+warn=yes
+
+[Continents]
+
+Côtes d’Armor=4
+Finistère=4
+Ille-et-Vilaine=4
+Loire-Atlantique=4
+Morbihan=3
+
+
+[Territories]
+
+Dinan,554,159,Côtes d’Armor,Dinan,Vannes,Rennes,Saint-Malo,Saint-Brieuc
+Guingamp,371,159,Côtes d’Armor,Lannion,Saint-Brieuc,Pontivy,Châteaulin
+Lannion,344,71,Côtes d’Armor,Saint-Brieuc,Guingamp,Morlaix
+Saint-Brieuc,463,171,Côtes d’Armor,Dinan,Vannes,Pontivy,Guingamp,Lannion
+
+Brest,156,98,Finistère,Morlaix,Châteaulin
+Châteaulin,278,157,Finistère,Brest,Morlaix,Guingamp,Pontivy,Quimper
+Morlaix,269,104,Finistère,Brest,Lannion,Châteaulin
+Quimper,215,230,Finistère,Châteaulin,Pontivy,Lorient
+
+Fougères,738,174,Ille-et-Vilaine,Saint-Malo,Rennes
+Redon,630,325,Ille-et-Vilaine,Vannes,Rennes,Châteaubriant
+Rennes,659,236,Ille-et-Vilaine,Dinan,Saint-Malo,Fougères,Redon,Châteaubriant,Vannes
+Saint-Malo,647,133,Ille-et-Vilaine,Dinan,Fougères,Rennes
+
+Ancenis,728,415,Loire-Atlantique,Châteaubriant,Nantes
+Châteaubriant,658,407,Loire-Atlantique,Ancenis,Nantes,Saint-Nazaire,Vannes,Redon,Rennes
+Nantes,668,512,Loire-Atlantique,Ancenis,Châteaubriant,Saint-Nazaire
+Saint-Nazaire,580,412,Loire-Atlantique,Nantes,Châteaubriant,Vannes
+
+Lorient,393,323,Morbihan,Quimper,Pontivy,Vannes
+Pontivy,450,267,Morbihan,Quimper,Châteaulin,Guingamp,Saint-Brieuc,Vannes,Lorient
+Vannes,512,368,Morbihan,Lorient,Pontivy,Saint-Brieuc,Dinan,Rennes,Redon,Châteaubriant,Saint-Nazaire
