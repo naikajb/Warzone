@@ -1,12 +1,11 @@
 #include "Map.h" // import Map.h header file
 
-class Continent; // class Continent call for the Territory class
-
 // TERRITORY CLASS
 
 // defines the Territory constructor with an initilizer list
 Territory::Territory(string name, Continent *continent) : name(name),
-                                                          continent(continent), numArmies(0)
+                                                          continent(continent), 
+                                                          numArmies(0)
 {
 }
 // defines the Territory copy constructor with an initilizer list
@@ -51,7 +50,6 @@ Continent *Territory::getContinent() { return continent; }                    //
 vector<Territory *> Territory::getAdjTerritories() { return adjTerritories; } // getAdjTerritories() definition
 
 void Territory::setNumArmies(int numArmies) { numArmies = numArmies; } // setNumArmies() definition
-// void Territory::setContinent(string continent){ continent = continent; }
 void Territory::addAdjTerritories(Territory *adjTerritory) { adjTerritories.push_back(adjTerritory); } // addAdjTerritories() definition
 
 // CONTINENT CLASS
@@ -126,7 +124,7 @@ Map &Map::operator=(const Map &o)
     return *this;
 }
 // Overloaded Stream insertion operator for the Map class definition
-// prints name of the file
+// prints name of the file, the continents, the territories
 ostream &operator<<(ostream &out, Map &o)
 {
     string terrString;
@@ -173,6 +171,7 @@ bool Map::validate(Map *m)
     cout << "-----------------------------------------------------------------\n"<< "Validation for the " << m->getFileName() << " in session...\n"
          << endl;
 
+    // checks if the map is a connected graph, else invalid map return false
     if (DFS(m))
     {
 
@@ -197,6 +196,7 @@ bool Map::validate(Map *m)
         }
     }
 
+    // checks if the continents are connected subgraphs, else invalid map return false
     if (v2)
     {
 
@@ -209,6 +209,7 @@ bool Map::validate(Map *m)
         return false;
     }
 
+    // checks if the territories all belong to one and only one continent, else invalid map return false 
     if (uniqueCountry(m))
     {
 
@@ -221,24 +222,32 @@ bool Map::validate(Map *m)
         return false;
     }
 
-    // if the map created has more than 32 countries, invalid map return a null map
+    // if the map created has more than 32 countries, invalid map return false
     if (m->getContinents().size() > 32)
     {
         cout << "Invalid map ! It has " << m->getContinents().size() << " continents which is bigger than 32.\n-----------------------------------------------------------------" << endl;
         return false;
     }
+    else{
+        cout << "Map has " <<  m->getContinents().size() << " continents." << endl;
+    }
 
-    // if the map created has more than 255 territories, invalid map return a null map
+    // if the map created has more than 255 territories, invalid map return false
     if (m->getTerritories().size() > 255)
     {
         cout << "Invalid map ! It has " << m->getTerritories().size() << " territories which is bigger than 255.\n-----------------------------------------------------------------" << endl;
         return false;
     }
+    else{
+        cout << "Map has " <<  m->getTerritories().size() << " territories." << endl;
+    }
 
-    // if the map has a territory with more than 10 adjacent territories, invalid map return a null map
+    // if the map has a territory with more than 10 adjacent territories, invalid map return false
     for (Territory *tt : m->getTerritories())
     {
         bool acceptable = true;
+        int nbOfAdjacent;
+
         for (Territory *ii : tt->getAdjTerritories())
         {
             if (ii->getAdjTerritories().size() > 10)
@@ -255,6 +264,7 @@ bool Map::validate(Map *m)
     }
 
     cout << "\n" << m->getFileName() << " is a valid map !\n" << "-----------------------------------------------------------------\n" << endl;
+    
     // if it has not return false, then valid map return true
     return true;
 }
@@ -531,7 +541,6 @@ bool uniqueCountry(Map *map)
 }
 
 // laundry List:
-// - remove the maploader files
 // - comment the dfs free functions, validate method, and testloadmap method
 
 // DONE:
@@ -540,3 +549,4 @@ bool uniqueCountry(Map *map)
 // - have the testloadmap() take in a verctor of pointers of type map object and use the validate method
 // - fix the overloaded stream insertions for pointer objects
 // - test out the MapDriver, validate(), assignment operator,and overloaded stream insertions
+// - remove the maploader files

@@ -3,7 +3,7 @@
 
 #include <iostream> // import library that provides objects which can read user input and output data to the console or to a file
 #include <string>   // import library to use string features
-#include <vector>   //import library to use vectors
+#include <vector>   // import library to use vectors
 #include <list>     // import library to use list features
 #include <sstream>  // import library to use string streams
 #include <fstream>  // import library to input and output stream class to operate on files
@@ -13,8 +13,6 @@ using std::endl;    // class template that inserts a new-line character
 using std::ostream; // class template that contains output stream objects to perform output operations
 using std::string;  // class template add features support strings
 using std::vector;  // class template that contains vector container and its member functions
-
-class Continent; // class Continent call for the Territory class
 
 class Territory // creation of Territory class
 {
@@ -45,7 +43,6 @@ public: // access identifier
     vector<Territory *> getAdjTerritories(); // Getter adjacent territories
 
     void setNumArmies(int numArmies); // Setter number of armies
-    // void setContinent(string continent);
     void addAdjTerritories(Territory *adjTerritory); // Add pointer of type Territory as adjacent territories in vector
 };
 
@@ -108,7 +105,7 @@ public: // access identifier
     static bool validate(Map *m); // checks if the Map Object is a connected graph, Continents are connected subgraphs and each Country belongs to one and only one Continent (declaration)
 };
 
-class MapLoader
+class MapLoader // creation of MapLoader class
 {
 
 private:      // access identifier
