@@ -166,6 +166,10 @@ void Map::addContinent(Continent *c)
 }
 
 // static validate() definition
+// validates a Map 'm' for the 3 required verifications:
+//  1. A Map is a connected graph
+//  2. Every Continent is a connected subgraph
+//  3. Every Territory is only present once in a single Continent
 bool Map::validate(Map *m)
 {
     cout << "-----------------------------------------------------------------\n"<< "Validation for the " << m->getFileName() << " in session...\n"
@@ -440,113 +444,104 @@ vector<string> MapLoader::splitString(string line, char splitter) // splitString
 // FREE FUNCTIONS
 ///////////////////////////////////////////////////////////////////////////////
 
-void DFSHelper(Territory *current, vector<Territory *> &visited)
+void DFSHelper(Territory *current, vector<Territory *> &visited) // main part of the depth first search traversal algorithm to verify that the map is a connected graph
+// the 'visited' vector is a reference so that updating it with recursion is possible
 {
 
-    for (Territory *t : current->getAdjTerritories())
+    for (Territory *t : current->getAdjTerritories()) // iterates through all the adjacent territorys of 'current'
     {
         bool contained = false;
 
-        for (Territory *t2 : visited)
+        for (Territory *t2 : visited) // iterates through the Territory objects in the 'visited' vector
         {
-            if (t->getName().compare(t2->getName()) == 0)
+            if (t->getName().compare(t2->getName()) == 0) // if an adjacent Territory is already in 'visited'
             {
-                contained = true;
-                break;
+                contained = true; 
+                break; 
             }
         }
 
         if (!contained)
         {
-            visited.push_back(t);
-            DFSHelper(t, visited);
+            visited.push_back(t); // add Territory 't' to the 'visited' vector
+            DFSHelper(t, visited); // recursive call
         }
     }
 }
 
-bool DFS(Map *map)
+bool DFS(Map *map) // method we call from the validate method to check if the map is a connected graph
 {
-    vector<Territory *> visited;
-    visited.push_back(map->getTerritories()[0]);
-    DFSHelper(map->getTerritories()[0], visited);
-    return (visited.size() == map->getTerritories().size());
+    vector<Territory *> visited; 
+    visited.push_back(map->getTerritories()[0]); // push the first Territory added to the Map in the 'visited' vector
+    DFSHelper(map->getTerritories()[0], visited); // calls the recursive method DFSHelper and updates the 'visited' vector with recursion
+    return (visited.size() == map->getTerritories().size()); // if the size of visited is equal to the number of Territory objects in the Map, we have a connected graph
 }
 
-void DFSContinent(Territory *current, vector<Territory *> &visited)
+void DFSContinent(Territory *current, vector<Territory *> &visited) // main part of the depth first search traversal algorithm to verify that every Continent object is a connected subgraph
+// the 'visited' vector is a reference so that updating it with recursion is possible
 {
 
-    for (Territory *t : current->getAdjTerritories())
+    for (Territory *t : current->getAdjTerritories()) // iterates through all the adjacent territories of the 'current' Territory
     {
 
-        if (t->getContinent()->getName().compare(current->getContinent()->getName()) != 0)
+        if (t->getContinent()->getName().compare(current->getContinent()->getName()) != 0) // if the 'current' Territory does not belong to the same Continent as Territory 't', we continue
         {
             continue;
         }
 
         bool contained = false;
 
-        for (Territory *t2 : visited)
+        for (Territory *t2 : visited) // iterates through the 'visited' vector
         {
-            if (t->getName().compare(t2->getName()) == 0)
+            if (t->getName().compare(t2->getName()) == 0) // if Territory 't' is already in 'visited', 'contained' is equal to true
             {
                 contained = true;
-                break;
+                break; 
             }
         }
 
         if (!contained)
         {
-            visited.push_back(t);
-            DFSContinent(t, visited);
+            visited.push_back(t); // if Territory 't' is not in 'visited', we add it to the vector
+            DFSContinent(t, visited); // recursive call
         }
     }
 }
 
-bool DFSC(Continent *c)
+bool DFSC(Continent *c) // important note: this method is called for every Continent object and tests each Continent to see if they are connected subgraphs
 {
 
     vector<Territory *> visited;
-    visited.push_back(c->getTerritories()[0]);
-    DFSContinent(c->getTerritories()[0], visited);
-    return (visited.size() == c->getTerritories().size());
+    visited.push_back(c->getTerritories()[0]); // push the first Territory added to the Continent 'c' in the 'visited' vector
+    DFSContinent(c->getTerritories()[0], visited); // calls the recursive method DFSContinent and updates the 'visited' vector with recursion
+    return (visited.size() == c->getTerritories().size()); // returns if a given Continent is a connected subgraph with the size comparison of 'visited' and its corresponding Continent size
 }
 
-bool uniqueCountry(Map *map)
+bool uniqueCountry(Map *map) // method to verify if a Territory is unique and is not present in multiple Continent objects
 {
 
-    for (Territory *t : map->getTerritories())
+    for (Territory *t : map->getTerritories()) // iterates through all the Territory objects of 'map'
     {
 
         int count(0);
 
-        for (Continent *c : map->getContinents())
+        for (Continent *c : map->getContinents()) // iterates through all the Continent objects of 'map'
         {
 
-            for (Territory *t2 : c->getTerritories())
+            for (Territory *t2 : c->getTerritories()) // iterates through all the Territory objects in Continent 'c'
             {
 
-                if (t->getName().compare(t2->getName()) == 0)
+                if (t->getName().compare(t2->getName()) == 0) // if the Territory 't' is found in a given Continent 'c', we increment 'count' by 1
                 {
                     count += 1;
                 }
             }
         }
 
-        if (count > 1)
+        if (count > 1) // if the count is bigger than 1, a given Territory 't' is present in multiple Continents or present more than once in a Continent 'c'
         {
-            return false;
+            return false; // returns that not every Territory is unique
         }
     }
-    return true;
+    return true; // returns that every Territory is unique
 }
-
-// laundry List:
-// - comment the dfs free functions, validate method, and testloadmap method
-
-// DONE:
-// - put all the functions from the mapdriver.cpp into the map.cpp
-// - create the validate() function (take whats in the testloadmap and the last part of loadmap)
-// - have the testloadmap() take in a verctor of pointers of type map object and use the validate method
-// - fix the overloaded stream insertions for pointer objects
-// - test out the MapDriver, validate(), assignment operator,and overloaded stream insertions
-// - remove the maploader files

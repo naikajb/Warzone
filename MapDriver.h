@@ -13,6 +13,6 @@ using std::endl; // class template that inserts a new-line character
 vector<Map *> testLoadMaps(vector<Map *> mapSet);
 
 // main program driver 
-int main();
+void testLoadMaps();
 
 #endif // end of if not defined statement MAPDRIVER_H
