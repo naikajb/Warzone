@@ -1,207 +1,144 @@
-#include "MapDriver.h"
-#include <iostream>
-using std::cout;
-using std::endl;
+#include "MapDriver.h" // import MapDriver.h header file
 
-void testLoadMaps(MapLoader* ml)
+vector<Map *> testLoadMaps(vector<Map *> mapSet) // testLoadMaps() definition
 {
+    // create a vector of pointer of type Map that will only contain valid maps
+    vector<Map *> validMaps;
+    bool valid = true;
 
-    // MapLoader *ml = new MapLoader("MapTextFiles\\South America.map");
-
-    if (DFS(ml->getMap()))
+    // go through the inputted vector, if the map is valid, place it in the vector, else ignore map
+    for (Map *m : mapSet)
     {
+        valid = Map::validate(m);
 
-        std::cout << "Map is a connected Graph (V1)." << std::endl;
-    }
-    else
-    {
-
-        std::cout << "Map is a NOT connected Graph (V1)." << std::endl;
-    }
-
-    bool v2 = true;
-
-    for (Continent *c : ml->getMap()->getContinents())
-    {
-
-        if (!DFSC(c))
-        {
-            v2 = false;
-            break;
-        }
+        if (valid == true)
+            validMaps.push_back(m);
     }
 
-    if (v2)
-    {
-
-        std::cout << "Continents are connected subgraphs (V2)." << std::endl;
-    }
-    else
-    {
-
-        std::cout << "NOT all Continents are connected subgraphs (V2)." << std::endl;
-    }
-
-    if (uniqueCountry(ml->getMap()))
-    {
-
-        std::cout << "Territories belong to one and only one Continent (V3)." << std::endl;
-    }
-    else
-    {
-
-        std::cout << "At least one Territory belongs to more than one Continent (V3)." << std::endl;
-    }
+    // return a vector with only valid pointers of Map objects
+    return validMaps;
 }
 
-void DFSHelper(Territory *current, vector<Territory *> &visited)
-{
-
-    for (Territory *t : current->getAdjTerritories())
-    {
-        bool contained = false;
-
-        for (Territory *t2 : visited)
-        {
-            if (t->getName().compare(t2->getName()) == 0)
-            {
-                contained = true;
-                break;
-            }
-        }
-
-        if (!contained)
-        {
-            visited.push_back(t);
-            DFSHelper(t, visited);
-        }
-    }
-}
-
-bool DFS(Map *map)
-{
-    vector<Territory *> visited;
-    visited.push_back(map->getTerritories()[0]);
-    DFSHelper(map->getTerritories()[0], visited);
-    return (visited.size() == map->getTerritories().size());
-}
-
-void DFSContinent(Territory *current, vector<Territory *> &visited)
-{
-
-    for (Territory *t : current->getAdjTerritories())
-    {
-
-        if (t->getContinent()->getName().compare(current->getContinent()->getName()) != 0)
-        {
-            continue;
-        }
-
-        bool contained = false;
-
-        for (Territory *t2 : visited)
-        {
-            if (t->getName().compare(t2->getName()) == 0)
-            {
-                contained = true;
-                break;
-            }
-        }
-
-        if (!contained)
-        {
-            visited.push_back(t);
-            DFSContinent(t, visited);
-        }
-    }
-}
-
-bool DFSC(Continent *c)
-{
-
-    vector<Territory *> visited;
-    visited.push_back(c->getTerritories()[0]);
-    DFSContinent(c->getTerritories()[0], visited);
-    return (visited.size() == c->getTerritories().size());
-}
-
-bool uniqueCountry(Map *map)
-{
-
-    for (Territory *t : map->getTerritories())
-    {
-
-        int count(0);
-
-        for (Continent *c : map->getContinents())
-        {
-
-            for (Territory *t2 : c->getTerritories())
-            {
-
-                if (t->getName().compare(t2->getName()) == 0)
-                {
-                    count += 1;
-                }
-            }
-        }
-
-        if (count > 1)
-        {
-            return false;
-        }
-    }
-    return true;
-}
-
+// program driver
 int main()
 {
-    
-    MapLoader ml("MapTextFiles\\South America.map");
-    // MapLoader *pml = &ml;
-    // Map *map = pml->loadMap(pml->getFileName());
 
-    cout << "Number of Continents: " << ml.getMap()->getContinents().size() << endl;
-    cout << "Number of Territories: " <<ml.getMap()->getTerritories().size() << endl;
-    cout << "\n"
-         << endl;
+    MapLoader *ml = new MapLoader("MapTextFiles\\South America.map");
 
-    for (Territory *tt : ml.getMap()->getTerritories())
+    // overloaded stream insertion for map
+    cout << *(ml->getMap());
+
+    // overloaded stream insertion for continent
+    for (Continent *c : ml->getMap()->getContinents())
     {
-        for (Territory *ii : tt->getAdjTerritories())
-        {
-            cout << "Number of Adjacent Territories to " << ii->getName() << " : " << ii->getAdjTerritories().size() << endl;
-        }
+        cout << *c << endl;
     }
 
-    std::cout << "\nthese are the continents:" << std::endl;
-    for (Continent *i : ml.getMap()->getContinents())
+    // overloaded stream insertion for territory
+    for (Territory *t : ml->getMap()->getTerritories())
     {
-        std::cout << "\nContinent: " << i->getName() << std::endl;
-
-        std::cout << "\nthese are the territories of the continent: " << i->getName() << std::endl;
-
-        for (Territory *t : i->getTerritories())
-        {
-            std::cout << t->getName() << std::endl;
-        }
-    }
-    std::cout << "\nthese are the territories: " << std::endl;
-
-    for (Territory *i : ml.getMap()->getTerritories())
-    {
-        std::cout << "\nTerritory: " << i->getName() << std::endl;
-
-        cout << "\nthese are the adjacent territories to the territory: " << i->getName() << endl;
-
-        for (Territory *ii : i->getAdjTerritories())
-        {
-            std::cout << ii->getName() << std::endl;
-        }
+        cout << *t << endl;
     }
 
+    // deallocates the memory space in the heap where ml is pointing to
+    delete ml;
+    // ml pointer no longer points to any valid memory
+    ml = NULL;
     return 0;
 }
 
 // g++ -std=c++11 MapDriver.cpp Map.cpp
 // ./a.exe
+
+// BELOW ARE DEBUGS TO TRY IN THE MAIN FOR THE MAPDRIVER.CPP
+
+/////////////////////////////////////////////////////
+// debug of the testLoadMaps()
+// MapLoader *ml1 = new MapLoader("MapTextFiles\\USA.map");
+// MapLoader *ml2 = new MapLoader("MapTextFiles\\Asia 1200.map"); // invalid map test
+
+// vector<Map *> allMapList;
+// vector<Map *> validMapList;
+
+// allMapList.push_back(ml->getMap());
+// allMapList.push_back(ml1->getMap());
+// allMapList.push_back(ml2->getMap());
+
+// validMapList = testLoadMaps(allMapList);
+
+// cout << "all maps: \n";
+
+// for (Map *am : allMapList)
+// {
+//     cout << am->getFileName() << endl;
+// }
+// cout << "\nvalid maps: \n";
+// for (Map *vm : validMapList)
+// {
+//     cout << vm->getFileName() << endl;
+// }
+
+//////////////////////////////////////////////////////////
+// debug to see if the validate() works
+// Map::validate(ml->getMap());
+
+//////////////////////////////////////////////////////////
+// debug to see if the file is read properly
+// cout << "Number of Continents: " << ml->getMap()->getContinents().size() << endl;
+// cout << "Number of Territories: " << ml->getMap()->getTerritories().size() << endl;
+// cout << "\n"
+//      << endl;
+
+// for (Territory *tt : ml->getMap()->getTerritories())
+// {
+//     cout << "Number of Adjacent Territories to " << tt->getName() << " : " << tt->getAdjTerritories().size() << endl;
+// }
+
+// std::cout << "\nthese are the continents:" << std::endl;
+// for (Continent *i : ml->getMap()->getContinents())
+// {
+//     std::cout << "\nContinent: " << i->getName() << std::endl;
+
+//     std::cout << "\nthese are the territories of the continent: " << i->getName() << std::endl;
+
+//     for (Territory *t : i->getTerritories())
+//     {
+//         std::cout << t->getName() << std::endl;
+//     }
+// }
+// std::cout << "\nthese are the territories: " << std::endl;
+
+// for (Territory *i : ml->getMap()->getTerritories())
+// {
+//     std::cout << "\nTerritory: " << i->getName() << std::endl;
+
+//     cout << "\nthese are the adjacent territories to the territory: " << i->getName() << endl;
+
+//     for (Territory *ii : i->getAdjTerritories())
+//     {
+//         std::cout << ii->getName() << std::endl;
+//     }
+// }
+
+/////////////////////////////////////////////////////////////////////////
+// debug of the assignment operator and overloaded stream insertion
+//  MapLoader *ml2;
+//  ml2 = ml;
+
+// Territory *t = ml->getMap()->getTerritories()[0];
+// cout << *t;
+
+// Continent *c = ml->getMap()->getContinents()[0];
+// cout << *c;
+
+// cout << *(ml->getMap());
+
+// cout << "test for overloaded operator stream\n" << endl;
+
+// Territory *t2 = ml2->getMap()->getTerritories()[0];
+// cout << *t2;
+
+// Continent *c2 = ml2->getMap()->getContinents()[0];
+// cout << *c2;
+
+// cout << *(ml2->getMap());
