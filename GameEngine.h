@@ -13,30 +13,26 @@ class GameEngine; // forward declaration
 //interface for game states which handles transitions when a command is executed
 class GameState {
 public:
-    //default constructor
-    GameState() {};
+    //declaring default constructor
+    GameState();
 
-    //copy constructor
-    GameState(const GameState& gameState) {
-        std::cout << "Copy Constructor of GameState";
-    }
+    //declaring copy constructor
+    GameState(const GameState& gameState);
 
-    //destructor
-    virtual ~GameState(){}
+    //declaring destructor
+    virtual ~GameState();
 
-    //pure virtual functions
+    //pure virtual functions, they are abstract (=0) and must be overriden by the derived classes
     virtual void handleCommand(GameEngine* engine, const std::string& command) = 0;
     virtual std::string getStateName() = 0; 
 };
 
-// derived classes which represent the different states of the Game Engine
+// derived class which represents one of the different states of the Game Engine
 class StartState : public GameState {
 public:
-    StartState() {};
-    StartState(const StartState& startState) {
-        std::cout << "Copy Constructor of StartState";
-    }
-    virtual ~StartState(){};
+    StartState();
+    StartState(const StartState& startState);
+    virtual ~StartState();
     void handleCommand(GameEngine* engine, const std::string& command) override;
     std::string getStateName() override;
 
@@ -46,11 +42,9 @@ private:
 
 class MapLoadedState : public GameState {
 public: 
-    MapLoadedState(){};
-    MapLoadedState(const MapLoadedState& mapLoadedState) {
-        std::cout << "Copy Constructor of MapLoadedState";
-    }
-    virtual ~MapLoadedState(){};
+    MapLoadedState();
+    MapLoadedState(const MapLoadedState& mapLoadedState);
+    virtual ~MapLoadedState();
     void handleCommand(GameEngine* engine, const std::string& command) override;
     std::string getStateName() override;
 
@@ -60,11 +54,9 @@ private:
 
 class MapValidatedState : public GameState {
 public:
-    MapValidatedState(){};
-    MapValidatedState(const MapValidatedState& mapValidatedState) {
-        std::cout << "Copy Constructor of MapValidatedState";
-    }
-    virtual ~MapValidatedState(){};
+    MapValidatedState();
+    MapValidatedState(const MapValidatedState& mapValidatedState);
+    virtual ~MapValidatedState();
     void handleCommand(GameEngine* engine, const std::string& command) override;
 
     std::string getStateName() override;
@@ -75,11 +67,9 @@ private:
 
 class PlayersAddedState : public GameState {
 public:
-    PlayersAddedState(){};
-    PlayersAddedState(const PlayersAddedState& PlayersAddedState) {
-        std::cout << "Copy Constructor of PlayersAddedState";
-    }
-    virtual ~PlayersAddedState(){};
+    PlayersAddedState();
+    PlayersAddedState(const PlayersAddedState& PlayersAddedState);
+    virtual ~PlayersAddedState();
     void handleCommand(GameEngine* engine, const std::string& command) override;
     std::string getStateName() override;
 
@@ -89,11 +79,9 @@ private:
 
 class AssignReinforcementState : public GameState {
 public:
-    AssignReinforcementState(){};
-    AssignReinforcementState(const AssignReinforcementState& assignReinf) {
-        std::cout << "Copy Constructor of AssignReinforcementState";
-    }
-    virtual ~AssignReinforcementState(){};
+    AssignReinforcementState();
+    AssignReinforcementState(const AssignReinforcementState& assignReinf);
+    virtual ~AssignReinforcementState();
     void handleCommand(GameEngine* engine, const std::string& command) override;
     std::string getStateName() override;
 
@@ -103,11 +91,9 @@ private:
 
 class IssueOrdersState : public GameState {
 public:
-    IssueOrdersState(){};
-    IssueOrdersState(const IssueOrdersState& issueOrderState) {
-        std::cout << "Copy Constructor of IssueOrderState";
-    }
-    virtual ~IssueOrdersState(){};
+    IssueOrdersState();
+    IssueOrdersState(const IssueOrdersState& issueOrderState);
+    virtual ~IssueOrdersState();
     void handleCommand(GameEngine* engine, const std::string& command) override;
     std::string getStateName() override;
 
@@ -117,11 +103,9 @@ private:
 
 class ExecuteOrdersState : public GameState {
 public:
-    ExecuteOrdersState(){};
-    ExecuteOrdersState(const ExecuteOrdersState& executeOrderState) {
-        std::cout << "Copy Constructor of ExecuteOrderState";
-    }
-    virtual ~ExecuteOrdersState(){};
+    ExecuteOrdersState();
+    ExecuteOrdersState(const ExecuteOrdersState& executeOrderState);
+    virtual ~ExecuteOrdersState();
     void handleCommand(GameEngine* engine, const std::string& command) override;
     std::string getStateName() override;
 
@@ -131,11 +115,9 @@ private:
 
 class WinState : public GameState {
 public:
-    WinState(){};
-    WinState(const WinState& winState) {
-        std::cout << "Copy Constructor of WinState";
-    }
-    virtual ~WinState(){};
+    WinState();
+    WinState(const WinState& winState);
+    virtual ~WinState();
     void handleCommand(GameEngine* engine, const std::string& command) override;
     std::string getStateName() override;
 
@@ -146,36 +128,14 @@ private:
 // GameEngine class which manages the current state and provides a function to switch between states
 class GameEngine {
 public:
-    // constructor, initializes the GameEngine with the CurrentState pointer 
-    GameEngine() : currentState(nullptr) {
-        startState = new StartState(); //creating instances of the State classes
-        mapLoadedState = new MapLoadedState();
-        mapValidated = new MapValidatedState();
-        playersAdded = new PlayersAddedState();
-        assignReinforcement = new AssignReinforcementState();
-        issueOrders = new IssueOrdersState();
-        executeOrders = new ExecuteOrdersState();
-        win = new WinState();
-        currentState = startState; //make the pointer point to the first State.
-    };
+    // declaring constructor
+    GameEngine();
 
     // copy constructor
-    GameEngine(const GameEngine& game_engine){
-        std::cout << "Copy constructor of Game Engine\n";
-    };
+    GameEngine(const GameEngine& game_engine);
 
-    // destructor that deallocates all the objects created
-    virtual ~GameEngine(){
-        delete startState;
-        delete mapLoadedState;
-        delete mapValidated;
-        delete playersAdded;
-        delete assignReinforcement;
-        delete issueOrders;
-        delete executeOrders;
-        delete win;
-        startState, mapLoadedState, mapValidated, playersAdded, assignReinforcement, issueOrders, executeOrders, win = NULL;
-    }; 
+    // destructor
+    virtual ~GameEngine();
 
     // function that handles changing states
     void changeState(GameState* newState);
@@ -183,15 +143,15 @@ public:
     // function which is responsible for receiving the user's command and then delegating it to the current state
     void handleCommand(const std::string& command);
 
-    // getters for the different states
-    GameState* getStartState() { return startState; }
-    GameState* getMapLoadedState() { return mapLoadedState; }
-    GameState* getMapValidated() { return mapValidated; }
-    GameState* getPlayersAdded() { return playersAdded; }
-    GameState* getAssignReinforcement() { return assignReinforcement; }
-    GameState* getIssueOrders() { return issueOrders; }
-    GameState* getExecuteOrders() { return executeOrders; }
-    GameState* getWin() { return win; }
+    // declaring getters for the different states 
+    GameState* getStartState();
+    GameState* getMapLoadedState();
+    GameState* getMapValidated();
+    GameState* getPlayersAdded();
+    GameState* getAssignReinforcement();
+    GameState* getIssueOrders();
+    GameState* getExecuteOrders();
+    GameState* getWin();
 
 private:
     // declaring instances of the states and a pointer that points to the current state
@@ -210,15 +170,15 @@ private:
 class CommandParser {
 public:
     // contructor of the class and member initializer list → initlializes pointer that points to GameEngine object
-    CommandParser(GameEngine* engine) : engine(engine) {}
+    CommandParser(GameEngine* engine);
 
     //copy constructor
-    CommandParser(const CommandParser& commandParser){};
+    CommandParser(const CommandParser& commandParser);
 
     //destructor
-    virtual ~CommandParser(){}
+    virtual ~CommandParser();
     
-    // all the accepted commands
+    // vector that stores all the accepted commands
     vector<string> commands{"loadmap", "validatemap", "addplayer", "assigncountries", "issueorder", "endissueorders", "execorder", "endexecorders", "win", "play", "end"};
     
     // function to process string inputs
@@ -227,6 +187,8 @@ public:
 private:
     GameEngine* engine;
 };
+
+void testGameStates();
 
 
 #endif

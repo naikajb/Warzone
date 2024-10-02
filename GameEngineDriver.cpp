@@ -1,9 +1,14 @@
 #include "GameEngine.h"
 
 // free function, it controls the command loop that interacts with the GameEngine through the CommandParser
-void testGameStates(GameEngine& engine, CommandParser& parser) {
+void testGameStates() {
 
-    std::cout << "Starting Game Engine, Please Type A Command\n\n";
+    GameEngine engine;
+
+    //passing engine pointer to parser object
+    CommandParser parser(&engine);
+
+    std::cout << "\nStarting Game Engine, Please Type A Command\n\n";
 
     while (true) {
         std::string input;
@@ -19,11 +24,7 @@ void testGameStates(GameEngine& engine, CommandParser& parser) {
 
 int main() {
 
-    GameEngine engine;
-    //passing engine pointer to parser object
-    CommandParser parser(&engine);
-
-    testGameStates(engine, parser);
+    testGameStates();
 
     return 0;
 }
