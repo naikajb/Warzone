@@ -5,6 +5,8 @@
 #include "MapDriver.h"
 #include "GameEngine.h"
 #include "PlayerDriver.h"
+#include "CardDriver.h"
+
 
 int main(){
 
@@ -20,6 +22,11 @@ int main(){
 
     // Call funcion to test the Orders list
     testOrdersLists();
+
+    std::cout << "Testing Part 4 - Cards Component :" << std::endl;
+
+    // Call funcion to test the Cards
+    testCards();
 
     std::cout << "Testing Part 5 - Game Engine Component :" << std::endl;
 
