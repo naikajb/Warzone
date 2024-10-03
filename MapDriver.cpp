@@ -19,29 +19,39 @@ vector<Map *> testLoadMaps(vector<Map *> mapSet) // testLoadMaps() definition
     return validMaps;
 }
 
-// program driver
+// called in program driver as an example of the testLoadMaps() function
 void testLoadMaps()
 {
 
     MapLoader *ml = new MapLoader("MapTextFiles\\South America.map");
+    MapLoader *ml1 = new MapLoader("MapTextFiles\\USA.map");
+    MapLoader *ml2 = new MapLoader("MapTextFiles\\Asia 1200.map"); // invalid map test
 
-    // overloaded stream insertion for map
-    cout << *(ml->getMap());
+    vector<Map *> allMapList;
+    vector<Map *> validMapList;
 
-    // overloaded stream insertion for continent
-    for (Continent *c : ml->getMap()->getContinents())
+    allMapList.push_back(ml->getMap());
+    allMapList.push_back(ml1->getMap());
+    allMapList.push_back(ml2->getMap());
+
+    validMapList = testLoadMaps(allMapList);
+
+    cout << "all maps: \n";
+
+    for (Map *am : allMapList)
     {
-        cout << *c << endl;
+        cout << am->getFileName() << endl;
+    }
+    cout << "\nvalid maps: \n";
+    for (Map *vm : validMapList)
+    {
+        cout << vm->getFileName() << endl;
     }
 
-    // overloaded stream insertion for territory
-    for (Territory *t : ml->getMap()->getTerritories())
-    {
-        cout << *t << endl;
-    }
-
-    // deallocates the memory space in the heap where ml is pointing to
-    delete ml;
-    // ml pointer no longer points to any valid memory
-    ml = NULL;
+    // deallocates the memory space in the heap where ml, ml1, ml2 is pointing to
+    delete ml, ml1, ml2;
+    // ml, ml1, ml2 pointer no longer points to any valid memory
+    ml = nullptr;
+    ml1 = nullptr;
+    ml2 = nullptr;
 }

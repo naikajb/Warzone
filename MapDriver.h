@@ -12,7 +12,7 @@ using std::endl; // class template that inserts a new-line character
 // receives a list of pointers of type map, returns a new list of pointers of type map but with only the valid maps
 vector<Map *> testLoadMaps(vector<Map *> mapSet);
 
-// main program driver 
+// runs the testLoadMaps() with an example of a vector of maps
 void testLoadMaps();
 
 #endif // end of if not defined statement MAPDRIVER_H
