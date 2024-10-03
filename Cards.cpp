@@ -23,7 +23,7 @@ Card::Card(const Card& other) {
 }
 
 //Returns the type of the card
-string Card::getCardType() {
+string Card::getCardType() const{
     if (type == nullptr) {
         return "Invalid card type";
     }
@@ -55,6 +55,12 @@ void Card::play(int index, Hand& hand, Deck& deck) {
     deck.returnCardToDeck(&cardToPLay);
     hand.cardsInHand.erase(hand.cardsInHand.begin() + index);
     
+}
+
+//Output stream operator
+ostream& operator<<(ostream& out, const Card& card) {
+    out << card.getCardType();
+    return out;
 }
 
 //Deck class constructor
@@ -126,6 +132,15 @@ void Deck::displayDeck() {
     }
 }
 
+//Output stream operator
+ostream& operator<<(ostream& out, const Deck& deck) {
+    out << "Deck: ";
+    for (Card* card : deck.cardsInDeck) {
+        out << card->getCardType() << " ";
+    }
+    return out;
+}
+
 void Deck::returnCardToDeck(Card* card) {
     Card* newCard = new Card(*card);
     cardsInDeck.push_back(newCard);
@@ -154,6 +169,15 @@ void Hand::displayHand() {
         }
         cout << endl;
     }
+}
+
+//Output stream operator
+ostream& operator<<(ostream& out, const Hand& hand) {
+    out << "Hand: ";
+    for (Card* card : hand.cardsInHand) {
+        out << card->getCardType() << " ";
+    }
+    return out;
 }
 
 //Hand class constructor

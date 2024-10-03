@@ -16,7 +16,7 @@ class Card {
         
         //Card constructor that takes type 
         Card(CardType type);
-        string getCardType();
+        string getCardType() const;
         
         //This method will be called when the card is played
         void play(int index, Hand& hand, Deck& deck);
@@ -29,6 +29,10 @@ class Card {
 
         // Copy constructor
         Card(const Card& other);
+
+        //output stream operator
+        friend ostream& operator<<(ostream& out, const Card& card);
+
         
     private:
         CardType* type; 
@@ -44,6 +48,7 @@ class Deck {
         void returnCardToDeck(Card* card);
         void displayDeck();
         vector<Card *> getCardsInDeck();
+        friend ostream& operator<<(ostream& out, const Deck& deck);
     private:
         //Arraylist equivalent in C++ that represents the deck of cards
         vector<Card*> cardsInDeck; 
@@ -56,9 +61,9 @@ class Hand {
         ~Hand();
         Hand(const Hand& other);
         void addCard(Card* card);
+        friend ostream& operator<<(ostream& out, const Hand& hand);
         //Creates an order & returns it to the player's 
         //list of orders and then returns the card to the deck 
-        //void play(int index);
         void displayHand();
         //Arraylist equivalent in C++ that represents the hand of cards
         vector<Card*> cardsInHand; 
