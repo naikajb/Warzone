@@ -45,6 +45,7 @@ Player::~Player() {
 // adds order to the player's list of orders
 void Player::issueOrder(Order* order){
     orders->addOrder(order);
+    cout << *order << endl;
 }
 
 // adds territory to the player's list of territories
@@ -86,10 +87,10 @@ vector<Territory*> Player::toAttack(){
 
 //stream insertion operator to print player's information
 ostream& operator<<(ostream &out, const Player &player){
-    out << "Player name: " << endl;
-    out << "Territories: " << endl;
+    out << "Player name: " << player.playerName << endl;
+    out << "Territories owned: " << player.territories.size() << endl;
     for (Territory* territory: player.territories){
-        out << territory->getName() << endl;
+        out << "\t" << territory->getName() << endl;
     }
     return out;
 }
