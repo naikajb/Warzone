@@ -45,6 +45,7 @@ Player::~Player() {
 // adds order to the player's list of orders
 void Player::issueOrder(Order* order){
     orders->addOrder(order);
+    cout << *order << endl;
 }
 
 // adds territory to the player's list of territories
@@ -52,21 +53,47 @@ void Player::addTerritory(Territory* territory){
     territories.push_back(territory);
 } 
 
-// returns list of territories to defend
+// returns ARBITRARY list of territories to defend
 vector<Territory*> Player::toDefend(){
     vector<Territory*> toDefend;
-
-    
+    if (territories.size() == 0){
+        cout << "Player has no territories to defend" << endl;
+        return toDefend;
+    }
+    for (int i = 0; i < territories.size(); i++){
+        if (i % 2 == 0){
+            toDefend.push_back(territories[i]);
+        }
+    } 
     return toDefend;
 }
 
-// returns list of territories to attack
+// returns ARBITRARY list of territories to attack
 vector<Territory*> Player::toAttack(){
     vector<Territory*> toAttack;
+    
+    if (territories.size() == 0){
+        cout << "Player has no territories to attack" << endl;
+        return toAttack;
+    }
 
+    for (int i = 0; i < territories.size(); i++){
+        if (i % 2 != 0){
+            toAttack.push_back(territories[i]);
+        }
+    } 
     return toAttack;
 }
 
+//stream insertion operator to print player's information
+ostream& operator<<(ostream &out, const Player &player){
+    out << "Player name: " << player.playerName << endl;
+    out << "Territories owned: " << player.territories.size() << endl;
+    for (Territory* territory: player.territories){
+        out << "\t" << territory->getName() << endl;
+    }
+    return out;
+}
 
 std::string Player::getPlayerName(){
     return playerName;
@@ -87,10 +114,3 @@ void Player::removeTerritory(Territory* territory){
     }
 }
 
-void Player::printPlayer(){
-    cout << "Player name: " << playerName 
-            << "\nNumber of Territories: " << territories.size() 
-            << "\nCurrent OrderList: " << orders->getOrders().size() 
-            << endl;
-    
-}

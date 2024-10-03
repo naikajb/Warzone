@@ -1,4 +1,5 @@
 #include "Map.h" // import Map.h header file
+class Continent; // forward declaration of Continent class
 
 // TERRITORY CLASS
 

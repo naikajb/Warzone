@@ -4,9 +4,9 @@
 #include <iostream> 
 #include <string>
 #include <vector> 
-#include "Territory.h"
 #include "Orders.h"
 #include "Cards.h"
+#include "Map.h"
 
 
 class Player{
@@ -31,10 +31,13 @@ class Player{
         
         void issueOrder(Order* order);  //adds order to player's list of orders
         
+        //stream insertion operator to print player's information
+        friend std::ostream& operator<<(std::ostream& out, const Player& player);
+        
         void addCard(Card* card);  //adds card to player's hand
         void removeCard(Card* card);  //removes card from player's hand
         
-        void printPlayer();  //prints player's information
+        
         void printTerritories();  //prints player's territories
         void printOrders();  //prints player's orders
 

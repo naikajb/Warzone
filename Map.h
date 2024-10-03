@@ -13,6 +13,7 @@ using std::endl;    // class template that inserts a new-line character
 using std::ostream; // class template that contains output stream objects to perform output operations
 using std::string;  // class template add features support strings
 using std::vector;  // class template that contains vector container and its member functions
+class Continent;     // forward declaration of Continent class
 
 class Territory // creation of Territory class
 {

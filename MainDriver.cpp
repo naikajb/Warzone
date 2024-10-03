@@ -4,7 +4,9 @@
 #include "OrdersDriver.h"
 #include "MapDriver.h"
 #include "GameEngine.h"
+#include "PlayerDriver.h"
 #include "CardDriver.h"
+
 
 int main(){
 
@@ -12,6 +14,9 @@ int main(){
 
     // Call funcion to test the Map(s)
     testLoadMaps();
+
+    std::cout << "Testing Part 2 - Player Component :" << std::endl;
+    testPlayers();
 
     std::cout << "Testing Part 3 - Orders List Component :" << std::endl;
 
