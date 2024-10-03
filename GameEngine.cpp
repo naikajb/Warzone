@@ -236,7 +236,14 @@ GameEngine::~GameEngine(){
     delete issueOrders;
     delete executeOrders;
     delete win;
-    startState, mapLoadedState, mapValidated, playersAdded, assignReinforcement, issueOrders, executeOrders, win = NULL;
+    startState = NULL;
+    mapLoadedState = NULL;
+    mapValidated = NULL;
+    playersAdded = NULL;
+    assignReinforcement = NULL;
+    issueOrders = NULL;
+    executeOrders = NULL;
+    win = NULL;
 };
 
 // Getters for the different states (definitions)
