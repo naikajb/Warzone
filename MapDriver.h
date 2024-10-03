@@ -1,23 +1,18 @@
-#ifndef MAPDRIVER_H
-#define MAPDRIVER_H
+#ifndef MAPDRIVER_H // if MapDriver.h file not defined
+#define MAPDRIVER_H // define it
 
-#include <iostream>
+#include "Map.h" // import Map.h header file
+#include <iostream> // import library that provides objects which can read user input and output data to the console or to a file
+#include <vector> // import library to use vectors
 
-#include "Map.h"
+using std::vector; // class template that contains vector container and its member functions
+using std::cout; // class template from the iostream that display the output to the standard output device
+using std::endl; // class template that inserts a new-line character
 
+// receives a list of pointers of type map, returns a new list of pointers of type map but with only the valid maps
+vector<Map *> testLoadMaps(vector<Map *> mapSet);
 
+// main program driver 
 void testLoadMaps();
 
-void DFSHelper(Territory*,vector<Territory*>&);
-
-bool DFS(Map*);
-
-void DFSContinent(Territory*,vector<Territory*>&);
-
-bool DFSC(Continent*);
-
-bool uniqueCountry(Map* map);
-
-int main();
-
-#endif
+#endif // end of if not defined statement MAPDRIVER_H
