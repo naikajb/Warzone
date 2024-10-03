@@ -31,9 +31,6 @@ void testCards() {
     hand.displayHand();
     
     deck.displayDeck();
-
-    deck.~Deck();
-    hand.~Hand();
 }
 
 // int main() {
