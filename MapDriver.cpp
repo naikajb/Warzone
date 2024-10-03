@@ -20,7 +20,7 @@ vector<Map *> testLoadMaps(vector<Map *> mapSet) // testLoadMaps() definition
 }
 
 // called in program driver as an example of the testLoadMaps() function
-void testLoadMaps()
+int main()
 {
 
     MapLoader *ml = new MapLoader("MapTextFiles\\South America.map");
@@ -49,7 +49,9 @@ void testLoadMaps()
     }
 
     // deallocates the memory space in the heap where ml, ml1, ml2 is pointing to
-    delete ml, ml1, ml2;
+    delete ml; 
+    delete ml1; 
+    delete ml2;
     // ml, ml1, ml2 pointer no longer points to any valid memory
     ml = nullptr;
     ml1 = nullptr;
