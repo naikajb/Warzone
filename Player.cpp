@@ -84,6 +84,16 @@ vector<Territory*> Player::toAttack(){
     return toAttack;
 }
 
+//stream insertion operator to print player's information
+ostream& operator<<(ostream &out, const Player &player){
+    out << "Player name: " << endl;
+    out << "Territories: " << endl;
+    for (Territory* territory: player.territories){
+        out << territory->getName() << endl;
+    }
+    return out;
+}
+
 std::string Player::getPlayerName(){
     return playerName;
 }
@@ -103,10 +113,3 @@ void Player::removeTerritory(Territory* territory){
     }
 }
 
-void Player::printPlayer(){
-    cout << "Player name: " << playerName 
-            << "\n  Number of Territories: " << territories.size() 
-            << "\n  Current OrderList: " << orders->getOrders().size() 
-            << endl;
-    
-}
