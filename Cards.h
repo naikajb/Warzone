@@ -2,6 +2,9 @@
 #include <string>
 #include <vector>
 
+#ifndef CARDS_H
+#define CARDS_H
+
 using namespace std;
 
 class Hand;
@@ -62,3 +65,4 @@ class Hand {
 
 };
 
+#endif
