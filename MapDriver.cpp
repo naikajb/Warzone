@@ -20,7 +20,7 @@ vector<Map *> testLoadMaps(vector<Map *> mapSet) // testLoadMaps() definition
 }
 
 // called in program driver as an example of the testLoadMaps() function
-int main()
+void testLoadMaps()
 {
 
     MapLoader *ml = new MapLoader("MapTextFiles\\South America.map");

@@ -22,9 +22,9 @@ void testGameStates() {
     }
 };
 
-int main() {
+// int main() {
 
-    testGameStates();
+//     testGameStates();
 
-    return 0;
-}
+//     return 0;
+// }

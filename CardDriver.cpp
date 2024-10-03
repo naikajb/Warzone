@@ -36,7 +36,7 @@ void testCards() {
     hand.~Hand();
 }
 
-int main() {
-    testCards();
-    return 0;
-}
+// int main() {
+//     testCards();
+//     return 0;
+// }
