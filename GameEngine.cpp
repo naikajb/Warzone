@@ -303,6 +303,13 @@ void CommandParser::parseCommand(const std::string& input) {
     std::string commandType;
     iss >> commandType; // stream the input to string commandType
 
+    // Check if extraction was successful
+    if (commandType.empty()) {
+        std::cout << "No valid command entered. Please try again.\n" << std::endl;
+        return;
+    }
+
+
     // using find function to search for the value input inside the vector
     if (std::find(commands.begin(), commands.end(), commandType) != commands.end()) { // if std::find does not find element, it returns commands.end()
         engine->handleCommand(commandType);
