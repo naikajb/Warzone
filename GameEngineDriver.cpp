@@ -9,12 +9,12 @@ void testGameStates() {
     CommandParser parser(&engine);
 
     std::cout << "\nStarting Game Engine, Please Type A Command\n\n";
-
+    std::string input;
     while (true) {
-        std::string input;
+        
         std::cout << "> ";
-        std::getline(std::cin, input);
-
+        std::getline(std::cin >> std::ws, input);
+        
         if (input == "exit") {
             break;
         }
