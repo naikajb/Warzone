@@ -5,9 +5,10 @@
 #include <vector>
 #include <string>
 #include <vector>
+#include "LoggingObserver.h"
 
 // Base class representing a general order in the game
-class Order {
+class Order: public ILoggable, public Subject{
 public:
     Order(); //default constructor
     Order(const Order& original); //copy constructor
@@ -27,6 +28,8 @@ public:
     //Overloaded stream insertion operator -> define how an object's details are printed using std::cout
     Order& operator = (const Order& orginal); //assignment operator
 
+    virtual std::string stringToLog() const = 0; //method to convert order details to a string for logging
+
 protected:
     std::string orderDescription; //description of the order -> eg. deploy armies
     std::string orderEffect; //effect of the order once executed -> eg. armies have been deployed
@@ -43,6 +46,7 @@ public:
 
     bool validateOrder() override; //validate if the deploy order can be executed
     void executeOrder() override; //execute the deploy order --> deploy armies in the game
+    std::string stringToLog() const override; //convert order details to a string for logging
 };
 
 // Derived class for the 'advance' order in the gamne
@@ -53,6 +57,7 @@ public:
 
     bool validateOrder() override; //validate if the advance order can be executed
     void executeOrder() override; //execute the advance order --> move armies between territories
+    std::string stringToLog() const override; //convert order details to a string for logging
 };
 
 // Derived class for the 'bomb' order in the game
@@ -63,6 +68,7 @@ public:
 
     bool validateOrder() override; //validate if the bomb order can be executed
     void executeOrder() override; //execute the bomb order --> destroy half of the army units
+    std::string stringToLog() const override; //convert order details to a string for logging
 };
 
 // Derived class for the 'blokade' order in the game
@@ -73,6 +79,7 @@ public:
 
     bool validateOrder() override; //validate if the blockade order can be executed
     void executeOrder() override; //execute the blockade order --> triple army units and make territories neutral
+    std::string stringToLog() const override; //convert order details to a string for logging
 };
 
 // Derived class for the 'airlift' order in the game
@@ -83,6 +90,7 @@ public:
 
     bool validateOrder() override; //validate if the airlift order can be executed
     void executeOrder() override; //execute the airlift order --> move some units 
+    std::string stringToLog() const override; //convert order details to a string for logging
 };
 
 // Derived class for the 'negotiate' order in the game
@@ -93,10 +101,11 @@ public:
 
     bool validateOrder() override; //validate if the negotiate order can be executed
     void executeOrder() override; //execute the negotiate order --> prevent attacks between 2 players
+    std::string stringToLog() const override; //convert order details to a string for logging
 };
 
 // Class to manage a list of orders --> operations like adding, moving, and removing orders
-class OrdersList {
+class OrdersList: public ILoggable, public Subject{
 public:
     OrdersList(); //constructor
     ~OrdersList(); //destructor
@@ -109,6 +118,7 @@ public:
     friend std::ostream& operator<<(std::ostream& outputStream, const OrdersList& ordersList);
 
     std::vector<Order*> getOrders(); //get the list of orders
+    std::string stringToLog() const override; //convert order list details to a string for logging
 private:
     //Vector to store pointers to orders
     //Polymorphism - storing different order types
