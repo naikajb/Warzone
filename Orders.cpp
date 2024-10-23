@@ -56,6 +56,10 @@ void Deploy::executeOrder() {
     orderEffect = "Armies have been deployed."; 
 }
 
+// Convert order details to a string for logging
+std::string Deploy::stringToLog() const {
+    return "Deploy order has been executed.";
+}
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // Advance Order - derived class 
@@ -78,6 +82,10 @@ void Advance::executeOrder() {
     orderEffect = "Armies have advanced.";
 }
 
+// Convert order details to a string for logging
+std::string Advance::stringToLog() const {
+    return "Advance order has been executed.";
+}
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // Bomb Order - derived class
@@ -98,6 +106,11 @@ bool Bomb::validateOrder() {
 void Bomb::executeOrder() {
     executed = true;
     orderEffect = "Territory has been bombed.";
+}
+
+// Convert order details to a string for logging
+std::string Bomb::stringToLog() const {
+    return "Bomb order has been executed.";
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -122,6 +135,10 @@ void Blockade::executeOrder() {
     orderEffect = "Territory has been blockaded.";
 }
 
+// Convert order details to a string for logging
+std::string Blockade::stringToLog() const {
+    return "Blockade order has been executed.";
+}
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // Airlift Order - derived class
@@ -144,6 +161,10 @@ void Airlift::executeOrder() {
     orderEffect = "Armies have been airlifted";
 }
 
+// Convert order details to a string for logging
+std::string Airlift::stringToLog() const {
+    return "Airlift order has been executed.";
+}
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // Negotiate Order - derived class
@@ -166,6 +187,10 @@ void Negotiate::executeOrder() {
     orderEffect = "Truce has been negotiated.";
 }
 
+// Convert order details to a string for logging
+std::string Negotiate::stringToLog() const {
+    return "Negotiate order has been executed.";
+}
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // OrdersList class implementation
@@ -212,4 +237,9 @@ std::ostream& operator<<(std::ostream& out, const OrdersList& ordersList) {
 
 vector<Order*> OrdersList::getOrders(){
     return orders;
+}
+
+// Convert order list details to a string for logging
+std::string OrdersList::stringToLog() const {
+    return "Orders list has been updated.";
 }

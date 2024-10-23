@@ -290,6 +290,10 @@ void GameEngine::changeState(GameState* newState) {
     std::cout << "State changed to: " << currentState->getStateName() << "\n" << std::endl;
 }
 
+std::string GameEngine::stringToLog() const {
+    return "Game Engine has been updated.";
+}
+
 // Constructor definition, using the initializer list to initialize the 'engine' member
 CommandParser::CommandParser(GameEngine* engine) : engine(engine){};
 

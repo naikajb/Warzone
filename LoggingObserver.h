@@ -1,4 +1,4 @@
-// 
+
 #ifndef LOGGINGOBSERVER_H
 #define LOGGINGOBSERVER_H
 
@@ -7,21 +7,29 @@
 #include <iostream>
 #include <fstream>
 
+
+class ILoggable{
+    
+    public:
+        //the = 0 ensures that the method is pure virtual and must be implemented by the derived class 
+        virtual std::string stringToLog() const = 0; 
+
+};
 //saveCommand(), execute(), saveEffect(), addOrder(), transition() use the Notify() method
 class Observer{
     public:
-        void update(ILoggable* loggable);
+        virtual void update(const ILoggable& loggable) const = 0;
         virtual ~Observer();
 }; 
 
 class LogObserver: public Observer{
     private: 
         std::string logFileName;
-        std::ofstream logFile;
+        mutable std::ofstream logFile; //mutable keywork allows the variable to be modified in a const method
     public:
         LogObserver();
         LogObserver(std::string logFilename);
-        void update(ILoggable* loggable);
+        void update(const ILoggable& loggable) const;
         ~LogObserver();
 };
 
@@ -39,13 +47,7 @@ class Subject{
 
 };
 
-class ILoggable{
-    
-    public:
-        //the = 0 ensures that the method is pure virtual and must be implemented by the derived class 
-        virtual std::string stringToLog() const = 0; 
 
-};
 
 
 
