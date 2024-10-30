@@ -114,3 +114,8 @@ void Player::removeTerritory(Territory* territory){
     }
 }
 
+//attach observer to player's order list
+void Player::AttachObserver(Observer* observer){
+    orders->Attach(observer);
+}
+
