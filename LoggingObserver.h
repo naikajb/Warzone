@@ -40,7 +40,7 @@ class Subject{
         void Detach(Observer* observer);
         void Notify(ILoggable* loggableObject);
     private: 
-        std::vector<Observer*> observers;
+        Observer* observer;
 };
 
 #endif

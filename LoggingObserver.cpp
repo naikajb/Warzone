@@ -1,17 +1,18 @@
 #include "LoggingObserver.h"
 using namespace std;
 
+//OBSERVER CLASS
 Observer::~Observer(){
-    delete this;
 }
 
 Observer::Observer(){
 }
 
+//LOGGINGOBSERVER CLASS
 LogObserver::~LogObserver(){
-    delete this;
+    delete &logFile;
+    delete &logFileName;
 }
-
 
 // LogObserver constructor to create the log file
 LogObserver::LogObserver(){
@@ -21,6 +22,29 @@ LogObserver::LogObserver(){
     logFile.close();
 }
 
+// LogObserver update method to write to the log file
 void LogObserver::update(ILoggable* loggableObject){
+    logFile.open(logFileName, std::ios::app);
+    logFile << loggableObject->stringToLog() << std::endl;
+    logFile.close();
+}
+
+//SUBJECT CLASS
+Subject::~Subject(){
+    delete observer;
+
+    observer = NULL;
 
 }
+void Subject::Attach(Observer* observer){
+    this->observer = observer;
+}
+
+void Subject::Detach(Observer* observer){
+    delete observer;
+}
+
+void Subject::Notify(ILoggable* loggableObject){
+    observer->update(loggableObject);
+}
+
