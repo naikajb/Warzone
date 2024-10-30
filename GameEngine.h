@@ -154,8 +154,7 @@ public:
     GameState* getExecuteOrders();
     GameState* getWin();
 
-    // function to convert the game engine to a string for logging
-    std::string stringToLog() const override;
+    std::string stringToLog(); // override from ILoggable to log the current state
 
 private:
     // declaring instances of the states and a pointer that points to the current state
