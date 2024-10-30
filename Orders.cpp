@@ -35,6 +35,9 @@ std::ostream& operator<<(std::ostream& outputStream, const Order& order) {
     return outputStream; //return the output stream
 }
 
+std::string Order::stringToLog() {
+    return "Order " + orderDescription + " had effect " + orderEffect;
+}
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // Deploy Order - derived class Deploy implementation
@@ -54,12 +57,10 @@ bool Deploy::validateOrder() {
 void Deploy::executeOrder() {
     executed = true; //mark the order as executed
     orderEffect = "Armies have been deployed."; 
+    Notify(this);
 }
 
-// Convert order details to a string for logging
-std::string Deploy::stringToLog() const {
-    return "Deploy order has been executed.";
-}
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // Advance Order - derived class 
@@ -80,12 +81,9 @@ bool Advance::validateOrder() {
 void Advance::executeOrder() {
     executed = true; 
     orderEffect = "Armies have advanced.";
+    Notify(this);
 }
 
-// Convert order details to a string for logging
-std::string Advance::stringToLog() const {
-    return "Advance order has been executed.";
-}
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // Bomb Order - derived class
@@ -108,10 +106,6 @@ void Bomb::executeOrder() {
     orderEffect = "Territory has been bombed.";
 }
 
-// Convert order details to a string for logging
-std::string Bomb::stringToLog() const {
-    return "Bomb order has been executed.";
-}
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -135,10 +129,7 @@ void Blockade::executeOrder() {
     orderEffect = "Territory has been blockaded.";
 }
 
-// Convert order details to a string for logging
-std::string Blockade::stringToLog() const {
-    return "Blockade order has been executed.";
-}
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // Airlift Order - derived class
@@ -159,12 +150,10 @@ bool Airlift::validateOrder() {
 void Airlift::executeOrder() {
     executed = true;
     orderEffect = "Armies have been airlifted";
+    Notify(this);
 }
 
-// Convert order details to a string for logging
-std::string Airlift::stringToLog() const {
-    return "Airlift order has been executed.";
-}
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // Negotiate Order - derived class
@@ -185,12 +174,10 @@ bool Negotiate::validateOrder() {
 void Negotiate::executeOrder() {
     executed = true;
     orderEffect = "Truce has been negotiated.";
+    Notify(this);
 }
 
-// Convert order details to a string for logging
-std::string Negotiate::stringToLog() const {
-    return "Negotiate order has been executed.";
-}
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // OrdersList class implementation
@@ -208,6 +195,7 @@ OrdersList::~OrdersList() {
 // Add an order to the list
 void OrdersList::addOrder(Order* order) {
     orders.push_back(order);
+    Notify(order);
 }
 
 // Move an order from one position to another in the list
@@ -239,7 +227,12 @@ vector<Order*> OrdersList::getOrders(){
     return orders;
 }
 
-// Convert order list details to a string for logging
-std::string OrdersList::stringToLog() const {
-    return "Orders list has been updated.";
+std::string OrdersList::stringToLog() {
+    std::string logString = "Current Orders List: \n";
+    for (Order* order : orders) {
+        logString += "\t" + order->stringToLog() + "\n";
+    }
+    return logString;
 }
+
+
