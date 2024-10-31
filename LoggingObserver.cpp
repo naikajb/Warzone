@@ -10,8 +10,10 @@ Observer::Observer(){
 
 //LOGGINGOBSERVER CLASS
 LogObserver::~LogObserver(){
-    delete &logFile;
-    delete &logFileName;
+    if (logFile.is_open()) {
+        logFile.close();
+    }
+    
 }
 
 // LogObserver constructor to create the log file
@@ -31,17 +33,15 @@ void LogObserver::update(ILoggable* loggableObject){
 
 //SUBJECT CLASS
 Subject::~Subject(){
-    delete observer;
-
+    Detach(observer);
     observer = NULL;
-
 }
 void Subject::Attach(Observer* observer){
     this->observer = observer;
 }
 
 void Subject::Detach(Observer* observer){
-    delete observer;
+    observer = NULL;
 }
 
 void Subject::Notify(ILoggable* loggableObject){

@@ -36,7 +36,7 @@ std::ostream& operator<<(std::ostream& outputStream, const Order& order) {
 }
 
 std::string Order::stringToLog() {
-    return "Order " + orderDescription + " had effect " + orderEffect;
+    return orderDescription + " had effect " + orderEffect;
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
