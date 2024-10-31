@@ -189,6 +189,7 @@ OrdersList::OrdersList() {}
 OrdersList::~OrdersList() {
     for (Order* order : orders) {
         delete order;
+        order = NULL;
     }
 }
 

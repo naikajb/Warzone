@@ -28,27 +28,43 @@ using namespace std;
 
 void testLoggingObserver(){
     LogObserver* observer = new LogObserver();
-    /** TestSubject* testSubject = new TestSubject();
-     testSubject->Attach(observer);
-     testSubject->Notify(testSubject);
-
-     testSubject->setAction("New Action");*/
-
     GameEngine* engine = new GameEngine();
     CommandParser parser(engine);
-    Order* order = new Deploy();
-    //OrdersList* orderList = new OrdersList();
+    Deploy* order = new Deploy();
     Player* player = new Player("naika");
-    player->AttachObserver(observer);
+    OrdersList* orders = new OrdersList();
     
-    cout << "GameEngine is created, its typeId is: " << typeid(engine).name() << endl;
-    cout << "Order is created, its typeId is: " << typeid(*order).name() << endl;   
-    //cout << "OrderList is created, its typeId is: " << typeid(orderList).name() << endl; 
-    
+    orders->Attach(observer);
+    orders->addOrder(order);
+    //TODO: add the observer to the Command and CommandProcessor
+
+    cout<< "\nAttaching observer to GameEngine, Order, and Player\n----------------------------------------------" 
+        << "\n\texecuting engine->Attach(observer);"
+        //<< "\n\texecuting order->Attach(observer);"
+        << "\n\texecuting player->AttachObserver(observer);"
+        << endl;
     engine->Attach(observer);
-    order->Attach(observer);
-    //orderList->Attach(observer);
+    //order->Attach(observer);
+    player->AttachObserver(observer);
+   //TODO: add the observer to the Command and CommandProcessor 
+    
+    cout << "\nExample of the observer being notified when an order is added to the order list of a player\n----------------------------------------------" 
+        << "\n\texecuting player->issueOrder(order);"
+        << endl;
+    player->issueOrder(order);
+    
+    // cout << "\nExample of the observer being notified when an order is executed\n----------------------------------------------" 
+    //     << "\n\texecuting order->executeOrder();"
+    //     << "\n\tExecuting order->executeOrder();"
+    //     << endl;
+    // //order->executeOrder();
+
+    cout << "\nExample of the observer being notified when the GameEngine changes its state\n----------------------------------------------" 
+        << "\n\texecuting parser.parseCommand(\"loadmap\");"
+        << "\n\texecuting parser.parseCommand(\"validatemap\");"
+        << endl;
     parser.parseCommand("loadmap");
+    parser.parseCommand("validatemap");
     string input;
     cout << "Enter a command: ";
     cin >> input;
@@ -57,11 +73,16 @@ void testLoggingObserver(){
     cin >> input;
     parser.parseCommand(input);
     
-    player->issueOrder(order);
-    
+    cout << "player address: " << player << endl;
+    cout << "order address: " << order << endl;
+    cout << "observer address: " << observer << endl;
+    cout << "engine address: " << engine << endl;
 
-    
-    
+    delete player;
+    engine->Detach(observer);
+    delete engine;
+    delete observer;
+    //delete orders; TODO: seg fault when deleting orders
 }
 
 
