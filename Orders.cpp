@@ -56,6 +56,15 @@ void Deploy::executeOrder() {
     orderEffect = "Armies have been deployed."; 
 }
 
+void Deploy::execute(){
+
+    // input -> (player issuing order{Player}, num of army units {int}, target {Territory})
+
+    // verify -> target Territory needs to be owned by Player
+
+    // valid -> target Territory's army units += num of army units {int}
+}
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // Advance Order - derived class 
@@ -76,6 +85,18 @@ bool Advance::validateOrder() {
 void Advance::executeOrder() {
     executed = true; 
     orderEffect = "Armies have advanced.";
+}
+
+void Advance::execute(){
+
+    // input -> (player issuing order{Player}, num of army units {int}, source {Territory}, target {Territory})
+
+    // verify -> source Territory needs to be owned by Player
+    // -> target Territory needs to be adjacent to source Territory (use adjacency list)
+
+    // valid -> 
+    // if source and target belong to Player: move num of army units from source to target
+    // if target does NOT belong to Player: simulate battle
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -100,6 +121,17 @@ void Bomb::executeOrder() {
     orderEffect = "Territory has been bombed.";
 }
 
+void Bomb::execute(){
+
+    // input -> (player issuing order{Player}, target {Territory})
+
+    // verify -> target Territory CANNOT be owned by Player
+    // -> target needs to be adjacent to at least one Territory owned by Player
+
+    // valid -> army units of target{Territory}=/2
+
+}
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // Blockade Order - derived class
@@ -120,6 +152,17 @@ bool Blockade::validateOrder() {
 void Blockade::executeOrder() {
     executed = true;
     orderEffect = "Territory has been blockaded.";
+}
+
+void Blockade::execute(){
+
+    // input -> (player issuing order{Player}, target {Territory})
+
+    // verify -> target Territory needs to be owned by Player
+
+    // valid -> army units of target{Territory}*/2
+    // -> target's ownership is transferred to the Neutral Player
+
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -144,6 +187,18 @@ void Airlift::executeOrder() {
     orderEffect = "Armies have been airlifted";
 }
 
+void Airlift::execute(){
+
+    // requirement -> Airlift card
+
+    // input -> (player issuing order{Player}, num of army units {int}, source {Territory},target {Territory})
+
+    // verify -> source{Territory} AND target{Territory} needs to be owned by Player
+
+    // valid -> move *num of army units* from source to target
+
+}
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // Negotiate Order - derived class
@@ -164,6 +219,18 @@ bool Negotiate::validateOrder() {
 void Negotiate::executeOrder() {
     executed = true;
     orderEffect = "Truce has been negotiated.";
+}
+
+void Negotiate::execute(){
+
+    // requirement -> Airlift card
+
+    // input -> (player issuing order{Player}, target player{Player})
+
+    // verify -> the target player CANNOT be the same as the player issuing the order
+
+    // valid -> all attacks between territories owned by both players = invalid order
+
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

@@ -18,4 +18,6 @@ class Negotiate;    //derived class --> negotiate order
 // Function to test the OrdersList class and functionality
 void testOrdersLists();
 
+void testOrderExecution();
+
 #endif // ORDERSDRIVER_H

@@ -27,6 +27,8 @@ public:
     //Overloaded stream insertion operator -> define how an object's details are printed using std::cout
     Order& operator = (const Order& orginal); //assignment operator
 
+    virtual void execute() = 0;
+
 protected:
     std::string orderDescription; //description of the order -> eg. deploy armies
     std::string orderEffect; //effect of the order once executed -> eg. armies have been deployed
@@ -43,6 +45,9 @@ public:
 
     bool validateOrder() override; //validate if the deploy order can be executed
     void executeOrder() override; //execute the deploy order --> deploy armies in the game
+
+    void execute();
+
 };
 
 // Derived class for the 'advance' order in the gamne
@@ -53,6 +58,8 @@ public:
 
     bool validateOrder() override; //validate if the advance order can be executed
     void executeOrder() override; //execute the advance order --> move armies between territories
+
+    void execute();
 };
 
 // Derived class for the 'bomb' order in the game
@@ -63,6 +70,8 @@ public:
 
     bool validateOrder() override; //validate if the bomb order can be executed
     void executeOrder() override; //execute the bomb order --> destroy half of the army units
+
+    void execute();
 };
 
 // Derived class for the 'blokade' order in the game
@@ -73,6 +82,8 @@ public:
 
     bool validateOrder() override; //validate if the blockade order can be executed
     void executeOrder() override; //execute the blockade order --> triple army units and make territories neutral
+
+    void execute();
 };
 
 // Derived class for the 'airlift' order in the game
@@ -83,6 +94,8 @@ public:
 
     bool validateOrder() override; //validate if the airlift order can be executed
     void executeOrder() override; //execute the airlift order --> move some units 
+
+    void execute();
 };
 
 // Derived class for the 'negotiate' order in the game
@@ -93,6 +106,8 @@ public:
 
     bool validateOrder() override; //validate if the negotiate order can be executed
     void executeOrder() override; //execute the negotiate order --> prevent attacks between 2 players
+
+    void execute();
 };
 
 // Class to manage a list of orders --> operations like adding, moving, and removing orders
