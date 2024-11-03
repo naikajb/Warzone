@@ -1,11 +1,12 @@
 #ifndef GameEngine_h
 #define GameEngine_h
 
+#include "CommandProcessor.h"
 #include <iostream>
 #include <sstream>
 #include <string>
 #include <vector> 
-#include <algorithm>
+#include <map>
 using namespace std;
 
 class GameEngine; // forward declaration
@@ -142,6 +143,8 @@ public:
     
     // function which is responsible for receiving the user's command and then delegating it to the current state
     void handleCommand(const std::string& command);
+
+    multimap<Command*, GameState*> commandStateMap;
 
     // declaring getters for the different states 
     GameState* getStartState();
