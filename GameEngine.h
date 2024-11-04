@@ -6,7 +6,10 @@
 #include <string>
 #include <vector> 
 #include <algorithm>
+#include "Player.h" //added
+#include "Map.h"
 using namespace std;
+using std::vector; // added 
 
 class GameEngine; // forward declaration
 
@@ -153,6 +156,17 @@ public:
     GameState* getExecuteOrders();
     GameState* getWin();
 
+
+
+
+
+
+    // added Main Game Loop part of the game
+    void reinforcementPhase(vector <Player*>, Map *map);
+    void issueOrdersPhase(vector <Player*>);
+    void executeOrdersPhase(vector <Player*>);
+    void mainGameLoop(vector <Player*>);
+
 private:
     // declaring instances of the states and a pointer that points to the current state
     GameState* currentState;
@@ -189,6 +203,8 @@ private:
 };
 
 void testGameStates();
+
+
 
 
 #endif

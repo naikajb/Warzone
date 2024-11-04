@@ -16,6 +16,7 @@ class Player{
         std::vector<Territory*> territories; // collection of Territory objects
         Hand* hand; // hand of Card objects
         OrdersList* orders; // list of Order objects
+        int reinforcementPool; // nb of armies recieved added
 
     public: 
         Player(string playerName); //constructor function
@@ -25,6 +26,10 @@ class Player{
         // Player owns collection of Territory objects
         void addTerritory(Territory* territory);
         void removeTerritory(Territory* territory);
+
+        std::vector<Territory*> getTerritories(); // getter of a list of territories the player has
+        void setReinforcementPool(int);
+        int getReinforcementPool();
 
         std::vector<Territory*> toDefend();  //returns territories to be defended 
         std::vector<Territory*> toAttack();  //returns territories to be attacked

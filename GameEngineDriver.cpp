@@ -22,6 +22,8 @@ void testGameStates() {
     }
 };
 
+void testMainGameLoop();
+
 // int main() {
 
 //     testGameStates();
