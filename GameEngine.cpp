@@ -288,6 +288,11 @@ void GameEngine::handleCommand(const std::string& command) {
 void GameEngine::changeState(GameState* newState) {
     currentState = newState;
     std::cout << "State changed to: " << currentState->getStateName() << "\n" << std::endl;
+    Notify(this);
+}
+
+std::string GameEngine::stringToLog() {
+    return "GameEngine changed state to " + currentState->getStateName();
 }
 
 // Constructor definition, using the initializer list to initialize the 'engine' member

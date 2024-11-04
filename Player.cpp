@@ -31,21 +31,16 @@ Player :: Player(const Player& orig){
 
 // Player destructor
 Player::~Player() {
-    // for (Order* order: orders->getOrders()){
-    //     delete order;
-    // }
     delete orders; //TODO: check if i need to delete the orders in the list first
-
-    for (Territory* territory: territories){
-        delete territory;
-    }
+    orders = NULL;
+    territories.clear();
     //TODO: check if i need to delete the cards in the hand first
 }
 
 // adds order to the player's list of orders
 void Player::issueOrder(Order* order){
     orders->addOrder(order);
-    cout << *order << endl;
+    //cout << *order << endl;
 }
 
 // adds territory to the player's list of territories
@@ -112,5 +107,10 @@ void Player::removeTerritory(Territory* territory){
             break;
         }
     }
+}
+
+//attach observer to player's order list
+void Player::AttachObserver(Observer* observer){
+    orders->Attach(observer);
 }
 
