@@ -35,6 +35,9 @@ std::ostream& operator<<(std::ostream& outputStream, const Order& order) {
     return outputStream; //return the output stream
 }
 
+std::string Order::stringToLog() {
+    return orderDescription + " had effect " + orderEffect;
+}
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // Deploy Order - derived class Deploy implementation
@@ -54,7 +57,9 @@ bool Deploy::validateOrder() {
 void Deploy::executeOrder() {
     executed = true; //mark the order as executed
     orderEffect = "Armies have been deployed."; 
+    Notify(this);
 }
+
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -76,6 +81,7 @@ bool Advance::validateOrder() {
 void Advance::executeOrder() {
     executed = true; 
     orderEffect = "Armies have advanced.";
+    Notify(this);
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -100,6 +106,7 @@ void Bomb::executeOrder() {
     orderEffect = "Territory has been bombed.";
 }
 
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // Blockade Order - derived class
@@ -122,6 +129,7 @@ void Blockade::executeOrder() {
     orderEffect = "Territory has been blockaded.";
 }
 
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // Airlift Order - derived class
@@ -142,7 +150,9 @@ bool Airlift::validateOrder() {
 void Airlift::executeOrder() {
     executed = true;
     orderEffect = "Armies have been airlifted";
+    Notify(this);
 }
+
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -164,7 +174,9 @@ bool Negotiate::validateOrder() {
 void Negotiate::executeOrder() {
     executed = true;
     orderEffect = "Truce has been negotiated.";
+    Notify(this);
 }
+
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -177,12 +189,14 @@ OrdersList::OrdersList() {}
 OrdersList::~OrdersList() {
     for (Order* order : orders) {
         delete order;
+        order = NULL;
     }
 }
 
 // Add an order to the list
 void OrdersList::addOrder(Order* order) {
     orders.push_back(order);
+    Notify(order);
 }
 
 // Move an order from one position to another in the list
@@ -213,3 +227,13 @@ std::ostream& operator<<(std::ostream& out, const OrdersList& ordersList) {
 vector<Order*> OrdersList::getOrders(){
     return orders;
 }
+
+std::string OrdersList::stringToLog() {
+    std::string logString = "Current Orders List: \n";
+    for (Order* order : orders) {
+        logString += "\t" + order->stringToLog() + "\n";
+    }
+    return logString;
+}
+
+

@@ -69,7 +69,7 @@ int Player::getReinforcementPool()
 void Player::issueOrder(Order *order)
 {
     orders->addOrder(order);
-    cout << *order << endl;
+    //cout << *order << endl;
 }
 
 // adds territory to the player's list of territories
@@ -153,3 +153,9 @@ void Player::removeTerritory(Territory *territory)
         }
     }
 }
+
+//attach observer to player's order list
+void Player::AttachObserver(Observer* observer){
+    orders->Attach(observer);
+}
+

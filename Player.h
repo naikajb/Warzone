@@ -21,7 +21,7 @@ class Player{
     public: 
         Player(string playerName); //constructor function
         Player(const Player& orig);
-        ~Player(); //destructor function 
+        ~Player(); // TODO: implement destructor function 
     
         // Player owns collection of Territory objects
         void addTerritory(Territory* territory);
@@ -47,6 +47,8 @@ class Player{
         void printOrders();  //prints player's orders
 
         std::string getPlayerName();  //returns player's name
+
+        void AttachObserver(Observer* observer);  //attaches observer to player
         
 };
 

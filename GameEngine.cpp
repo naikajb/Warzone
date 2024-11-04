@@ -1,446 +1,75 @@
 #include "GameEngine.h"
 
-// defining the GameState constructor
-GameState::GameState() {};
-
-// defining the copy constructor
-GameState::GameState(const GameState &gameState)
-{
-    std::cout << "Copy Constructor of GameState";
+// creating a list of game states
+const char* GameEngine::GameStateStrings[] = {
+    "startState",
+    "mapLoadedState",
+    "mapValidated",
+    "playersAdded",
+    "assignReinforcement",
+    "issueOrders",
+    "executeOrders",
+    "win"
 };
 
-// defining the destructor
-GameState::~GameState() {};
-
-StartState::StartState() {};
-
-StartState::StartState(const StartState &startState)
-{
-    std::cout << "Copy Constructor of StartState";
+//defining the GameEngine constructor, creating the state transition map which maps commands to the states they transition to
+GameEngine::GameEngine() : currentState(GameStateStrings[0]), commandProcessor(new CommandProcessor()) {
+    
+    stateTransitionMap.insert(pair<std::string, const char*>("loadmap", GameStateStrings[1]));
+    stateTransitionMap.insert(pair<std::string, const char*>("validatemap", GameStateStrings[2]));
+    stateTransitionMap.insert(pair<std::string, const char*>("addplayer", GameStateStrings[3]));
+    stateTransitionMap.insert(pair<std::string, const char*>("gamestart", GameStateStrings[4]));
+    stateTransitionMap.insert(pair<std::string, const char*>("replay", GameStateStrings[0]));
 };
 
-StartState::~StartState() {};
 
-// handleCommand function implementation, it processes the command and each state decides what to do with the received command
-void StartState::handleCommand(GameEngine *engine, const std::string &command)
-{
-    if (command == "loadmap")
-    {
-        std::cout << "Loading map..." << std::endl;
-        engine->changeState(engine->getMapLoadedState()); // transition to next state
-    }
-    else
-    {
-        std::cout << "Invalid command. Try <loadmap> to move to next step.\n"
-                  << std::endl;
-    }
+//defining the copy constructor
+GameEngine::GameEngine(const GameEngine& game_engine) {
+    std::cout << "Copy Constructor of GameEngine";
 };
 
-// StartState's getstatename: returns the name of the state
-std::string StartState::getStateName()
-{
-    return "Start";
+//defining the destructor
+GameEngine::~GameEngine() {
+    delete commandProcessor;
+    commandProcessor = NULL;
 };
 
-MapLoadedState::MapLoadedState() {};
+//function to get the current state
+const char* GameEngine::getCurrentState(){
+    return currentState;
+}
 
-MapLoadedState::MapLoadedState(const MapLoadedState &mapLoadedState)
-{
-    std::cout << "Copy Constructor of MapLoadedState";
-};
+//function to handle state transitions, it finds the command in the map and changes the state associated with it
+void GameEngine::stateTransition(Command* cmd) {
+    std::string command = cmd->getCommandStr();
 
-MapLoadedState::~MapLoadedState() {};
-
-void MapLoadedState::handleCommand(GameEngine *engine, const std::string &command)
-{
-    if (command == "loadmap")
-    {
-        std::cout << "Loading map...\n"
-                  << std::endl;
+    if (stateTransitionMap.find(command) != stateTransitionMap.end()) {
+        currentState = stateTransitionMap.find(command)->second;
+        cmd->saveEffect(currentState);
+        std::cout << "Changing state to: " << currentState << "...\n" << std::endl;
     }
-    else if (command == "validatemap")
-    {
-        std::cout << "Validating map...." << std::endl;
-        engine->changeState(engine->getMapValidated());
-    }
-    else
-    {
-        std::cout << "Invalid command. try <validatemap> to move to next step or <loadmap> to load another map.\n"
-                  << std::endl;
-    }
-};
-
-std::string MapLoadedState::getStateName()
-{
-    return "Map Loaded";
+       Notify(this);
 }
 
-MapValidatedState::MapValidatedState() {};
-
-MapValidatedState::MapValidatedState(const MapValidatedState &mapValidatedState)
-{
-    std::cout << "Copy Constructor of MapValidatedState";
+std::string GameEngine::stringToLog() {
+    return "GameEngine changed state to " + std::string(currentState);
 }
 
-MapValidatedState::~MapValidatedState() {};
+//function to process commands entered by the user
+void GameEngine::processCommand(std::string& command) {
+   
+    Command* cmd = commandProcessor->getCommand(command);
 
-void MapValidatedState::handleCommand(GameEngine *engine, const std::string &command)
-{
-    if (command == "addplayer")
-    {
-        std::cout << "adding player...." << std::endl;
-        engine->changeState(engine->getPlayersAdded());
-    }
-    else
-    {
-        std::cout << "Invalid command. try <addplayer> to move to next step.\n"
-                  << std::endl;
-    }
-};
+    std::cout << "\nCurrent State: " << getCurrentState() << "\n" << std::endl;
 
-std::string MapValidatedState::getStateName()
-{
-    return "Map Validated";
+    if((commandProcessor->validate(cmd, this->getCurrentState())) == true) {
+        stateTransition(cmd);
+        
+    } else {
+        std::cout << "Invalid command. Try again.\n" << std::endl;
+
+    };
 }
 
-PlayersAddedState::PlayersAddedState() {};
-PlayersAddedState::PlayersAddedState(const PlayersAddedState &PlayersAddedState)
-{
-    std::cout << "Copy Constructor of PlayersAddedState";
-}
 
-PlayersAddedState::~PlayersAddedState() {};
 
-void PlayersAddedState::handleCommand(GameEngine *engine, const std::string &command)
-{
-    if (command == "addplayer")
-    {
-        std::cout << "adding player....\n"
-                  << std::endl;
-    }
-    else if (command == "assigncountries")
-    {
-        std::cout << "Assigning countries...." << std::endl;
-        engine->changeState(engine->getAssignReinforcement());
-    }
-
-    else
-    {
-        std::cout << "Invalid command. try <assigncountries> to move to next step or <addplayer> if you want to add more players.\n"
-                  << std::endl;
-    }
-};
-
-std::string PlayersAddedState::getStateName()
-{
-    return "Players Added";
-}
-
-AssignReinforcementState::AssignReinforcementState() {};
-
-AssignReinforcementState::AssignReinforcementState(const AssignReinforcementState &assignReinf)
-{
-    std::cout << "Copy Constructor of AssignReinforcementState";
-}
-
-AssignReinforcementState::~AssignReinforcementState() {};
-
-void AssignReinforcementState::handleCommand(GameEngine *engine, const std::string &command)
-{
-    if (command == "issueorder")
-    {
-        std::cout << "Issuing order...." << std::endl;
-        engine->changeState(engine->getIssueOrders());
-    }
-    else
-    {
-        std::cout << "Invalid command. try <issueorder> to move to next step.\n"
-                  << std::endl;
-    }
-}
-
-std::string AssignReinforcementState::getStateName()
-{
-    return "Assign Reinforcement";
-}
-
-IssueOrdersState::IssueOrdersState() {};
-
-IssueOrdersState::IssueOrdersState(const IssueOrdersState &issueOrderState)
-{
-    std::cout << "Copy Constructor of IssueOrderState";
-};
-
-IssueOrdersState::~IssueOrdersState() {};
-
-void IssueOrdersState::handleCommand(GameEngine *engine, const std::string &command)
-{
-    if (command == "issueorder")
-    {
-        std::cout << "Issuing order....\n"
-                  << std::endl;
-    }
-    else if (command == "endissueorders")
-    {
-        std::cout << "Ending issue orders...." << std::endl;
-        engine->changeState(engine->getExecuteOrders());
-    }
-    else
-    {
-        std::cout << "Invalid command. try <endissueorders> to move to next step or <issueorder>.\n"
-                  << std::endl;
-    }
-}
-
-std::string IssueOrdersState::getStateName()
-{
-    return "Issue Orders";
-}
-
-ExecuteOrdersState::ExecuteOrdersState() {};
-
-ExecuteOrdersState::ExecuteOrdersState(const ExecuteOrdersState &executeOrderState)
-{
-    std::cout << "Copy Constructor of ExecuteOrderState";
-}
-
-ExecuteOrdersState::~ExecuteOrdersState() {};
-
-void ExecuteOrdersState::handleCommand(GameEngine *engine, const std::string &command)
-{
-    if (command == "execorder")
-    {
-        std::cout << "Executing Order....\n"
-                  << std::endl;
-    }
-    else if (command == "win")
-    {
-        std::cout << "Win...." << std::endl;
-        engine->changeState(engine->getWin());
-    }
-    else if (command == "endexecorders")
-    {
-        std::cout << "Ending Execute Order...." << std::endl;
-        engine->changeState(engine->getAssignReinforcement());
-    }
-    else
-    {
-        std::cout << "Invalid command. try <endexecorders> or <win> to move to next step or <execorder>.\n"
-                  << std::endl;
-    }
-}
-
-std::string ExecuteOrdersState::getStateName()
-{
-    return "Execute Orders";
-}
-
-WinState::WinState() {};
-
-WinState::WinState(const WinState &winState)
-{
-    std::cout << "Copy Constructor of WinState";
-};
-
-WinState::~WinState() {};
-
-void WinState::handleCommand(GameEngine *engine, const std::string &command)
-{
-    if (command == "play")
-    {
-        std::cout << "Continuing Game...." << std::endl;
-        engine->changeState(engine->getStartState());
-    }
-    else if (command == "end")
-    {
-        exit(-1);
-    }
-    else
-    {
-        std::cout << "Invalid command. try <play> to continue playing or <end>.\n"
-                  << std::endl;
-    }
-}
-
-std::string WinState::getStateName()
-{
-    return "Win!";
-}
-
-// initializing the CurrentState pointer
-GameEngine::GameEngine() : currentState(nullptr)
-{
-    startState = new StartState(); // creating instances of the State classes
-    mapLoadedState = new MapLoadedState();
-    mapValidated = new MapValidatedState();
-    playersAdded = new PlayersAddedState();
-    assignReinforcement = new AssignReinforcementState();
-    issueOrders = new IssueOrdersState();
-    executeOrders = new ExecuteOrdersState();
-    win = new WinState();
-    currentState = startState; // set the pointer to the first State.
-}
-
-GameEngine::GameEngine(const GameEngine &game_engine)
-{
-    std::cout << "Copy constructor of Game Engine\n";
-};
-
-// deallocating all the objects created
-GameEngine::~GameEngine()
-{
-    delete startState;
-    delete mapLoadedState;
-    delete mapValidated;
-    delete playersAdded;
-    delete assignReinforcement;
-    delete issueOrders;
-    delete executeOrders;
-    delete win;
-    startState = NULL;
-    mapLoadedState = NULL;
-    mapValidated = NULL;
-    playersAdded = NULL;
-    assignReinforcement = NULL;
-    issueOrders = NULL;
-    executeOrders = NULL;
-    win = NULL;
-};
-
-// Getters for the different states (definitions)
-GameState *GameEngine::getStartState()
-{
-    return startState;
-}
-
-GameState *GameEngine::getMapLoadedState()
-{
-    return mapLoadedState;
-}
-
-GameState *GameEngine::getMapValidated()
-{
-    return mapValidated;
-}
-
-GameState *GameEngine::getPlayersAdded()
-{
-    return playersAdded;
-}
-
-GameState *GameEngine::getAssignReinforcement()
-{
-    return assignReinforcement;
-}
-
-GameState *GameEngine::getIssueOrders()
-{
-    return issueOrders;
-}
-
-GameState *GameEngine::getExecuteOrders()
-{
-    return executeOrders;
-}
-
-GameState *GameEngine::getWin()
-{
-    return win;
-}
-
-// Delegate command to the current state's handleCommand method
-void GameEngine::handleCommand(const std::string &command)
-{
-    currentState->handleCommand(this, command);
-}
-
-// GameEngine's change state method, the current state pointer is updated to point to the newState passed as parameter
-void GameEngine::changeState(GameState *newState)
-{
-    currentState = newState;
-    std::cout << "State changed to: " << currentState->getStateName() << "\n"
-              << std::endl;
-}
-
-// added Main Game Loop part of the game
-void GameEngine::reinforcementPhase(vector<Player *> v, Map *map)
-{
-    for (int i = 0; i < v.size(); i++)
-    {
-
-        if (v[i]->getTerritories().size() < 9)
-            v[i]->setReinforcementPool(3);
-        else
-        {
-            int armies = v[i]->getTerritories().size() / 3;
-
-            for (Continent *c : map->getContinents())
-            {
-                int count = 0;
-
-                for (int n = 0; n < v[i]->getTerritories().size(); n++)
-                {
-
-                    for (Territory *t : c->getTerritories())
-                    {
-
-                        if (t->getName().compare(v[i]->getTerritories()[n]->getName()) == 0)
-                        {
-                            count++;
-                        }
-                    }
-                }
-
-                if (count == c->getTerritories().size())
-                {
-                    armies += c->getBonus();
-                }
-            }
-
-            v[i]->setReinforcementPool(armies);
-        }
-    }
-}
-void GameEngine::issueOrdersPhase(vector<Player *> v)
-{
-}
-void GameEngine::executeOrdersPhase(vector<Player *> v)
-{
-}
-void GameEngine::mainGameLoop(vector<Player *> v)
-{
-}
-
-// Constructor definition, using the initializer list to initialize the 'engine' member
-CommandParser::CommandParser(GameEngine *engine) : engine(engine) {};
-
-CommandParser::CommandParser(const CommandParser &commandParser) {};
-
-CommandParser::~CommandParser() {};
-
-// CommandParser's parseCommand function definition which checks if a command is valid before delegating it to the handleCommand function
-void CommandParser::parseCommand(const std::string &input)
-{
-    std::istringstream iss(input); // creating object of istringstream
-    std::string commandType;
-    iss >> commandType; // stream the input to string commandType
-
-    // Check if extraction was successful
-    if (commandType.empty())
-    {
-        std::cout << "No valid command entered. Please try again.\n"
-                  << std::endl;
-        return;
-    }
-
-    // using find function to search for the value input inside the vector
-    if (std::find(commands.begin(), commands.end(), commandType) != commands.end())
-    { // if std::find does not find element, it returns commands.end()
-        engine->handleCommand(commandType);
-    }
-    else
-    {
-        std::cout << "Unknown command: " << commandType << ". Try Again\n"
-                  << std::endl;
-    }
-}
