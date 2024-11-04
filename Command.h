@@ -5,13 +5,16 @@
 
 class Command {
 private:
-    std::string cmd;
+    std::string commandStr;
     std::string effect;
-    void saveEffect(const std::string& effect);
+    
 public:
     Command(const std::string& command);
     Command(const Command& command);
+    void saveEffect(const std::string& effectStr);
     virtual ~Command();
+    std::string getCommandStr() const;
+    friend std::ostream& operator<<(std::ostream& os, const Command& command); //overloading the << operator
 };
 
 

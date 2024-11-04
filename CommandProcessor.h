@@ -12,13 +12,14 @@ class CommandProcessor {
         CommandProcessor();
         CommandProcessor(const CommandProcessor& commandProcessor);
         virtual ~CommandProcessor();
-        Command* getCommand();
-        void validate(Command* cmd);
-        multimap<
+        Command* getCommand(std::string& commandstr);
+        bool validate(Command* cmd, const char* state);
     private:
-        Command* readCommand();
+        Command* readCommand(std::string& commandstr);
         void saveCommand(Command* cmd);
-        std::vector<Command*> commands{};
+        std::vector<Command*> commands;
+        void createMap();
+        multimap<std::string, std::string> commandStateMap;
 };
 
 
