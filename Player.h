@@ -8,6 +8,8 @@
 #include "Cards.h"
 #include "Map.h"
 
+class OrdersList;
+class Order;
 
 class Player{
 
@@ -37,7 +39,7 @@ class Player{
         void addCard(Card* card);  //adds card to player's hand
         void removeCard(Card* card);  //removes card from player's hand
         
-        
+        vector<Territory*> getTerritories();
         void printTerritories();  //prints player's territories
         void printOrders();  //prints player's orders
 

@@ -51,7 +51,9 @@ void Player::issueOrder(Order* order){
 // adds territory to the player's list of territories
 void Player::addTerritory(Territory* territory){
     territories.push_back(territory);
-} 
+}
+
+vector<Territory*> Player::getTerritories(){return territories;}
 
 // returns ARBITRARY list of territories to defend
 vector<Territory*> Player::toDefend(){

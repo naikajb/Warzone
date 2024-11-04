@@ -1,4 +1,5 @@
 #include "Orders.h"
+#include "Player.h"
 #include <iostream>
 #include <algorithm>
 using namespace std;
@@ -43,25 +44,37 @@ std::ostream& operator<<(std::ostream& outputStream, const Order& order) {
 Deploy::Deploy() {
     orderDescription = "Deploy order - place armies on a territory";
 }
+
+Deploy::Deploy(Player* p, int a, Territory* t): player(p), armies(a), target(t)
+{Deploy();}
+
 Deploy::~Deploy() {} //destructor
 
 // Validate if the deploy order can be executed 
 bool Deploy::validateOrder() {
-    return true;
+    
+    for(Territory* t : player->getTerritories()) if(target == t) return true;
+
+    return false;
 }
 
 // Execute the deploy order and set its effect
 void Deploy::executeOrder() {
+
+    target->setNumArmies(target->getNumArmies()+armies);
+    
     executed = true; //mark the order as executed
     orderEffect = "Armies have been deployed."; 
 }
 
 void Deploy::execute(){
 
+    if(!this->validateOrder()) return;
+
+    this->executeOrder();
+
     // input -> (player issuing order{Player}, num of army units {int}, target {Territory})
-
     // verify -> target Territory needs to be owned by Player
-
     // valid -> target Territory's army units += num of army units {int}
 }
 
@@ -73,21 +86,118 @@ void Deploy::execute(){
 Advance::Advance() {
     orderDescription = "Advance Order - move armies to an adjacent territory";
 }
+
+Advance::Advance(Player* p, int a, Territory* s, Territory* t): player(p), armies(a), source(s), target(t)
+{Advance();}
+
 Advance::~Advance() {} //destructor
 
 // Validate if the advance order can be executed
 bool Advance::validateOrder() {
-    // Placeholder logic for validation
-    return true;
+    
+    bool validOwnership = false;
+    bool validAdj = false;
+
+    for(Territory* t : player->getTerritories()) {
+        if(source == t){
+            validOwnership = true;
+            break;
+        }
+    }
+
+    for(Territory* t : source->getAdjTerritories()){
+        if(target == t){
+            validAdj = true;
+            break;
+        }
+    }
+
+    Player* targetOwner;
+    bool found;
+
+    for(Player* p : iterate over all players){
+
+        for(Territory* t : p->getTerritories()){
+
+            if(t == target) targetOwner = p;
+            found = true;
+            break;
+        }
+
+        if(found) break;
+    }
+
+    if(source->getNumArmies()<armies) return false;
+
+    return validOwnership && validAdj && !checkNegotiatePairs(player,targetOwner);
 }
 
 // Execute the advance order and set its effect
 void Advance::executeOrder() {
+    
+    bool attack = true;
+
+    for(Territory* t : player->getTerritories()){
+
+        if(target == t){
+            attack = false;
+            break;
+        }
+    }
+
+    if(attack){
+
+        source->setNumArmies(source->getNumArmies()-armies);
+
+        int attackerNum = armies;
+        int defenderNum = target->getNumArmies();
+
+        while(attackerNum!=0 && defenderNum!=0){
+
+            if(getRand() <= 60) defenderNum--;
+            if(getRand() <= 70) attackerNum--;
+        }
+
+        if(defenderNum == 0){
+
+            bool found = false;
+
+            for(Player* p : iterate over all players){
+
+                for(Territory* t : p->getTerritories()){
+
+                    if(t == target){
+
+                        p->removeTerritory(t);
+                        found = true;
+                        break;
+                    }
+                }
+
+                if(found) break;
+            }
+
+            player->addTerritory(target);
+            target->setNumArmies(attackerNum);
+        }
+
+
+    }else{
+
+        source->setNumArmies(source->getNumArmies()-armies);
+        target->setNumArmies(target->getNumArmies()+armies);
+
+    }
+
     executed = true; 
     orderEffect = "Armies have advanced.";
 }
 
 void Advance::execute(){
+
+    if(!this->validateOrder()) return;
+
+    this->executeOrder();
 
     // input -> (player issuing order{Player}, num of army units {int}, source {Territory}, target {Territory})
 
@@ -99,6 +209,14 @@ void Advance::execute(){
     // if target does NOT belong to Player: simulate battle
 }
 
+int Advance::getRand(){
+
+    random_device random;
+    mt19937 gen(random());
+    uniform_int_distribution range(1,100);
+    return range(random);
+}
+
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // Bomb Order - derived class
@@ -107,21 +225,63 @@ void Advance::execute(){
 Bomb::Bomb() {
     orderDescription = "Bomb Order - bomb a territory to weaken its defense";
 }
+
+Bomb::Bomb(Player* p, Territory* t): player(p),target(t)
+{Bomb();}
+
 Bomb::~Bomb() {} //destructor
 
 // Validate if the bomb order can be executed
 bool Bomb::validateOrder() {
-    // Placeholder logic for validation
-    return true;
+   
+    for(Territory* t : player->getTerritories()) if(target == t) return false;
+
+    bool validAdj = false;
+
+    for(Territory* t : target->getAdjTerritories()){
+
+        for(Territory* t2 : player->getTerritories()){
+
+            if(t==t2){
+                validAdj = true;
+                break;
+            }
+            if(validAdj) break;
+        }
+    }
+
+    Player* targetOwner;
+    bool found;
+
+    for(Player* p : iterate over all players){
+
+        for(Territory* t : p->getTerritories()){
+
+            if(t == target) targetOwner = p;
+            found = true;
+            break;
+        }
+
+        if(found) break;
+    }
+
+    return validAdj && !checkNegotiatePairs(player,targetOwner);
 }
 
 // Execute the bomb order and set its effect
 void Bomb::executeOrder() {
+    
+    target->setNumArmies(target->getNumArmies()/2);
+    
     executed = true;
     orderEffect = "Territory has been bombed.";
 }
 
 void Bomb::execute(){
+
+    if(!this->validateOrder()) return;
+
+    this->executeOrder();
 
     // input -> (player issuing order{Player}, target {Territory})
 
@@ -140,21 +300,65 @@ void Bomb::execute(){
 Blockade::Blockade() {
     orderDescription = "Blockade Order - blockade a territory to prevent movement";
 }
+
+Blockade::Blockade(Player* p,Territory* t): player(p),target(t)
+{Blockade();}
+
 Blockade::~Blockade() {} //destructor
 
 // Validate if the blockade order can be executed 
 bool Blockade::validateOrder() {
     // Placeholder logic for validation
-    return true;
+
+    for(Territory* t : player->getTerritories()){
+
+        if(t == target) return true;
+
+    }
+
+    return false;
 }
 
 // Execute the bloackade order and set its effect
 void Blockade::executeOrder() {
+    
+    player->removeTerritory(target);
+
+    bool neutralCreated = false;
+
+    for(Player* p : iterate over all players){
+
+        if((p->getPlayerName().compare("Neutral")) == 0){
+
+            p->addTerritory(target);
+            neutralCreated = true;
+            break;
+
+        }
+        if(neutralCreated) break;
+    }
+
+    if(!neutralCreated){
+
+        Player *n = new Player("Neutral");
+
+        add Neutral player to the list of players
+
+        n->addTerritory(target);
+
+    }
+
+    target->setNumArmies(target->getNumArmies()*2);
+    
     executed = true;
     orderEffect = "Territory has been blockaded.";
 }
 
 void Blockade::execute(){
+
+    if(!this->validateOrder()) return;
+
+    this->executeOrder();
 
     // input -> (player issuing order{Player}, target {Territory})
 
@@ -173,21 +377,43 @@ void Blockade::execute(){
 Airlift::Airlift() {
     orderDescription = "Airlift Order - move armies from one territory to another by air";
 }
+
+Airlift::Airlift(Player*p, int a, Territory* s, Territory* t): player(p),armies(a), source(s), target(t)
+{Airlift();}
+
 Airlift::~Airlift() {} //destructor
 
 // Validate if the airlift order can be executed 
 bool Airlift::validateOrder() {
     // Placeholder logic for validation
-    return true;
+
+    bool validSource = false;
+    bool validTarget = false;
+
+    for(Territory* t : player->getTerritories()){
+
+        if(t == source) validSource = true;
+        if(t == target) validTarget = true;
+    }
+
+    return validSource && validTarget;
 }
 
 // Execute the airlift order and set its effect
 void Airlift::executeOrder() {
+    
+    source->setNumArmies(source->getNumArmies()-armies);
+    target->setNumArmies(target->getNumArmies()+armies);
+    
     executed = true;
     orderEffect = "Armies have been airlifted";
 }
 
 void Airlift::execute(){
+
+    if(!this->validateOrder()) return;
+
+    this->executeOrder();
 
     // requirement -> Airlift card
 
@@ -207,21 +433,32 @@ void Airlift::execute(){
 Negotiate::Negotiate() {
     orderDescription = "Negotiate Order - negotiate a truce with another player";
 }
+
+Negotiate::Negotiate(Player* p1, Player* p2): player(p1),targetPlayer(p2)
+{Negotiate();}
+
 Negotiate::~Negotiate() {} //destructor
 
 // Validate if the negoatiate order can be executed
 bool Negotiate::validateOrder() {
-    // Placeholder logic for validation
-    return true;
+
+    return player != targetPlayer && checkNegotiatePairs(player,targetPlayer);
 }
 
 // Execute the negotiate order and set its effect
 void Negotiate::executeOrder() {
+    
+    addNegotiatePairs(player,targetPlayer);
+
     executed = true;
     orderEffect = "Truce has been negotiated.";
 }
 
 void Negotiate::execute(){
+
+    if(!this->validateOrder()) return;
+
+    this->executeOrder();
 
     // requirement -> Airlift card
 
@@ -279,4 +516,24 @@ std::ostream& operator<<(std::ostream& out, const OrdersList& ordersList) {
 
 vector<Order*> OrdersList::getOrders(){
     return orders;
+}
+
+
+bool checkNegotiatePairs(Player* p1, Player* p2){
+
+    for(pair p : negotiatePairs){
+
+        if((p.first == p1 && p.second == p2) || p.first == p2 && p.second == p1) return true;
+    }
+    return false;
+}
+
+void addNegotiatePairs(Player* p1, Player* p2){
+
+    negotiatePairs.push_back(make_pair(p1,p2));
+}
+
+void resetNegotiatePairs(){
+
+    negotiatePairs.clear();
 }
