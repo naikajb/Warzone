@@ -7,10 +7,11 @@
 #include <string>
 #include <vector> 
 #include <map>
+#include "LoggingObserver.h"
 using namespace std;
 
 
-class GameEngine {
+class GameEngine : public Subject, public ILoggable  {
 public:
     // declaring constructor
     GameEngine();
@@ -23,6 +24,8 @@ public:
 
      // process commands entered by the user
     void processCommand(std::string& command);
+
+    std::string stringToLog();
 
     // function that handles changing states
     void stateTransition(Command* cmd);

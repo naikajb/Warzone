@@ -48,6 +48,11 @@ void GameEngine::stateTransition(Command* cmd) {
         cmd->saveEffect(currentState);
         std::cout << "Changing state to: " << currentState << "...\n" << std::endl;
     }
+       Notify(this);
+}
+
+std::string GameEngine::stringToLog() {
+    return "GameEngine changed state to " + std::string(currentState);
 }
 
 //function to process commands entered by the user

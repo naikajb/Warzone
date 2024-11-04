@@ -37,7 +37,7 @@ void testPlayers(){
 
     //cout << *player2 << endl;
     //cout << *player1 << endl;
-    delete player1;
+    //delete player1;
     //delete player2; 
 }
 
