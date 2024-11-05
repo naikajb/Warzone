@@ -2,6 +2,7 @@
 #define GameEngine_h
 
 #include "CommandProcessor.h"
+#include "FileCommandProcessorAdapter.h"
 #include <iostream>
 #include <sstream>
 #include <string>
@@ -22,8 +23,11 @@ public:
     // destructor
     virtual ~GameEngine();
 
-     // process commands entered by the user
-    void processCommand(std::string& command);
+     // process file commands
+    void processFileCommand(std::string& command, CommandProcessor* commandProcessor);
+
+    // process console commands
+    void processConsoleCommand(std::string& command, CommandProcessor* commandProcessor);
 
     std::string stringToLog();
 

@@ -13,7 +13,7 @@ const char* GameEngine::GameStateStrings[] = {
 };
 
 //defining the GameEngine constructor, creating the state transition map which maps commands to the states they transition to
-GameEngine::GameEngine() : currentState(GameStateStrings[0]), commandProcessor(new CommandProcessor()) {
+GameEngine::GameEngine() : currentState(GameStateStrings[0]) {
     
     stateTransitionMap.insert(pair<std::string, const char*>("loadmap", GameStateStrings[1]));
     stateTransitionMap.insert(pair<std::string, const char*>("validatemap", GameStateStrings[2]));
@@ -48,27 +48,40 @@ void GameEngine::stateTransition(Command* cmd) {
         cmd->saveEffect(currentState);
         std::cout << "Changing state to: " << currentState << "...\n" << std::endl;
     }
-       Notify(this);
+    //    Notify(this);
 }
 
 std::string GameEngine::stringToLog() {
     return "GameEngine changed state to " + std::string(currentState);
 }
 
-//function to process commands entered by the user
-void GameEngine::processCommand(std::string& command) {
-   
+//function to process console commands
+void GameEngine::processConsoleCommand(std::string& command, CommandProcessor* commandProcessor) {
+
     Command* cmd = commandProcessor->getCommand(command);
-
     std::cout << "\nCurrent State: " << getCurrentState() << "\n" << std::endl;
-
     if((commandProcessor->validate(cmd, this->getCurrentState())) == true) {
         stateTransition(cmd);
-        
     } else {
         std::cout << "Invalid command. Try again.\n" << std::endl;
+    }
+};
 
-    };
+//function to process file commands 
+void GameEngine::processFileCommand(std::string& command, CommandProcessor* commandProcessor) {
+
+    Command* cmd = nullptr;
+    while ((cmd = commandProcessor->getCommand(command)) != nullptr) {
+        std::cout << "\nCurrent State: " << getCurrentState() << "\n" << std::endl;
+        if((commandProcessor->validate(cmd, this->getCurrentState())) == true) {
+            stateTransition(cmd);
+        } else {
+            std::cout << "Invalid command. Try again.\n" << std::endl;
+        }
+    }   
+    std::cout << "\nNo more commands to process.\nCurrent State: " << getCurrentState() << "\n" << std::endl;
+    delete cmd;
+    exit(0);
 }
 
 
