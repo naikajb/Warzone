@@ -10,6 +10,8 @@
 #include <vector>
 #include <random>
 
+using namespace std;
+
 class Player;
 class Territory;
 
@@ -192,5 +194,10 @@ static vector<pair<Player*,Player*>> negotiatePairs;
 bool checkNegotiatePairs(Player*,Player*);
 void addNegotiatePairs(Player*,Player*);
 void resetNegotiatePairs();
+
+static vector<Player*> playerList;
+
+vector<Player*> getPlayerList();
+void addToPlayerList(Player*);
 
 #endif // ORDERS_H

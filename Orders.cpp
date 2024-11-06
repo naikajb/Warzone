@@ -48,7 +48,14 @@ Deploy::Deploy() {
 Deploy::Deploy(Player* p, int a, Territory* t): player(p), armies(a), target(t)
 {Deploy();}
 
-Deploy::~Deploy() {} //destructor
+Deploy::~Deploy() {
+
+    delete player;
+    player = NULL;
+    delete target;
+    target = NULL;
+
+} //destructor
 
 // Validate if the deploy order can be executed 
 bool Deploy::validateOrder() {
@@ -90,7 +97,16 @@ Advance::Advance() {
 Advance::Advance(Player* p, int a, Territory* s, Territory* t): player(p), armies(a), source(s), target(t)
 {Advance();}
 
-Advance::~Advance() {} //destructor
+Advance::~Advance() {
+
+    delete player;
+    player = NULL;
+    delete source;
+    source = NULL;
+    delete target;
+    target = NULL;
+
+} //destructor
 
 // Validate if the advance order can be executed
 bool Advance::validateOrder() {
@@ -115,7 +131,7 @@ bool Advance::validateOrder() {
     Player* targetOwner;
     bool found;
 
-    for(Player* p : iterate over all players){
+    for(Player* p : getPlayerList()){
 
         for(Territory* t : p->getTerritories()){
 
@@ -162,7 +178,7 @@ void Advance::executeOrder() {
 
             bool found = false;
 
-            for(Player* p : iterate over all players){
+            for(Player* p : getPlayerList()){
 
                 for(Territory* t : p->getTerritories()){
 
@@ -213,7 +229,7 @@ int Advance::getRand(){
 
     random_device random;
     mt19937 gen(random());
-    uniform_int_distribution range(1,100);
+    std::uniform_int_distribution range(1,100);
     return range(random);
 }
 
@@ -229,12 +245,21 @@ Bomb::Bomb() {
 Bomb::Bomb(Player* p, Territory* t): player(p),target(t)
 {Bomb();}
 
-Bomb::~Bomb() {} //destructor
+Bomb::~Bomb() {
+
+    delete player;
+    player = NULL;
+    delete target;
+    target = NULL;
+
+} //destructor
 
 // Validate if the bomb order can be executed
 bool Bomb::validateOrder() {
    
-    for(Territory* t : player->getTerritories()) if(target == t) return false;
+    for(Territory* t : player->getTerritories()){
+        if(target == t) return false;
+    }
 
     bool validAdj = false;
 
@@ -253,7 +278,7 @@ bool Bomb::validateOrder() {
     Player* targetOwner;
     bool found;
 
-    for(Player* p : iterate over all players){
+    for(Player* p : getPlayerList()){
 
         for(Territory* t : p->getTerritories()){
 
@@ -304,7 +329,14 @@ Blockade::Blockade() {
 Blockade::Blockade(Player* p,Territory* t): player(p),target(t)
 {Blockade();}
 
-Blockade::~Blockade() {} //destructor
+Blockade::~Blockade() {
+
+    delete player;
+    player = NULL;
+    delete target;
+    target = NULL;
+
+} //destructor
 
 // Validate if the blockade order can be executed 
 bool Blockade::validateOrder() {
@@ -326,7 +358,7 @@ void Blockade::executeOrder() {
 
     bool neutralCreated = false;
 
-    for(Player* p : iterate over all players){
+    for(Player* p : getPlayerList()){
 
         if((p->getPlayerName().compare("Neutral")) == 0){
 
@@ -342,7 +374,7 @@ void Blockade::executeOrder() {
 
         Player *n = new Player("Neutral");
 
-        add Neutral player to the list of players
+        addToPlayerList(n);
 
         n->addTerritory(target);
 
@@ -381,7 +413,16 @@ Airlift::Airlift() {
 Airlift::Airlift(Player*p, int a, Territory* s, Territory* t): player(p),armies(a), source(s), target(t)
 {Airlift();}
 
-Airlift::~Airlift() {} //destructor
+Airlift::~Airlift() {
+
+    delete player;
+    player = NULL;
+    delete source;
+    source = NULL;
+    delete target;
+    target = NULL;
+
+} //destructor
 
 // Validate if the airlift order can be executed 
 bool Airlift::validateOrder() {
@@ -437,7 +478,14 @@ Negotiate::Negotiate() {
 Negotiate::Negotiate(Player* p1, Player* p2): player(p1),targetPlayer(p2)
 {Negotiate();}
 
-Negotiate::~Negotiate() {} //destructor
+Negotiate::~Negotiate() {
+
+    delete player;
+    player = NULL;
+    delete targetPlayer;
+    targetPlayer = NULL;
+
+} //destructor
 
 // Validate if the negoatiate order can be executed
 bool Negotiate::validateOrder() {
@@ -523,9 +571,9 @@ bool checkNegotiatePairs(Player* p1, Player* p2){
 
     for(pair p : negotiatePairs){
 
-        if((p.first == p1 && p.second == p2) || p.first == p2 && p.second == p1) return true;
+        if((p.first == p1 && p.second == p2) || p.first == p2 && p.second == p1) return false;
     }
-    return false;
+    return true;
 }
 
 void addNegotiatePairs(Player* p1, Player* p2){
@@ -536,4 +584,21 @@ void addNegotiatePairs(Player* p1, Player* p2){
 void resetNegotiatePairs(){
 
     negotiatePairs.clear();
+}
+
+void addToPlayerList(Player* p){
+
+    playerList.push_back(p);
+
+}
+
+vector<Player*> getPlayerList(){
+    return playerList;
+}
+
+int main(){
+
+    addToPlayerList(new Player("Jake"));
+    addToPlayerList(new Player("Joop"));
+
 }
