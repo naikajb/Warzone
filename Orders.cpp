@@ -329,6 +329,7 @@ void Bomb::executeOrder() {
     
     executed = true;
     orderEffect = "Territory has been bombed.";
+    Notify(this);
 }
 
 void Bomb::execute(){
@@ -413,6 +414,7 @@ void Blockade::executeOrder() {
     
     executed = true;
     orderEffect = "Territory has been blockaded.";
+    Notify(this);
 }
 
 void Blockade::execute(){
