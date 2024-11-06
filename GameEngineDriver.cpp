@@ -1,4 +1,4 @@
-#include "GameEngine2.h"
+#include "GameEngine.h"
 
 
 // free function, it controls the command loop that interacts with the GameEngine through the CommandParser
@@ -39,9 +39,9 @@ void testGameStates() {
     // }
 };
 
-int main() {
+// int main() {
 
-    testGameStates();
+//     testGameStates();
 
-    return 0;
-}
+//     return 0;
+// }

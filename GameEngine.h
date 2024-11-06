@@ -7,11 +7,13 @@
 #include <string>
 #include <vector> 
 #include <map>
+#include <cmath>
 #include "LoggingObserver.h"
 #include "Player.h" //added
 #include "Map.h"
 using namespace std;
 using std::vector; // added 
+using std::floor;
 
 class GameEngine : public Subject, public ILoggable  {
 public:
@@ -38,6 +40,12 @@ public:
     // map to store the state transitions
     multimap<std::string, const char*> stateTransitionMap;
     static const char* GameStateStrings[];
+
+    // added Main Game Loop part of the game
+    void reinforcementPhase(vector <Player*>, Map *map);
+    void issueOrdersPhase(vector <Player*>);
+    void executeOrdersPhase(vector <Player*>);
+    void mainGameLoop(vector <Player*>);
 
 private:
     const char* currentState;

@@ -11,9 +11,9 @@ public:
     FileCommandProcessorAdapter(const std::string& fileName);
     ~FileCommandProcessorAdapter();
 
-    ~FileCommandProcessorAdapter() {
-        fileStream.close();
-    }
+    // ~FileCommandProcessorAdapter() {
+    //     fileStream.close();
+    // }
 
     Command* getCommand() {
         if (fileStream.is_open()) {
