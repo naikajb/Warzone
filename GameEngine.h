@@ -6,6 +6,7 @@
 #include <string>
 #include <vector> 
 #include <algorithm>
+#include "LoggingObserver.h"
 using namespace std;
 
 class GameEngine; // forward declaration
@@ -126,7 +127,7 @@ private:
 };
 
 // GameEngine class which manages the current state and provides a function to switch between states
-class GameEngine {
+class GameEngine : public Subject, public ILoggable {
 public:
     // declaring constructor
     GameEngine();
@@ -152,6 +153,8 @@ public:
     GameState* getIssueOrders();
     GameState* getExecuteOrders();
     GameState* getWin();
+
+    std::string stringToLog(); // override from ILoggable to log the current state
 
 private:
     // declaring instances of the states and a pointer that points to the current state

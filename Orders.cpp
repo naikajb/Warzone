@@ -36,6 +36,9 @@ std::ostream& operator<<(std::ostream& outputStream, const Order& order) {
     return outputStream; //return the output stream
 }
 
+std::string Order::stringToLog() {
+    return orderDescription + " had effect " + orderEffect;
+}
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 // Deploy Order - derived class Deploy implementation
@@ -72,6 +75,7 @@ void Deploy::executeOrder() {
     
     executed = true; //mark the order as executed
     orderEffect = "Armies have been deployed."; 
+    Notify(this);
 }
 
 void Deploy::execute(){
@@ -207,6 +211,31 @@ void Advance::executeOrder() {
 
     executed = true; 
     orderEffect = "Armies have advanced.";
+    Notify(this);
+}
+
+void Advance::execute(){
+
+    if(!this->validateOrder()) return;
+
+    this->executeOrder();
+
+    // input -> (player issuing order{Player}, num of army units {int}, source {Territory}, target {Territory})
+
+    // verify -> source Territory needs to be owned by Player
+    // -> target Territory needs to be adjacent to source Territory (use adjacency list)
+
+    // valid -> 
+    // if source and target belong to Player: move num of army units from source to target
+    // if target does NOT belong to Player: simulate battle
+}
+
+int Advance::getRand(){
+
+    random_device random;
+    mt19937 gen(random());
+    std::uniform_int_distribution range(1,100);
+    return range(random);
 }
 
 void Advance::execute(){
@@ -448,6 +477,7 @@ void Airlift::executeOrder() {
     
     executed = true;
     orderEffect = "Armies have been airlifted";
+    Notify(this);
 }
 
 void Airlift::execute(){
@@ -500,6 +530,7 @@ void Negotiate::executeOrder() {
 
     executed = true;
     orderEffect = "Truce has been negotiated.";
+    Notify(this);
 }
 
 void Negotiate::execute(){
@@ -529,12 +560,14 @@ OrdersList::OrdersList() {}
 OrdersList::~OrdersList() {
     for (Order* order : orders) {
         delete order;
+        order = NULL;
     }
 }
 
 // Add an order to the list
 void OrdersList::addOrder(Order* order) {
     orders.push_back(order);
+    Notify(order);
 }
 
 // Move an order from one position to another in the list
@@ -602,3 +635,13 @@ int main(){
     addToPlayerList(new Player("Joop"));
 
 }
+
+std::string OrdersList::stringToLog() {
+    std::string logString = "Current Orders List: \n";
+    for (Order* order : orders) {
+        logString += "\t" + order->stringToLog() + "\n";
+    }
+    return logString;
+}
+
+

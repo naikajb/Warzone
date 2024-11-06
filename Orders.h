@@ -14,9 +14,10 @@ using namespace std;
 
 class Player;
 class Territory;
+#include "LoggingObserver.h"
 
 // Base class representing a general order in the game
-class Order {
+class Order: public ILoggable, public Subject{
 public:
     Order(); //default constructor
     Order(const Order& original); //copy constructor
@@ -35,7 +36,7 @@ public:
     //Overloaded assignment operator for proper copying of order objects
     //Overloaded stream insertion operator -> define how an object's details are printed using std::cout
     Order& operator = (const Order& orginal); //assignment operator
-
+    std::string stringToLog() override; //convert the order to a string for logging
     virtual void execute() = 0;
 
 protected:
@@ -88,6 +89,7 @@ public:
     void execute() override;
 
     int getRand();
+    
 };
 
 // Derived class for the 'bomb' order in the game
@@ -126,6 +128,7 @@ public:
     void executeOrder() override; //execute the blockade order --> triple army units and make territories neutral
 
     void execute() override;
+    
 };
 
 // Derived class for the 'airlift' order in the game
@@ -170,7 +173,7 @@ public:
 };
 
 // Class to manage a list of orders --> operations like adding, moving, and removing orders
-class OrdersList {
+class OrdersList: public ILoggable, public Subject{
 public:
     OrdersList(); //constructor
     ~OrdersList(); //destructor
@@ -183,6 +186,8 @@ public:
     friend std::ostream& operator<<(std::ostream& outputStream, const OrdersList& ordersList);
 
     std::vector<Order*> getOrders(); //get the list of orders
+    std::string stringToLog() override; //convert the list of orders to a string for logging
+    
 private:
     //Vector to store pointers to orders
     //Polymorphism - storing different order types
