@@ -48,7 +48,7 @@ Deploy::Deploy() {
 }
 
 Deploy::Deploy(Player* p, int a, Territory* t): player(p), armies(a), target(t)
-{Deploy();}
+{orderDescription = "Deploy order - place armies on a territory";}
 
 Deploy::~Deploy() {
 
@@ -98,7 +98,7 @@ Advance::Advance() {
 }
 
 Advance::Advance(Player* p, int a, Territory* s, Territory* t): player(p), armies(a), source(s), target(t)
-{Advance();}
+{orderDescription = "Advance Order - move armies to an adjacent territory";}
 
 Advance::~Advance() {
 
@@ -247,7 +247,7 @@ Bomb::Bomb() {
 }
 
 Bomb::Bomb(Player* p, Territory* t): player(p),target(t)
-{Bomb();}
+{orderDescription = "Bomb Order - bomb a territory to weaken its defense";}
 
 Bomb::~Bomb() {
 
@@ -332,7 +332,7 @@ Blockade::Blockade() {
 }
 
 Blockade::Blockade(Player* p,Territory* t): player(p),target(t)
-{Blockade();}
+{orderDescription = "Blockade Order - blockade a territory to prevent movement";}
 
 Blockade::~Blockade() {
 
@@ -417,7 +417,7 @@ Airlift::Airlift() {
 }
 
 Airlift::Airlift(Player*p, int a, Territory* s, Territory* t): player(p),armies(a), source(s), target(t)
-{Airlift();}
+{orderDescription = "Airlift Order - move armies from one territory to another by air";}
 
 Airlift::~Airlift() {
 
@@ -483,7 +483,7 @@ Negotiate::Negotiate() {
 }
 
 Negotiate::Negotiate(Player* p1, Player* p2): player(p1),targetPlayer(p2)
-{Negotiate();}
+{orderDescription = "Negotiate Order - negotiate a truce with another player";}
 
 Negotiate::~Negotiate() {
 
@@ -608,8 +608,15 @@ vector<Player*> getPlayerList(){
 
 /*int main(){
 
-    addToPlayerList(new Player("Jake"));
-    addToPlayerList(new Player("Joop"));
+    Player* p1 = new Player("Jake");
+    Player* p2 = new Player("Joop");
+
+    addToPlayerList(p1);
+    addToPlayerList(p2);
+
+    //p1->issueOrder(new Negotiate(p1,p2));
+
+    //ol->addOrder(new Negotiate(p1,p2));
 
 }*/
 
@@ -620,5 +627,3 @@ std::string OrdersList::stringToLog() {
     }
     return logString;
 }
-
-
