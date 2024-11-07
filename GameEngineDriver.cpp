@@ -1,7 +1,8 @@
-#include "GameEngine2.h"
-
+//#include "GameEngine.h"
+//#ifndef 
 
 // free function, it controls the command loop that interacts with the GameEngine through the CommandParser
+#include "GameEngine.h"
 void testGameStates() {
 
     GameEngine engine;
@@ -41,7 +42,13 @@ void testGameStates() {
 
 int main() {
 
-    testGameStates();
+    //testGameStates();
+    GameEngine ge;
+    ge.startupPhase();
+
+
+
+
 
     return 0;
 }

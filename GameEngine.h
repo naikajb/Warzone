@@ -37,6 +37,9 @@ public:
     multimap<std::string, const char*> stateTransitionMap;
     static const char* GameStateStrings[];
 
+    //startupPhase() fucntion
+    void startupPhase();
+
 private:
     const char* currentState;
     CommandProcessor* commandProcessor;
