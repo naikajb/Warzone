@@ -1,4 +1,5 @@
 #include "GameEngine.h"
+#include <iostream>
 
 
 // free function, it controls the command loop that interacts with the GameEngine through the CommandParser
@@ -79,7 +80,9 @@ void testGameStates() { // to accept command-line command, argc is the number of
 
 int main() {
 
-    testGameStates();
+    //testGameStates();
+    GameEngine gm;
+    gm.startupPhase();
 
     return 0;
 }

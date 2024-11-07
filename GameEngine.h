@@ -1,5 +1,5 @@
-#ifndef GameEngine_h
-#define GameEngine_h
+#ifndef GAMEENGINE_H
+#define GAMEENGINE_H
 
 #include "CommandProcessor.h"
 #include "FileCommandProcessorAdapter.h"
@@ -17,6 +17,9 @@ public:
     // declaring constructor
     GameEngine();
 
+    // function to handle the startup phase
+    void startupPhase();
+    
     // copy constructor
     GameEngine(const GameEngine& game_engine);
 
