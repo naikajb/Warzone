@@ -3,18 +3,20 @@
 
 #include "Player.h"
 #include "OrdersDriver.h"
+#include "LoggingObserver.h"
 
 #include <iostream>
 #include <vector>
 #include <string>
 #include <vector>
 #include <random>
+#include <utility>
 
-using namespace std;
+using std::vector;
+using std::pair;
 
 class Player;
 class Territory;
-#include "LoggingObserver.h"
 
 // Base class representing a general order in the game
 class Order: public ILoggable, public Subject{
@@ -88,7 +90,7 @@ public:
 
     void execute() override;
 
-    int getRand();
+    int getRandomNum();
     
 };
 

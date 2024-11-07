@@ -1,5 +1,4 @@
 #include "Orders.h"
-#include "Player.h"
 #include <iostream>
 #include <algorithm>
 using namespace std;
@@ -174,8 +173,8 @@ void Advance::executeOrder() {
 
         while(attackerNum!=0 && defenderNum!=0){
 
-            if(getRand() <= 60) defenderNum--;
-            if(getRand() <= 70) attackerNum--;
+            if(getRandomNum() <= 60) defenderNum--;
+            if(getRandomNum() <= 70) attackerNum--;
         }
 
         if(defenderNum == 0){
@@ -230,35 +229,11 @@ void Advance::execute(){
     // if target does NOT belong to Player: simulate battle
 }
 
-int Advance::getRand(){
+int Advance::getRandomNum(){
 
     random_device random;
     mt19937 gen(random());
-    std::uniform_int_distribution range(1,100);
-    return range(random);
-}
-
-void Advance::execute(){
-
-    if(!this->validateOrder()) return;
-
-    this->executeOrder();
-
-    // input -> (player issuing order{Player}, num of army units {int}, source {Territory}, target {Territory})
-
-    // verify -> source Territory needs to be owned by Player
-    // -> target Territory needs to be adjacent to source Territory (use adjacency list)
-
-    // valid -> 
-    // if source and target belong to Player: move num of army units from source to target
-    // if target does NOT belong to Player: simulate battle
-}
-
-int Advance::getRand(){
-
-    random_device random;
-    mt19937 gen(random());
-    std::uniform_int_distribution range(1,100);
+    std::uniform_int_distribution<int> range(1,100);
     return range(random);
 }
 
@@ -604,7 +579,7 @@ vector<Order*> OrdersList::getOrders(){
 
 bool checkNegotiatePairs(Player* p1, Player* p2){
 
-    for(pair p : negotiatePairs){
+    for(pair<Player*,Player*> p : negotiatePairs){
 
         if((p.first == p1 && p.second == p2) || p.first == p2 && p.second == p1) return false;
     }
@@ -631,12 +606,12 @@ vector<Player*> getPlayerList(){
     return playerList;
 }
 
-int main(){
+/*int main(){
 
     addToPlayerList(new Player("Jake"));
     addToPlayerList(new Player("Joop"));
 
-}
+}*/
 
 std::string OrdersList::stringToLog() {
     std::string logString = "Current Orders List: \n";

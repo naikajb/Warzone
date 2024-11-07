@@ -7,6 +7,7 @@
 #include "Orders.h"
 #include "Cards.h"
 #include "Map.h"
+#include "LoggingObserver.h"
 
 class OrdersList;
 class Order;
