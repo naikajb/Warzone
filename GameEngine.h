@@ -8,7 +8,12 @@
 #include <string>
 #include <vector> 
 #include <map>
+#include <random>
 #include "LoggingObserver.h"
+#include "Map.h"
+#include "Player.h"
+#include "Cards.h"
+#include "Orders.h"
 using namespace std;
 
 
@@ -27,10 +32,10 @@ public:
     virtual ~GameEngine();
 
      // process file commands
-    void processFileCommand(std::string& command, CommandProcessor* commandProcessor);
+    bool processFileCommand(std::string& command, CommandProcessor* commandProcessor);
 
     // process console commands
-    void processConsoleCommand(std::string& command, CommandProcessor* commandProcessor);
+    bool processConsoleCommand(std::string& command, CommandProcessor* commandProcessor);
 
     std::string stringToLog();
 
@@ -43,6 +48,9 @@ public:
     // map to store the state transitions
     multimap<std::string, const char*> stateTransitionMap;
     static const char* GameStateStrings[];
+
+    // function to get the random numbers
+    vector<int> getRandomizedNumbers(int n);
 
 private:
     const char* currentState;

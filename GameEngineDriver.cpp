@@ -48,13 +48,13 @@ void testGameStates() { // to accept command-line command, argc is the number of
             std::cout << "Type a command " << std::endl;
             std::cout << "> ";
             std::getline(std::cin >> std::ws, input);
-            engine.processConsoleCommand(input, commandProcessor);
+            bool temp1 = engine.processConsoleCommand(input, commandProcessor);
             if (input == "exit") {
                 break;
             }
         }
         else {
-            engine.processFileCommand(unknown, commandProcessor);
+            bool temp2 = engine.processFileCommand(unknown, commandProcessor);
         }
         
         
