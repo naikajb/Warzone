@@ -19,6 +19,8 @@ Territory::~Territory(){
         delete t;
         t = NULL;
     }
+    delete owner;
+    owner = NULL;
 }
 
 // defines the Territory copy constructor with an initilizer list
@@ -60,10 +62,11 @@ string Territory::getName() { return name; }                                  //
 int Territory::getNumArmies() { return numArmies; }                           // getNumArmies() definition
 Continent *Territory::getContinent() { return continent; }                    // getContinent() definition
 vector<Territory *> Territory::getAdjTerritories() { return adjTerritories; } // getAdjTerritories() definition
+Player* Territory::getPlayer(){return owner;};
 
-void Territory::setNumArmies(int numArmies) { numArmies = numArmies; } // setNumArmies() definition
+void Territory::setNumArmies(int num) { numArmies = num; } // setNumArmies() definition
 void Territory::addAdjTerritories(Territory *adjTerritory) { adjTerritories.push_back(adjTerritory); } // addAdjTerritories() definition
-
+void Territory::setPlayer(Player* p){owner = p;}
 // CONTINENT CLASS
 
 // defines the Continent constructor with an initilizer list

@@ -79,13 +79,16 @@ void Deploy::executeOrder() {
 
 void Deploy::execute(){
 
-    if(!this->validateOrder()) return;
+    if(!this->validateOrder()){
+        
+        cout << "Deploy Order is not valid." << endl;
+
+        return; }
+
+    cout << "Deploy Order is valid - > " << player->getPlayerName() << " is deploying " << armies << " units to Territory "<< target->getName() << endl;
 
     this->executeOrder();
 
-    // input -> (player issuing order{Player}, num of army units {int}, target {Territory})
-    // verify -> target Territory needs to be owned by Player
-    // valid -> target Territory's army units += num of army units {int}
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -131,24 +134,16 @@ bool Advance::validateOrder() {
         }
     }
 
-    Player* targetOwner;
-    bool found;
-
     for(Player* p : getPlayerList()){
 
         for(Territory* t : p->getTerritories()){
 
-            if(t == target) targetOwner = p;
-            found = true;
-            break;
+            if(t == target) return validAdj && !checkNegotiatePairs(player,p) && source->getNumArmies()>=armies;
+           
         }
-
-        if(found) break;
     }
 
-    if(source->getNumArmies()<armies) return false;
-
-    return validOwnership && validAdj && !checkNegotiatePairs(player,targetOwner);
+    return false;
 }
 
 // Execute the advance order and set its effect
@@ -166,6 +161,8 @@ void Advance::executeOrder() {
 
     if(attack){
 
+        cout << "Battle begins!" << endl;
+
         source->setNumArmies(source->getNumArmies()-armies);
 
         int attackerNum = armies;
@@ -178,6 +175,8 @@ void Advance::executeOrder() {
         }
 
         if(defenderNum == 0){
+
+            cout << "The defending army has lost the battle! Transferring ownership of Territory "<<target->getName()<< " to " << player->getPlayerName() << endl;
 
             bool found = false;
 
@@ -203,6 +202,7 @@ void Advance::executeOrder() {
 
     }else{
 
+        cout << "No battle, both Territories belong to " << player->getPlayerName() << endl;
         source->setNumArmies(source->getNumArmies()-armies);
         target->setNumArmies(target->getNumArmies()+armies);
 
@@ -215,18 +215,15 @@ void Advance::executeOrder() {
 
 void Advance::execute(){
 
-    if(!this->validateOrder()) return;
+    if(!this->validateOrder()){
+        
+        cout << "Advance Order is not valid." << endl;
+        return;
+    }
+    cout << "Advance Order is valid -> "<< player->getPlayerName() << " is advancing " << armies << " units from Territory " << source->getName() << " to Territory " << target->getName() << endl;
 
     this->executeOrder();
 
-    // input -> (player issuing order{Player}, num of army units {int}, source {Territory}, target {Territory})
-
-    // verify -> source Territory needs to be owned by Player
-    // -> target Territory needs to be adjacent to source Territory (use adjacency list)
-
-    // valid -> 
-    // if source and target belong to Player: move num of army units from source to target
-    // if target does NOT belong to Player: simulate battle
 }
 
 int Advance::getRandomNum(){
@@ -279,22 +276,16 @@ bool Bomb::validateOrder() {
         }
     }
 
-    Player* targetOwner;
-    bool found;
-
     for(Player* p : getPlayerList()){
 
         for(Territory* t : p->getTerritories()){
 
-            if(t == target) targetOwner = p;
-            found = true;
-            break;
+            if(t == target) return validAdj && !checkNegotiatePairs(player,p);
+           
         }
-
-        if(found) break;
     }
 
-    return validAdj && !checkNegotiatePairs(player,targetOwner);
+    return false;
 }
 
 // Execute the bomb order and set its effect
@@ -309,16 +300,14 @@ void Bomb::executeOrder() {
 
 void Bomb::execute(){
 
-    if(!this->validateOrder()) return;
+    if(!this->validateOrder()){
+        cout << "Bomb Order is not valid." << endl;
+        return;
+    }
+
+    cout << "Bomb Order is valid -> "<< player->getPlayerName() << " is bombing Territory "<< target->getName() << endl;
 
     this->executeOrder();
-
-    // input -> (player issuing order{Player}, target {Territory})
-
-    // verify -> target Territory CANNOT be owned by Player
-    // -> target needs to be adjacent to at least one Territory owned by Player
-
-    // valid -> army units of target{Territory}=/2
 
 }
 
@@ -394,16 +383,13 @@ void Blockade::executeOrder() {
 
 void Blockade::execute(){
 
-    if(!this->validateOrder()) return;
-
+    if(!this->validateOrder()){
+        cout << "Blockade Order is not valid." << endl;
+        return;
+    }
+    
+    cout << "Blockade Order is valid - > " << player->getPlayerName() << " is transferring the ownership of Territory "<< target->getName() << " to the Neutral player, army units doubled to: "<< target->getNumArmies() << endl;
     this->executeOrder();
-
-    // input -> (player issuing order{Player}, target {Territory})
-
-    // verify -> target Territory needs to be owned by Player
-
-    // valid -> army units of target{Territory}*/2
-    // -> target's ownership is transferred to the Neutral Player
 
 }
 
@@ -443,7 +429,7 @@ bool Airlift::validateOrder() {
         if(t == target) validTarget = true;
     }
 
-    return validSource && validTarget;
+    return validSource && validTarget && armies <= source->getNumArmies();
 }
 
 // Execute the airlift order and set its effect
@@ -459,17 +445,14 @@ void Airlift::executeOrder() {
 
 void Airlift::execute(){
 
-    if(!this->validateOrder()) return;
+    if(!this->validateOrder()){
+        cout << "Airlift Order is not valid." << endl;
+        return;
+    }
+
+    cout << "Airlift Order is valid -> "<< player->getPlayerName() << " is transferring " << armies << " from Territory " << source->getName() << " to Territory " << target->getName() << endl;
 
     this->executeOrder();
-
-    // requirement -> Airlift card
-
-    // input -> (player issuing order{Player}, num of army units {int}, source {Territory},target {Territory})
-
-    // verify -> source{Territory} AND target{Territory} needs to be owned by Player
-
-    // valid -> move *num of army units* from source to target
 
 }
 
@@ -497,7 +480,7 @@ Negotiate::~Negotiate() {
 // Validate if the negoatiate order can be executed
 bool Negotiate::validateOrder() {
 
-    return player != targetPlayer && checkNegotiatePairs(player,targetPlayer);
+    return player != targetPlayer && !checkNegotiatePairs(player,targetPlayer);
 }
 
 // Execute the negotiate order and set its effect
@@ -512,17 +495,14 @@ void Negotiate::executeOrder() {
 
 void Negotiate::execute(){
 
-    if(!this->validateOrder()) return;
+    if(!this->validateOrder()){
+        cout << "Negotiate Order is not valid." << endl;
+        return;
+    }
+
+    cout << "Negotiate Order is valid -> "<<player->getPlayerName() << " and " << targetPlayer->getPlayerName() << " cannot attack eachother this round" << endl;
 
     this->executeOrder();
-
-    // requirement -> Airlift card
-
-    // input -> (player issuing order{Player}, target player{Player})
-
-    // verify -> the target player CANNOT be the same as the player issuing the order
-
-    // valid -> all attacks between territories owned by both players = invalid order
 
 }
 
@@ -581,14 +561,16 @@ bool checkNegotiatePairs(Player* p1, Player* p2){
 
     for(pair<Player*,Player*> p : negotiatePairs){
 
-        if((p.first == p1 && p.second == p2) || p.first == p2 && p.second == p1) return false;
+        if((p.first == p1 && p.second == p2) || p.first == p2 && p.second == p1) return true;
     }
-    return true;
+    return false;
 }
 
 void addNegotiatePairs(Player* p1, Player* p2){
 
-    negotiatePairs.push_back(make_pair(p1,p2));
+    pair<Player*,Player*> pear = make_pair(p1,p2);
+
+    negotiatePairs.push_back(pear);
 }
 
 void resetNegotiatePairs(){
@@ -605,21 +587,6 @@ void addToPlayerList(Player* p){
 vector<Player*> getPlayerList(){
     return playerList;
 }
-
-/*int main(){
-
-    Player* p1 = new Player("Jake");
-    Player* p2 = new Player("Joop");
-
-    addToPlayerList(p1);
-    addToPlayerList(p2);
-
-    //p1->issueOrder(new Negotiate(p1,p2));
-
-    //ol->addOrder(new Negotiate(p1,p2));
-
-}*/
-
 std::string OrdersList::stringToLog() {
     std::string logString = "Current Orders List: \n";
     for (Order* order : orders) {
