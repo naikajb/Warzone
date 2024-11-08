@@ -27,6 +27,8 @@ public: // access identifier
     // Territory parametrized constructor declaration
     Territory(string name, Continent *continent);
 
+    ~Territory();
+
     // Territory copy constructor declaration
     Territory(const Territory &t);
 
@@ -59,6 +61,8 @@ public: // access identifier
     // Continent paramerized constructor declaration
     Continent(string name, int bonus);
 
+    ~Continent();
+
     // Continent copy constructor declaration
     Continent(const Continent &c);
 
@@ -86,6 +90,8 @@ private: // access identifier
 public: // access identifier
     // Map paramerized constructor declaration
     Map(string fileName);
+
+    ~Map();
 
     // Map copy constructor declaration
     Map(const Map &m);
@@ -116,6 +122,8 @@ private:      // access identifier
 public: // access identifier
     // MapLoader paramerized constructor declaration
     MapLoader(string fileName);
+
+    ~MapLoader();
 
     // MapLoader copy constructor declaration
     MapLoader(MapLoader &ml);

@@ -9,6 +9,18 @@ Territory::Territory(string name, Continent *continent) : name(name),
                                                           numArmies(0)
 {
 }
+
+Territory::~Territory(){
+
+    delete continent;
+    continent = NULL;
+
+    for(Territory* t:adjTerritories){
+        delete t;
+        t = NULL;
+    }
+}
+
 // defines the Territory copy constructor with an initilizer list
 Territory::Territory(const Territory &t)
 {
@@ -32,7 +44,6 @@ Territory &Territory::operator=(const Territory &o)
 // prints name of territory, the number of armies, the continent, and its adjacent territories
 ostream &operator<<(ostream &out, Territory &o)
 {
-
     string adjString;
 
     for (Territory *t : o.getAdjTerritories())
@@ -60,6 +71,14 @@ Continent::Continent(string name, int bonus) : name(name),
                                                bonus(bonus)
 {
 }
+
+Continent::~Continent(){
+    for(Territory* t:territories){
+        delete t;
+        t = NULL;
+    }
+}
+
 // defines the Continent copy constructor with an initilizer list
 Continent::Continent(const Continent &c)
 {
@@ -106,6 +125,20 @@ void Continent::addTerritory(Territory *t) { territories.push_back(t); } // addT
 Map::Map(string fileName) : fileName(fileName)
 {
 }
+
+Map::~Map(){
+
+    for(Territory* t:territories){
+        delete t;
+        t = NULL;
+    }
+    for(Continent* t:continents){
+        delete t;
+        t = NULL;
+    }
+
+}
+
 // defines the Map copy constructor with an initilizer list
 Map::Map(const Map &m)
 {
@@ -281,6 +314,12 @@ MapLoader::MapLoader(string fileName) : fileName(fileName),
                                         map(loadMap(fileName)) // as soon as you create a map loader and creates a map by using the loadmap function and the file inputted
 {
 }
+
+MapLoader::~MapLoader(){
+    delete map;
+    map = NULL;
+}
+
 // defines the MapLoader copy constructor with an initilizer list
 MapLoader::MapLoader(MapLoader &ml)
 {
