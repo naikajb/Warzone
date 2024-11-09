@@ -62,7 +62,7 @@ Deploy::~Deploy() { // Deploy Destructor
 // Validate if the deploy order can be executed 
 bool Deploy::validateOrder() {
     
-    for(Territory* t : player->getTerritories()) if(target == t) return true; // target Territory needs to belong to the player issuing the order
+    for(Territory* t : player->getTerritories()) if(target == t) return player->getReinforcementPool()>=armies; // target Territory needs to belong to the player issuing the order
 
     return false;
 }

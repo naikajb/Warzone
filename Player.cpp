@@ -53,11 +53,6 @@ Player::~Player()
     // TODO: check if i need to delete the cards in the hand first
 }
 
-std::vector<Territory *> Player::getTerritories()
-{
-    return territories;
-}
-
 void Player::setReinforcementPool(int armies)
 {
     reinforcementPool = armies;
