@@ -85,7 +85,6 @@ void Player::addTerritory(Territory *territory)
 // 3. has adjacent territories that are the player's
 vector<Territory *> Player::toDefend()
 {
-    cout << "Before the sort: \n" <<  endl;
 
     sort(territories.begin(), territories.end(), [this](Territory *t1, Territory *t2)
          {
@@ -116,9 +115,6 @@ vector<Territory *> Player::toDefend()
             }
         }    
 
-        cout << "\n" << t1->getName() << " with " << numArmiesT1 << " enemy armies and " << numEnemyAdjT1 << " adjacent enemy territories !" << endl;
-        cout << t2->getName() << " with " << numArmiesT2 << " enemy armies and " << numEnemyAdjT2 << " adjacent enemy territories !\n" << endl;
-
         if (numArmiesT1 == 0 && numArmiesT2 == 0)
             {   
                 // Sort in descending order based on the number of adajcent enemy territories OR 
@@ -126,33 +122,87 @@ vector<Territory *> Player::toDefend()
                 return numEnemyAdjT1 > numEnemyAdjT2;
             }
         // Sort in descending order based on the number of enemy armies
-        return numArmiesT1 > numArmiesT2; 
-        });
-    cout << "\nAfter the sort: \n" << endl;
-        for (Territory *t : territories){
-        cout << t->getName() << ": " << t->getNumArmies() << endl;
-    }
+        return numArmiesT1 > numArmiesT2; });
     return territories;
 }
 
-// returns ARBITRARY list of territories to attack
+// returns list of territories to attack based on priority
+// for now the priority is:
+// 1. adjacent territories are enemy territories and have less armies than the player's territory
+// 2. adjacent territories are enemy territories and have have the same nb of armies than the player's territory
+// 3. adjacent territories are enemy territories and have more armies than the player's territory
+// 4. adjacent territores belongs to the player
 vector<Territory *> Player::toAttack()
 {
     vector<Territory *> toAttack;
 
-    if (territories.size() == 0)
+    for (Territory *t : territories)
     {
-        cout << "Player has no territories to attack" << endl;
-        return toAttack;
-    }
-
-    for (int i = 0; i < territories.size(); i++)
-    {
-        if (i % 2 != 0)
+        for (Territory *tadj : t->getAdjTerritories())
         {
-            toAttack.push_back(territories[i]);
+            // check if tadj is not already in the toAttack vector AND the adjacent territory is not part of player's territories
+            if (std::find(toAttack.begin(), toAttack.end(), tadj) == toAttack.end() && std::find(territories.begin(), territories.end(), tadj) == territories.end())
+            {
+                toAttack.push_back(tadj);
+            }
         }
     }
+    cout << "\nBefore sort:\n"
+         << endl;
+    for (Territory *toattack : toAttack)
+    {
+        cout << toattack->getName() << endl;
+    }
+
+    sort(toAttack.begin(), toAttack.end(), [this](Territory *t1, Territory *t2)
+         {
+             int priorityT1 = 0;
+             int priorityT2 = 0;
+
+             for (Territory *t : territories)
+             {
+                 if (std::find(t->getAdjTerritories().begin(), t->getAdjTerritories().end(), t1) != t->getAdjTerritories().end())
+                 {
+                     if (t1->getNumArmies() < t->getNumArmies())
+                     {
+                         priorityT1 += 2;
+                         cout << t1->getName() << " " << t1->getNumArmies() << " < " << t->getName() << " " << t->getNumArmies() << endl;
+                     }
+                     else
+                     {
+                         priorityT1 += 1;
+                         cout << t1->getName() << " " << t1->getNumArmies() << " >= " << t->getName() << " " << t->getNumArmies() << endl;
+                     }
+                 }
+
+                 if (std::find(t->getAdjTerritories().begin(), t->getAdjTerritories().end(), t2) != t->getAdjTerritories().end())
+                 {
+                     if (t2->getNumArmies() < t->getNumArmies())
+                     {
+                         priorityT2 += 2;
+                         cout << t2->getName() << " " << t2->getNumArmies() << " < " << t->getName() << " " << t->getNumArmies() << endl;
+                     }
+                     else
+                     {
+                         priorityT2 += 1;
+                         cout << t2->getName() << " " << t2->getNumArmies() << " >= " << t->getName() << " " << t->getNumArmies() << endl;
+                     }
+                 }
+             }
+            cout << "\npriority 1 for " << t1->getName() << " is " << priorityT1 << endl;
+            cout << "priority 2 for " << t2->getName() << " is " << priorityT2 << "\n"<< endl;
+             return priorityT1 > priorityT2;
+         });
+
+    cout << "\nAfter sort:\n"
+         << endl;
+
+    for (Territory *toattack : toAttack)
+    {
+        cout << toattack->getName() << endl;
+    }
+    // cout << "\n"
+    //      << playerName << " " << toAttack.size() << endl;
     return toAttack;
 }
 

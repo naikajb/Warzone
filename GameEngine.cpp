@@ -145,6 +145,7 @@ int main()
 
     for (Territory *t : ml->getMap()->getTerritories())
     {   
+        // randomly assign an original value of armies for debugging for each territory
         t->setNumArmies(t->getName().length());
 
         if (t->getContinent()->getName().compare("Central America") == 0 || t->getContinent()->getName().compare("The Highlands") == 0)
@@ -185,6 +186,8 @@ int main()
 
     p1->toDefend();
     p2->toDefend();
+    p1->toAttack();
+    // p2->toAttack();
 
 
     return 0;
