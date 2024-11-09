@@ -4,11 +4,12 @@
 #include <iostream> 
 #include <string>
 #include <vector> 
+#include <algorithm>
 #include "Orders.h"
 #include "Cards.h"
 #include "Map.h"
 #include "LoggingObserver.h"
-
+using std::sort;
 class OrdersList;
 class Order;
 
@@ -20,6 +21,8 @@ class Player{
         Hand* hand; // hand of Card objects
         OrdersList* orders; // list of Order objects
         bool canDrawCard;
+        int reinforcementPool; // nb of armies recieved added
+        int reinforcementTemp;
 
     public: 
         Player(string playerName); //constructor function
@@ -30,16 +33,22 @@ class Player{
         void addTerritory(Territory* territory);
         void removeTerritory(Territory* territory);
 
+        std::vector<Territory*> getTerritories(); // getter of a list of territories the player has
+        void setReinforcementPool(int);
+        int getReinforcementPool();
+        int getReinforcementTemp();
+
         std::vector<Territory*> toDefend();  //returns territories to be defended 
         std::vector<Territory*> toAttack();  //returns territories to be attacked
         
-        void issueOrder(Order* order);  //adds order to player's list of orders
+        void issueOrder();  //adds order to player's list of orders
         
         //stream insertion operator to print player's information
         friend std::ostream& operator<<(std::ostream& out, const Player& player);
         
         void addCard(Card* card);  //adds card to player's hand
         void removeCard(Card* card);  //removes card from player's hand
+        Hand *getHand();
         
         vector<Territory*> getTerritories();
         void printTerritories();  //prints player's territories

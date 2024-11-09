@@ -29,7 +29,7 @@ using namespace std;
 void testLoggingObserver(){
     LogObserver* observer = new LogObserver();
     GameEngine* engine = new GameEngine();
-    CommandParser parser(engine);
+    // CommandParser parser(engine);
     Deploy* order = new Deploy();
     Player* player = new Player("naika");
     OrdersList* orders = new OrdersList();
@@ -63,15 +63,15 @@ void testLoggingObserver(){
         << "\n\texecuting parser.parseCommand(\"loadmap\");"
         << "\n\texecuting parser.parseCommand(\"validatemap\");"
         << endl;
-    parser.parseCommand("loadmap");
-    parser.parseCommand("validatemap");
+    // parser.parseCommand("loadmap");
+    // parser.parseCommand("validatemap");
     string input;
     cout << "Enter a command: ";
     cin >> input;
-    parser.parseCommand(input);
+    // parser.parseCommand(input);
     cout << "Enter a command: ";
     cin >> input;
-    parser.parseCommand(input);
+    // parser.parseCommand(input);
     
     cout << "player address: " << player << endl;
     cout << "order address: " << order << endl;
@@ -86,7 +86,7 @@ void testLoggingObserver(){
 }
 
 
-int main(){
-    testLoggingObserver();
-    return 0;
-}
+// int main(){
+//     testLoggingObserver();
+//     return 0;
+// }

@@ -30,6 +30,7 @@ Territory::Territory(const Territory &t)
     numArmies = t.numArmies;
     continent = t.continent;
     adjTerritories = t.adjTerritories;
+    playerOwner = t.playerOwner;
 }
 
 // Overloaded assignment operator for the Territory class definition
@@ -39,6 +40,7 @@ Territory &Territory::operator=(const Territory &o)
     this->numArmies = o.numArmies;
     this->continent = o.continent;
     this->adjTerritories = o.adjTerritories;
+    this->playerOwner = o.playerOwner;
 
     return *this;
 }
@@ -63,10 +65,12 @@ int Territory::getNumArmies() { return numArmies; }                           //
 Continent *Territory::getContinent() { return continent; }                    // getContinent() definition
 vector<Territory *> Territory::getAdjTerritories() { return adjTerritories; } // getAdjTerritories() definition
 Player* Territory::getPlayer(){return owner;};
+Player *Territory::getPlayerOwner() {return playerOwner;}
 
-void Territory::setNumArmies(int num) { numArmies = num; } // setNumArmies() definition
+void Territory::setNumArmies(int num) { this->numArmies = num; } // setNumArmies() definition
 void Territory::addAdjTerritories(Territory *adjTerritory) { adjTerritories.push_back(adjTerritory); } // addAdjTerritories() definition
-void Territory::setPlayer(Player* p){owner = p;}
+void Territory::setPlayer(Player* p){owner = p;}void Territory::setPlayerOwner(Player *p) {playerOwner = p;};
+
 // CONTINENT CLASS
 
 // defines the Continent constructor with an initilizer list
