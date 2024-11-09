@@ -19,6 +19,7 @@ class Player{
         std::vector<Territory*> territories; // collection of Territory objects
         Hand* hand; // hand of Card objects
         OrdersList* orders; // list of Order objects
+        bool canDrawCard;
 
     public: 
         Player(string playerName); //constructor function
@@ -47,6 +48,10 @@ class Player{
         std::string getPlayerName();  //returns player's name
 
         void AttachObserver(Observer* observer);  //attaches observer to player
+
+        void drewCard();
+        void roundReset();
+        bool getCanDrawCard();
         
 };
 

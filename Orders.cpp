@@ -48,9 +48,9 @@ Deploy::Deploy() {
 }
 
 Deploy::Deploy(Player* p, int a, Territory* t): player(p), armies(a), target(t)
-{orderDescription = "Deploy order - place armies on a territory";}
+{orderDescription = "Deploy order - place armies on a territory";} // parameterized constructor
 
-Deploy::~Deploy() {
+Deploy::~Deploy() { // Deploy Destructor
 
     delete player;
     player = NULL;
@@ -62,7 +62,7 @@ Deploy::~Deploy() {
 // Validate if the deploy order can be executed 
 bool Deploy::validateOrder() {
     
-    for(Territory* t : player->getTerritories()) if(target == t) return true;
+    for(Territory* t : player->getTerritories()) if(target == t) return true; // target Territory needs to belong to the player issuing the order
 
     return false;
 }
@@ -70,7 +70,7 @@ bool Deploy::validateOrder() {
 // Execute the deploy order and set its effect
 void Deploy::executeOrder() {
 
-    target->setNumArmies(target->getNumArmies()+armies);
+    target->setNumArmies(target->getNumArmies()+armies); // sending a number of troops to another Territory
     
     executed = true; //mark the order as executed
     orderEffect = "Armies have been deployed."; 
@@ -81,13 +81,13 @@ void Deploy::execute(){
 
     if(!this->validateOrder()){
         
-        cout << "Deploy Order is not valid." << endl;
+        cout << "Deploy Order is not valid." << endl; // invalid Order message
 
         return; }
 
     cout << "Deploy Order is valid - > " << player->getPlayerName() << " is deploying " << armies << " units to Territory "<< target->getName() << endl;
 
-    this->executeOrder();
+    this->executeOrder(); // executing the Order after checking to see if it is valid
 
 }
 
@@ -101,9 +101,9 @@ Advance::Advance() {
 }
 
 Advance::Advance(Player* p, int a, Territory* s, Territory* t): player(p), armies(a), source(s), target(t)
-{orderDescription = "Advance Order - move armies to an adjacent territory";}
+{orderDescription = "Advance Order - move armies to an adjacent territory";} // parameterized constructor
 
-Advance::~Advance() {
+Advance::~Advance() { // Advance destructor
 
     delete player;
     player = NULL;
@@ -117,19 +117,19 @@ Advance::~Advance() {
 // Validate if the advance order can be executed
 bool Advance::validateOrder() {
     
-    bool validOwnership = false;
-    bool validAdj = false;
+    bool validOwnership = false; // verify if the source Territory is owned by the player issuing the Order
+    bool validAdj = false; // target Territory needs to be adjacent to source Territory
 
     for(Territory* t : player->getTerritories()) {
         if(source == t){
-            validOwnership = true;
+            validOwnership = true; // source Territory is owned by player issuing the order
             break;
         }
     }
 
     for(Territory* t : source->getAdjTerritories()){
         if(target == t){
-            validAdj = true;
+            validAdj = true; // target Territory is adjacent to source Territory
             break;
         }
     }
@@ -140,7 +140,8 @@ bool Advance::validateOrder() {
 
             if(t == target) return validAdj && !checkNegotiatePairs(player,p) && source->getNumArmies()>=armies;
            
-        }
+        } // the above validates that if the two players (or one) owning both Territories are in a truce for the round
+        // and checks if the amount of troops being sent is lower than the amount of troops present in the source Territory
     }
 
     return false;
@@ -154,12 +155,12 @@ void Advance::executeOrder() {
     for(Territory* t : player->getTerritories()){
 
         if(target == t){
-            attack = false;
+            attack = false; // determines if the Advance order is an attack, or a deployment of troops to a friendly Territory
             break;
         }
     }
 
-    if(attack){
+    if(attack){ // Attack simulation
 
         cout << "Battle begins!" << endl;
 
@@ -170,11 +171,11 @@ void Advance::executeOrder() {
 
         while(attackerNum!=0 && defenderNum!=0){
 
-            if(getRandomNum() <= 60) defenderNum--;
-            if(getRandomNum() <= 70) attackerNum--;
+            if(getRandomNum() <= 60) defenderNum--; // random chance of an attacking army unit killing a defender
+            if(getRandomNum() <= 70) attackerNum--; // random chance of a defending army unit killing an attacker
         }
 
-        if(defenderNum == 0){
+        if(defenderNum == 0){ // if the defending army has no troops remaining on its Territory -> defenders lose
 
             cout << "The defending army has lost the battle! Transferring ownership of Territory "<<target->getName()<< " to " << player->getPlayerName() << endl;
 
@@ -186,7 +187,7 @@ void Advance::executeOrder() {
 
                     if(t == target){
 
-                        p->removeTerritory(t);
+                        p->removeTerritory(t); // removes Territory from the defending player's Territory list
                         found = true;
                         break;
                     }
@@ -195,12 +196,32 @@ void Advance::executeOrder() {
                 if(found) break;
             }
 
-            player->addTerritory(target);
-            target->setNumArmies(attackerNum);
+            if(player->getCanDrawCard()){ // checks to see if the player can draw a Card this round
+
+                Deck* deck = new Deck();
+
+                Card* c = deck->draw(); // player draws a Card from the Deck
+
+                cout << player->getPlayerName() << " has drawn a " << c->getCardType() << " card for conquering a Territory!" << endl;
+
+                player->drewCard(); // player cannot draw another card this round
+
+                delete deck;
+                deck = NULL;
+
+            }
+
+
+            player->addTerritory(target); // adds Territory to the attacking player
+            target->setNumArmies(attackerNum); // sets number of army units on the target Territory to the remaining number of attackers
+
+        }else{ // defending army has won
+
+            cout << "The defending army has won the battle!" << endl;
+
         }
 
-
-    }else{
+    }else{ // no battle has occurred, transferring units to target territory
 
         cout << "No battle, both Territories belong to " << player->getPlayerName() << endl;
         source->setNumArmies(source->getNumArmies()-armies);
@@ -217,16 +238,16 @@ void Advance::execute(){
 
     if(!this->validateOrder()){
         
-        cout << "Advance Order is not valid." << endl;
+        cout << "Advance Order is not valid." << endl; // invalid Order message
         return;
     }
     cout << "Advance Order is valid -> "<< player->getPlayerName() << " is advancing " << armies << " units from Territory " << source->getName() << " to Territory " << target->getName() << endl;
 
-    this->executeOrder();
+    this->executeOrder(); // executes Order
 
 }
 
-int Advance::getRandomNum(){
+int Advance::getRandomNum(){ // returns a random number in the range of 1-100
 
     random_device random;
     mt19937 gen(random());
@@ -243,10 +264,10 @@ Bomb::Bomb() {
     orderDescription = "Bomb Order - bomb a territory to weaken its defense";
 }
 
-Bomb::Bomb(Player* p, Territory* t): player(p),target(t)
+Bomb::Bomb(Player* p, Territory* t): player(p),target(t) // parameterized constructor for the Bomb class
 {orderDescription = "Bomb Order - bomb a territory to weaken its defense";}
 
-Bomb::~Bomb() {
+Bomb::~Bomb() { // Bomb destructor
 
     delete player;
     player = NULL;
@@ -259,17 +280,17 @@ Bomb::~Bomb() {
 bool Bomb::validateOrder() {
    
     for(Territory* t : player->getTerritories()){
-        if(target == t) return false;
+        if(target == t) return false; // checks to see if the target Territory is owned by the player issuing the Order
     }
 
     bool validAdj = false;
 
     for(Territory* t : target->getAdjTerritories()){
 
-        for(Territory* t2 : player->getTerritories()){
-
-            if(t==t2){
-                validAdj = true;
+        for(Territory* t2 : player->getTerritories()){  //
+                                                        // validates that the target Territory is adjacent to at least
+            if(t==t2){                                  // one Territory owned by the player issuing the Order
+                validAdj = true;                        //
                 break;
             }
             if(validAdj) break;
@@ -282,7 +303,7 @@ bool Bomb::validateOrder() {
 
             if(t == target) return validAdj && !checkNegotiatePairs(player,p);
            
-        }
+        } // the above validates if the player issuing the order and the player owning the target territory are in a truce this round
     }
 
     return false;
@@ -291,7 +312,7 @@ bool Bomb::validateOrder() {
 // Execute the bomb order and set its effect
 void Bomb::executeOrder() {
     
-    target->setNumArmies(target->getNumArmies()/2);
+    target->setNumArmies(target->getNumArmies()/2); // killing half the army units on the target territory
     
     executed = true;
     orderEffect = "Territory has been bombed.";
@@ -301,7 +322,7 @@ void Bomb::executeOrder() {
 void Bomb::execute(){
 
     if(!this->validateOrder()){
-        cout << "Bomb Order is not valid." << endl;
+        cout << "Bomb Order is not valid." << endl; // invalid order message
         return;
     }
 
@@ -320,11 +341,11 @@ Blockade::Blockade() {
     orderDescription = "Blockade Order - blockade a territory to prevent movement";
 }
 
-Blockade::Blockade(Player* p,Territory* t): player(p),target(t)
+Blockade::Blockade(Player* p,Territory* t): player(p),target(t) // paramterized constructor for the Blockade class
 {orderDescription = "Blockade Order - blockade a territory to prevent movement";}
 
-Blockade::~Blockade() {
-
+Blockade::~Blockade() { // Blockade destructor
+ 
     delete player;
     player = NULL;
     delete target;
@@ -338,7 +359,7 @@ bool Blockade::validateOrder() {
 
     for(Territory* t : player->getTerritories()){
 
-        if(t == target) return true;
+        if(t == target) return true; // validates to see if the target Territory is owned by the player issuing the Order
 
     }
 
@@ -348,15 +369,15 @@ bool Blockade::validateOrder() {
 // Execute the bloackade order and set its effect
 void Blockade::executeOrder() {
     
-    player->removeTerritory(target);
+    player->removeTerritory(target); // removes target Territory from the territory list of the player issuing the Order
 
     bool neutralCreated = false;
 
     for(Player* p : getPlayerList()){
 
-        if((p->getPlayerName().compare("Neutral")) == 0){
+        if((p->getPlayerName().compare("Neutral")) == 0){ // if the neutral player already exists
 
-            p->addTerritory(target);
+            p->addTerritory(target); // adds Territory to the neutral player's list
             neutralCreated = true;
             break;
 
@@ -364,17 +385,17 @@ void Blockade::executeOrder() {
         if(neutralCreated) break;
     }
 
-    if(!neutralCreated){
+    if(!neutralCreated){ // if the neutral player doesnt already exist
 
-        Player *n = new Player("Neutral");
+        Player *n = new Player("Neutral"); // creates Neutral player
 
-        addToPlayerList(n);
+        addToPlayerList(n); // adds the neutral player to the list
 
-        n->addTerritory(target);
+        n->addTerritory(target); // adds the territory to the neutral player's list
 
     }
 
-    target->setNumArmies(target->getNumArmies()*2);
+    target->setNumArmies(target->getNumArmies()*2); // doubles the number of units on the target Territory
     
     executed = true;
     orderEffect = "Territory has been blockaded.";
@@ -384,7 +405,7 @@ void Blockade::executeOrder() {
 void Blockade::execute(){
 
     if(!this->validateOrder()){
-        cout << "Blockade Order is not valid." << endl;
+        cout << "Blockade Order is not valid." << endl; // invalid order message
         return;
     }
     
@@ -402,10 +423,10 @@ Airlift::Airlift() {
     orderDescription = "Airlift Order - move armies from one territory to another by air";
 }
 
-Airlift::Airlift(Player*p, int a, Territory* s, Territory* t): player(p),armies(a), source(s), target(t)
+Airlift::Airlift(Player*p, int a, Territory* s, Territory* t): player(p),armies(a), source(s), target(t) // parameterized constructor for the Airlift class
 {orderDescription = "Airlift Order - move armies from one territory to another by air";}
 
-Airlift::~Airlift() {
+Airlift::~Airlift() { // destructor for the Airlift class
 
     delete player;
     player = NULL;
@@ -423,20 +444,20 @@ bool Airlift::validateOrder() {
     bool validSource = false;
     bool validTarget = false;
 
-    for(Territory* t : player->getTerritories()){
+    for(Territory* t : player->getTerritories()){ // validates that both the target and source territory are owned by the player issuing the Order
 
         if(t == source) validSource = true;
         if(t == target) validTarget = true;
     }
 
-    return validSource && validTarget && armies <= source->getNumArmies();
+    return validSource && validTarget && armies <= source->getNumArmies(); // also validates that the amount of troops being moved is lesser or equal than the amount present on the source territory
 }
 
 // Execute the airlift order and set its effect
 void Airlift::executeOrder() {
     
-    source->setNumArmies(source->getNumArmies()-armies);
-    target->setNumArmies(target->getNumArmies()+armies);
+    source->setNumArmies(source->getNumArmies()-armies); // transferring a given amount of troops from source to target
+    target->setNumArmies(target->getNumArmies()+armies); // 
     
     executed = true;
     orderEffect = "Armies have been airlifted";
@@ -446,7 +467,7 @@ void Airlift::executeOrder() {
 void Airlift::execute(){
 
     if(!this->validateOrder()){
-        cout << "Airlift Order is not valid." << endl;
+        cout << "Airlift Order is not valid." << endl; // invalid order message
         return;
     }
 
@@ -465,10 +486,10 @@ Negotiate::Negotiate() {
     orderDescription = "Negotiate Order - negotiate a truce with another player";
 }
 
-Negotiate::Negotiate(Player* p1, Player* p2): player(p1),targetPlayer(p2)
+Negotiate::Negotiate(Player* p1, Player* p2): player(p1),targetPlayer(p2) // parameterized constructor for Negotiate class
 {orderDescription = "Negotiate Order - negotiate a truce with another player";}
 
-Negotiate::~Negotiate() {
+Negotiate::~Negotiate() { // destructor for negotiate class
 
     delete player;
     player = NULL;
@@ -480,13 +501,13 @@ Negotiate::~Negotiate() {
 // Validate if the negoatiate order can be executed
 bool Negotiate::validateOrder() {
 
-    return player != targetPlayer && !checkNegotiatePairs(player,targetPlayer);
-}
+    return player != targetPlayer && !checkNegotiatePairs(player,targetPlayer); // validates that the target player is not the same as the player issuing the order
+}                                                                               // also validates to see if the pair is not already in a truce
 
 // Execute the negotiate order and set its effect
 void Negotiate::executeOrder() {
     
-    addNegotiatePairs(player,targetPlayer);
+    addNegotiatePairs(player,targetPlayer); // adds this pair of players to the list
 
     executed = true;
     orderEffect = "Truce has been negotiated.";
@@ -496,7 +517,7 @@ void Negotiate::executeOrder() {
 void Negotiate::execute(){
 
     if(!this->validateOrder()){
-        cout << "Negotiate Order is not valid." << endl;
+        cout << "Negotiate Order is not valid." << endl; // invalid Order message
         return;
     }
 
@@ -557,37 +578,37 @@ vector<Order*> OrdersList::getOrders(){
 }
 
 
-bool checkNegotiatePairs(Player* p1, Player* p2){
+bool checkNegotiatePairs(Player* p1, Player* p2){ // returns a boolean to check if 2 players are in a truce this round
 
-    for(pair<Player*,Player*> p : negotiatePairs){
+    for(pair<Player*,Player*> p : negotiatePairs){ // using ADT pair
 
         if((p.first == p1 && p.second == p2) || p.first == p2 && p.second == p1) return true;
     }
     return false;
 }
 
-void addNegotiatePairs(Player* p1, Player* p2){
+void addNegotiatePairs(Player* p1, Player* p2){ // adds 2 players to the negotiatepairs pair
 
     pair<Player*,Player*> pear = make_pair(p1,p2);
 
     negotiatePairs.push_back(pear);
 }
 
-void resetNegotiatePairs(){
+void resetNegotiatePairs(){ // after each round, we clear the truces
 
-    negotiatePairs.clear();
+    negotiatePairs.clear(); // clears the vector
 }
 
-void addToPlayerList(Player* p){
+void addToPlayerList(Player* p){ // test method
 
     playerList.push_back(p);
 
 }
 
-vector<Player*> getPlayerList(){
+vector<Player*> getPlayerList(){ // tets method
     return playerList;
 }
-std::string OrdersList::stringToLog() {
+std::string OrdersList::stringToLog() { 
     std::string logString = "Current Orders List: \n";
     for (Order* order : orders) {
         logString += "\t" + order->stringToLog() + "\n";

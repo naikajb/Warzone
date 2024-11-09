@@ -13,6 +13,7 @@ using namespace std;
 Player::Player(string playerName) {
     this->playerName = playerName;
     orders = new OrdersList(); 
+    canDrawCard = true;
 }
 
 Player :: Player(const Player& orig){
@@ -115,4 +116,8 @@ void Player::removeTerritory(Territory* territory){
 void Player::AttachObserver(Observer* observer){
     orders->Attach(observer);
 }
+
+void Player::drewCard(){canDrawCard = false;}
+void Player::roundReset(){canDrawCard = true;}
+bool Player::getCanDrawCard(){return canDrawCard;}
 
