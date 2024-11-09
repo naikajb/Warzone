@@ -18,6 +18,7 @@ class Player{
         Hand* hand; // hand of Card objects
         OrdersList* orders; // list of Order objects
         int reinforcementPool; // nb of armies recieved added
+        int reinforcementTemp;
 
     public: 
         Player(string playerName); //constructor function
@@ -31,17 +32,19 @@ class Player{
         std::vector<Territory*> getTerritories(); // getter of a list of territories the player has
         void setReinforcementPool(int);
         int getReinforcementPool();
+        int getReinforcementTemp();
 
         std::vector<Territory*> toDefend();  //returns territories to be defended 
         std::vector<Territory*> toAttack();  //returns territories to be attacked
         
-        void issueOrder(Order* order);  //adds order to player's list of orders
+        void issueOrder();  //adds order to player's list of orders
         
         //stream insertion operator to print player's information
         friend std::ostream& operator<<(std::ostream& out, const Player& player);
         
         void addCard(Card* card);  //adds card to player's hand
         void removeCard(Card* card);  //removes card from player's hand
+        Hand *getHand();
         
         
         void printTerritories();  //prints player's territories

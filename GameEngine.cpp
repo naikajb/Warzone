@@ -115,7 +115,8 @@ void GameEngine::reinforcementPhase(vector<Player *> v, Map *map)
             {
                 armies += static_cast<int>(std::floor(c->getBonus()));
                 cout << v[i]->getPlayerName() << " has concurred continent: " << c->getName() << "\nbonus added for that continent: " << c->getBonus() << endl;
-                cout << v[i]->getPlayerName() << " now has " << armies << " armies after bonus of " << c->getBonus() << "\n" << endl;
+                cout << v[i]->getPlayerName() << " now has " << armies << " armies after bonus of " << c->getBonus() << "\n"
+                     << endl;
             }
         }
         v[i]->setReinforcementPool(armies);
@@ -124,6 +125,24 @@ void GameEngine::reinforcementPhase(vector<Player *> v, Map *map)
 
 void GameEngine::issueOrdersPhase(vector<Player *> v)
 {
+    bool stillOrders = true;
+    // while (stillOrders == true)
+    // {
+    //     for (Player *p : v)
+    //     {
+    //         if (p->getReinforcementPool() != 0)
+    //         {
+    //             Deploy *d = new Deploy();
+    //             p->issueOrder(d);
+    //         }
+    //         Advance *a =  new Advance();
+    //         p->issueOrder(a);
+
+    //         if (p-> != 0) {
+
+    //         }
+    //     }
+    // }
 }
 void GameEngine::executeOrdersPhase(vector<Player *> v)
 {
@@ -144,7 +163,7 @@ int main()
     pList.push_back(p2);
 
     for (Territory *t : ml->getMap()->getTerritories())
-    {   
+    {
         // randomly assign an original value of armies for debugging for each territory
         t->setNumArmies(t->getName().length());
 
@@ -155,7 +174,6 @@ int main()
         else
         {
             p2->addTerritory(t);
-
         }
     }
 
@@ -176,19 +194,20 @@ int main()
     }
 
     cout << "\nplayer 1 reinforcement pool at the beginning of the game: " << p1->getReinforcementPool() << endl;
-    cout << "\nplayer 2 reinforcement pool at the beginning of the game: "  << p2->getReinforcementPool() << "\n" << endl;
+    cout << "\nplayer 2 reinforcement pool at the beginning of the game: " << p2->getReinforcementPool() << "\n"
+         << endl;
 
     GameEngine g;
     g.reinforcementPhase(pList, ml->getMap());
 
     cout << "\nplayer 1 reinforcement pool after acquired territories: " << p1->getReinforcementPool() << endl;
-    cout << "\nplayer 2 reinforcement pool after acquired territories: " << p2->getReinforcementPool() << "\n" << endl;
+    cout << "\nplayer 2 reinforcement pool after acquired territories: " << p2->getReinforcementPool() << "\n"
+         << endl;
 
     p1->toDefend();
     p2->toDefend();
     p1->toAttack();
-    // p2->toAttack();
-
+    p2->toAttack();
 
     return 0;
 }

@@ -11,6 +11,8 @@
 #include "LoggingObserver.h"
 #include "Player.h" //added
 #include "Map.h"
+#include "Orders.h"
+#include "Cards.h"
 using namespace std;
 using std::vector; // added 
 using std::floor;
