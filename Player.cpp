@@ -13,6 +13,8 @@ using namespace std;
 Player::Player(string playerName) {
     this->playerName = playerName;
     orders = new OrdersList(); 
+    hand = new Hand();
+    territories = vector<Territory*>();
 }
 
 Player :: Player(const Player& orig){

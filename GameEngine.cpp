@@ -1,7 +1,4 @@
 #include "GameEngine.h"
-// #include <random>
-// #include "Map.h"
-// #include "Player.h"
 
 // creating a list of game states
 const char* GameEngine::GameStateStrings[] = {
@@ -91,232 +88,257 @@ bool GameEngine::processFileCommand(std::string& command, CommandProcessor* comm
     exit(0);
 }
 
-void GameEngine::startupPhase() {
-    std::string inputMode;
-    bool useConsole = false;
-    bool useFile = false;
-    std::cout << "Welcome to the Game Engine!\n\n" << "Choose a mode to input commands: \n" << "1. Console\n" << "2. File\n" << "\nEnter 1 or 2:\n" << "> ";
-    std::cin >> inputMode;
+void GameEngine::startupPhase()
+{
+	std::string inputMode;
+	bool useConsole = false;
+	bool useFile = false;
+	std::cout << "Welcome to the Game Engine!\n\n"
+			  << "Choose a mode to input commands: \n"
+			  << "1. Console\n"
+			  << "2. File\n"
+			  << "\nEnter 1 or 2:\n"
+			  << "> ";
+	std::cin >> inputMode;
+	CommandProcessor *commandProcessor = nullptr;
+	FileLineReader *fileLineReader = nullptr;
+	Map *mapP = nullptr;
+	int nbPlayers = 0;
+	std::string fileName;
+	std::ifstream file;
+	vector<Player> players;
 
-     // Select the appropriate CommandProcessor based on command-line argument
-    CommandProcessor* commandProcessor = nullptr;
-    FileLineReader* fileLineReader = nullptr;
-    Map* mapP = nullptr;
-    int nbPlayers = 0;
-    std::string fileName;
-    vector<Player> players;
+	if (inputMode == "1") {
+		commandProcessor = new CommandProcessor();
+		useConsole = true;
+	}
+	else if (inputMode == "2") {
+		std::cout << "\nEnter the file name: ";
+		std::cin >> fileName;
+		commandProcessor = new CommandProcessor();
+		file.open(fileName);
+		useFile = true;
+	}
 
-    if (inputMode == "1") {
-        commandProcessor = new CommandProcessor();
-        useConsole = true;
-    } 
-    else if (inputMode == "2") {
-        while (true) {
-            std::cout << "\nEnter the file name: ";
-            std::cin >> fileName;
-            try {
-                fileLineReader = new FileLineReader(fileName);
-                commandProcessor = new FileCommandProcessorAdapter(fileLineReader);
-                break;
-            } catch (std::invalid_argument& e) {
-                std::cerr << e.what() << std::endl;
-            }
-        }
-    } 
+	else {
+		std::cerr << "\nInvalid input mode. Exiting..." << std::endl;
+		return;
+	}
 
-    else {
-        std::cerr << "\nInvalid input mode. Exiting..." << std::endl;
-        return;
-    }
+	GameEngine engine;
+	std::cout << "\nStarting Game Engine\n\n";
 
-    GameEngine engine;
-    std::cout << "\nStarting Game Engine\n\n";
+	std::string input;
+	std::string unknown = "";
 
-    std::string input;
-    std::string unknown = "";
+	if (useConsole)
+	{
+		while (true)
+		{
+			std::cout << "Type a command " << std::endl;
+			std::cout << "> ";
+			std::getline(std::cin >> std::ws, input);
 
-    while (true) {
-        if(useConsole) {
-            std::cout << "Type a command " << std::endl;
-            std::cout << "> ";
-            std::getline(std::cin >> std::ws, input);
-            bool isRightCommand = engine.processConsoleCommand(input, commandProcessor);
-            if (isRightCommand){
-                if (input == "loadmap") {
-                    std::cout << "Enter the name of the map: ";
-                    std::string filename;
-                    std::cin >> filename;
-                    MapLoader ml(filename);
-                    // Map object of the map from the filename
-                    mapP = ml.getMap();
-                    std::cout << "Map loaded successfully!" << std::endl;
-                } else if (input == "validatemap") {
-                    bool isValidatedMap = mapP->validate;
-                    if (isValidatedMap) {
-                        std::cout << "Map is validated!" << std::endl;
-                    } else {
-                        std::cout << "Map is not validated!" << std::endl;
-                    }
-                } else if (input == "addplayer") {
-                    // Handle addplayer count players logic here TODO
-                    cout<<"Please enter the number of players: ";
-                    cin>>nbPlayers;
-                    
-                    for (int i=0; i<nbPlayers;i++){
-                        string name; 
-                        cout<<"Please enter the name of player "<<i+1<<": ";
-                        cin>>name;
-                        players.push_back(Player(name));
-                    }
-                } else if (input == "gamestart") {
-                    //Distrribute the territories to each player 
-                    vector<Territory *> allTerritories = mapP->getTerritories();
-                    int nbTerritories = allTerritories.size();
-                    
-                    vector<int> randomOrder = getRandomizedNumbers(nbTerritories);
-                    
-                    //Assign an equal number of territories to each player 
-                    for (int i=0; i<nbTerritories; i++){
-                        for (int j=0; j<nbPlayers; j++){
-                            for (int k=0; k<(nbTerritories/nbPlayers);k++){
-                                players[j].addTerritory(allTerritories[randomOrder[i]]);
-                            }
-                        }  
-                    }
+			// Split command and argument
+			std::istringstream iss(input);
+			std::string command, argument;
+			iss >> command;
+			std::getline(iss >> std::ws, argument);
+			bool isRightCommand = engine.processConsoleCommand(command, commandProcessor);
+			if (isRightCommand)
+			{
+				if (command == "loadmap")
+				{
+					MapLoader ml(argument);
+					// Map object of the map from the filename
+					mapP = ml.getMap();
+					std::cout << "Map loaded successfully!" << std::endl;
+				}
+				else if (command == "validatemap")
+				{
+					bool isValidatedMap = mapP->validate;
+					if (isValidatedMap)
+					{
+						std::cout << "Map is validated!" << std::endl;
+					}
+					else
+					{
+						std::cout << "Map is not validated!" << std::endl;
+					}
+				}
+				else if (command == "addplayer")
+				{
+					if (argument != "")
+					{
+						players.push_back(Player(argument)); // Add player with the specified name
+						nbPlayers++;
+						std::cout << "Player " << argument << " added successfully!" << std::endl;
+					}
+					else
+					{
+						std::cout << "Error: addplayer command requires a <playername> argument." << std::endl;
+					}
+				}
+				else if (command == "gamestart")
+				{
+					if (nbPlayers >= 2 && nbPlayers <= 6)
+					{
+						// Distrribute the territories to each player
+						vector<Territory *> allTerritories = mapP->getTerritories();
+						int nbTerritories = allTerritories.size();
 
-                    //Determine randomly the order of play of the players in the game
-                    vector<int> playersOrder = getRandomizedNumbers(nbPlayers);
+						vector<int> randomOrder = getRandomizedNumbers(nbTerritories);
 
-                    Deck deck;
+						// Assign an equal number of territories to each player
+						for (int i = 0; i < nbTerritories; i++)
+						{
+							for (int j = 0; j < nbPlayers; j++)
+							{
+								for (int k = 0; k < (nbTerritories / nbPlayers); k++)
+								{
+									players[j].addTerritory(allTerritories[randomOrder[i]]);
+								}
+							}
+						}
 
-                    //let each player draw 2 initial cards from the deck using the deck’s draw() method
-                    for (int i=0; i<players.size();i++){
-                        players[playersOrder[i]].addCard(deck.draw());
-                        players[playersOrder[i]].addCard(deck.draw());
-                    }
-                    
-                }
-                
-            }
-            
+						// Determine randomly the order of play of the players in the game
+						vector<int> playersOrder = getRandomizedNumbers(nbPlayers);
 
-            if (input == "exit") {
-                break;
-            }
-        }
-        else {
-            //Here you need to go line by line through the file read the commands 
-            //and process them in a similar way to the console commands
-            //engine.processFileCommand(unknown, commandProcessor);
-            //Go through file filename line by line. For each line, process the command
-            //we need to get the line and change input to the value of the line
-            std::string line; 
-            while (getline(cin, line)){
-                // Split command and argument
-                std::istringstream iss(line);
-                std::string command, argument;
-                iss >> command;
-                bool isRightCommand = engine.processConsoleCommand(command, commandProcessor);
-                if (isRightCommand){
-                if (command == "loadmap") {
-                    MapLoader ml(argument);
-                    // Map object of the map from the filename
-                    mapP = ml.getMap();
-                    std::cout << "Map loaded successfully!" << std::endl;
-                } else if (command == "validatemap") {
-                    bool isValidatedMap = mapP->validate;
-                    if (isValidatedMap) {
-                        std::cout << "Map is validated!" << std::endl;
-                    } else {
-                        std::cout << "Map is not validated!" << std::endl;
-                    }
-                } else if (command == "addplayer") {
-                    if (iss >> argument) {
-                        players.push_back(Player(argument));  // Add player with the specified name
-                        nbPlayers++;
-                        std::cout << "Player " << argument << " added successfully!" << std::endl;
-                    } 
-                    else {
-                    std::cout << "Error: addplayer command requires a <playername> argument." << std::endl;
-                    }
+						Deck deck;
 
-                    if (nbPlayers<2 || nbPlayers>6){
-                        std::cout << "Error: Number of players must be between 2 and 6." << std::endl;
-                        std::cout << "Exiting system ..." << std::endl;
-                        exit(0);
-                    }
-                    
-                    for (int i=0; i<nbPlayers;i++){
-                        string name; 
-                        cout<<"Please enter the name of player "<<i<<endl;
-                        cin>>name;
-                        players[i]=Player(name);
+						// let each player draw 2 initial cards from the deck using the deck’s draw() method
+						for (int i = 0; i < players.size(); i++)
+						{
+							players[playersOrder[i]].addCard(deck.draw());
+							players[playersOrder[i]].addCard(deck.draw());
+						}
+					}
+					else
+					{
+						std::cout << "Error: Number of players must be between 2 and 6." << std::endl;
+						std::cout << "Exiting system ..." << std::endl;
+						exit(0);
+					}
+				}
+			}
 
-                    }
-                } else if (command == "gamestart") {
-                    //Distrribute the territories to each player 
-                    vector<Territory *> allTerritories = mapP->getTerritories();
-                    int nbTerritories = allTerritories.size();
-                    
-                    vector<int> randomOrder = getRandomizedNumbers(nbTerritories);
-                    
-                    //Assign an equal number of territories to each player 
-                    for (int i=0; i<nbTerritories; i++){
-                        for (int j=0; j<nbPlayers; j++){
-                            for (int k=0; k<(nbTerritories/nbPlayers);k++){
-                                players[j].addTerritory(allTerritories[randomOrder[i]]);
-                            }
-                        }  
-                    }
+			if (command == "exit")
+			{
+				break;
+			}
+		}
+	}
 
-                    //Determine randomly the order of play of the players in the game
-                    vector<int> playersOrder = getRandomizedNumbers(nbPlayers);
+	if (useFile)
+	{
+		std::string line = "";
+		while (getline(file, line))
+		{
+			// Split command and argument
+			std::istringstream iss(line);
+			std::string command, argument;
+			iss >> command;
+			std::getline(iss >> std::ws, argument);
+			bool isRightCommand = engine.processConsoleCommand(command, commandProcessor);
+			if (isRightCommand)
+			{
+				if (command == "loadmap")
+				{
+					MapLoader ml(argument);
+					// Map object of the map from the filename
+					mapP = ml.getMap();
+					std::cout << "Map " << argument << " loaded successfully!" << std::endl;
+				}
+				else if (command == "validatemap")
+				{
+					bool isValidatedMap = mapP->validate;
+					if (isValidatedMap)
+					{
+						std::cout << "Map is validated!" << std::endl;
+					}
+					else
+					{
+						std::cout << "Map is not validated!" << std::endl;
+					}
+				}
+				else if (command == "addplayer")
+				{
+					if (argument != "")
+					{
+						players.push_back(Player(argument)); // Add player with the specified name
+						nbPlayers++;
+						std::cout << "Player " << argument << " added successfully!" << std::endl;
+					}
+					else
+					{
+						std::cout << "Error: addplayer command requires a <playername> argument." << std::endl;
+					}
+				}
+				else if (command == "gamestart")
+				{
 
-                    Deck deck;
+					if (nbPlayers >= 2 && nbPlayers <= 6)
+					{
+						// Distrribute the territories to each player
+						vector<Territory *> allTerritories = mapP->getTerritories();
+						int nbTerritories = allTerritories.size();
 
-                    //let each player draw 2 initial cards from the deck using the deck’s draw() method
-                    for (int i=0; i<players.size();i++){
-                        players[playersOrder[i]].addCard(deck.draw());
-                        players[playersOrder[i]].addCard(deck.draw());
-                    }
-                    
-                }
-                
-            }
-            else {
-                std::cout << "The system has encoutered an invalid command. Please start over.\n" << std::endl;
-                std::cout << "See you later alligator!" << std::endl;
-                std::cout << "Exiting system ..." << std::endl;
-                exit(0);
-                }
-            }
-        }
-    }
+						vector<int> randomOrder = getRandomizedNumbers(nbTerritories);
 
-    
-    delete commandProcessor;
-    delete fileLineReader;
-    commandProcessor = nullptr;
-    fileLineReader = nullptr;
+						// Assign an equal number of territories to each player
+						for (int i = 0; i < nbTerritories; i++)
+						{
+							for (int j = 0; j < nbPlayers; j++)
+							{
+								for (int k = 0; k < (nbTerritories / nbPlayers); k++)
+								{
+									players[j].addTerritory(allTerritories[randomOrder[i]]);
+								}
+							}
+						}
 
+						// Determine randomly the order of play of the players in the game
+						vector<int> playersOrder = getRandomizedNumbers(nbPlayers);
 
+						Deck deck;
 
+						// let each player draw 2 initial cards from the deck using the deck’s draw() method
+						for (int i = 0; i < players.size(); i++)
+						{
+							players[playersOrder[i]].addCard(deck.draw());
+							players[playersOrder[i]].addCard(deck.draw());
+						}
+					}
+					else
+					{
+						std::cout << "Error: Number of players must be between 2 and 6." << std::endl;
+						std::cout << "Exiting system ..." << std::endl;
+						exit(0);
+					}
+				}
+			}
+		}
+	}
+
+	delete commandProcessor;
+	delete fileLineReader;
+	commandProcessor = nullptr;
+	fileLineReader = nullptr;
 }
 
-vector<int> GameEngine::getRandomizedNumbers(int n) {
-    // Step 1: Create a vector with numbers from 0 to n-1
-    vector<int> randomizedNumbers;
-    for (int i = 0; i < n; ++i) {
-        randomizedNumbers.push_back(i);
-    }
+vector<int> GameEngine::getRandomizedNumbers(int n)
+{
+	// Step 1: Create a vector with numbers from 0 to n-1
+	vector<int> randomizedNumbers;
+	for (int i = 0; i < n; ++i)
+	{
+		randomizedNumbers.push_back(i);
+	}
 
-    // Step 2: Shuffle the vector randomly
-    random_device rd;
-    mt19937 generator(rd());
-    shuffle(randomizedNumbers.begin(), randomizedNumbers.end(), generator);
+	// Step 2: Shuffle the vector randomly
+	random_device rd;
+	mt19937 generator(rd());
+	shuffle(randomizedNumbers.begin(), randomizedNumbers.end(), generator);
 
-    return randomizedNumbers;
-} 
-
-
-
+	return randomizedNumbers;
+}
