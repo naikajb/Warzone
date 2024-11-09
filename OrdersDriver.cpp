@@ -107,7 +107,6 @@ void testOrderExecution(){
     p3->addTerritory(t4);
 
 
-
     /* Deploy Test Works
     
     Order* deployTest = new Deploy(p1,4,t1);
@@ -122,7 +121,7 @@ void testOrderExecution(){
 
 
 
-    /* Advance Test Works -> Tried everything
+    /*//Advance Test Works -> Tried everything
     
     t1->setNumArmies(10);
     t2->setNumArmies(2);
@@ -199,7 +198,7 @@ void testOrderExecution(){
 
 
 
-    Order* o = new Negotiate(p1,p2);
+    /*Order* o = new Negotiate(p1,p2);
     o->Attach(ob);
     Order* o2 = new Negotiate(p1,p3);
     o2->Attach(ob);
@@ -215,5 +214,5 @@ void testOrderExecution(){
 
     resetNegotiatePairs();
 
-    boomboom->execute();
+    boomboom->execute();*/
 }

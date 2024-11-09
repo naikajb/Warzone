@@ -9,6 +9,9 @@
 
 int main(int argc, char **argv){
 
+    testOrderExecution();
+
+    /*
     //if there is more than one argument passed to the program print error message
     if (argc > 2){
         std::cout << "Invalid arguments. \nPlease run the program without any arguments to start the game or with '-test' to run the tests." << std::endl;
@@ -80,6 +83,7 @@ int main(int argc, char **argv){
     }else{
         
         std::cout << "Starting the game..." << std::endl;
+
+        */
         return 0;
     }
-}
