@@ -16,6 +16,7 @@ Territory::Territory(const Territory &t)
     numArmies = t.numArmies;
     continent = t.continent;
     adjTerritories = t.adjTerritories;
+    playerOwner = t.playerOwner;
 }
 
 // Overloaded assignment operator for the Territory class definition
@@ -25,6 +26,7 @@ Territory &Territory::operator=(const Territory &o)
     this->numArmies = o.numArmies;
     this->continent = o.continent;
     this->adjTerritories = o.adjTerritories;
+    this->playerOwner = o.playerOwner;
 
     return *this;
 }
@@ -49,9 +51,11 @@ string Territory::getName() { return name; }                                  //
 int Territory::getNumArmies() { return numArmies; }                           // getNumArmies() definition
 Continent *Territory::getContinent() { return continent; }                    // getContinent() definition
 vector<Territory *> Territory::getAdjTerritories() { return adjTerritories; } // getAdjTerritories() definition
+Player *Territory::getPlayerOwner() {return playerOwner;}
 
-void Territory::setNumArmies(int numArmies) { numArmies = numArmies; } // setNumArmies() definition
+void Territory::setNumArmies(int numArmies) { this->numArmies = numArmies; } // setNumArmies() definition
 void Territory::addAdjTerritories(Territory *adjTerritory) { adjTerritories.push_back(adjTerritory); } // addAdjTerritories() definition
+void Territory::setPlayerOwner(Player *p) {playerOwner = p;};
 
 // CONTINENT CLASS
 

@@ -144,7 +144,9 @@ int main()
     pList.push_back(p2);
 
     for (Territory *t : ml->getMap()->getTerritories())
-    {
+    {   
+        t->setNumArmies(t->getName().length());
+
         if (t->getContinent()->getName().compare("Central America") == 0 || t->getContinent()->getName().compare("The Highlands") == 0)
         {
             p1->addTerritory(t);
@@ -152,6 +154,7 @@ int main()
         else
         {
             p2->addTerritory(t);
+
         }
     }
 
@@ -159,14 +162,16 @@ int main()
 
     for (Territory *t : p1->getTerritories())
     {
-        cout << t->getName() << endl;
+        t->setPlayerOwner(p1);
+        cout << "Player owner of " << t->getName() << " is " << t->getPlayerOwner()->getPlayerName() << endl;
     }
 
     cout << "\nplayer 2 territories: " << endl;
 
     for (Territory *t : p2->getTerritories())
     {
-        cout << t->getName() << endl;
+        t->setPlayerOwner(p2);
+        cout << "Player owner of " << t->getName() << " is " << t->getPlayerOwner()->getPlayerName() << endl;
     }
 
     cout << "\nplayer 1 reinforcement pool at the beginning of the game: " << p1->getReinforcementPool() << endl;
@@ -177,6 +182,10 @@ int main()
 
     cout << "\nplayer 1 reinforcement pool after acquired territories: " << p1->getReinforcementPool() << endl;
     cout << "\nplayer 2 reinforcement pool after acquired territories: " << p2->getReinforcementPool() << "\n" << endl;
+
+    p1->toDefend();
+    p2->toDefend();
+
 
     return 0;
 }

@@ -69,7 +69,7 @@ int Player::getReinforcementPool()
 void Player::issueOrder(Order *order)
 {
     orders->addOrder(order);
-    //cout << *order << endl;
+    // cout << *order << endl;
 }
 
 // adds territory to the player's list of territories
@@ -78,23 +78,61 @@ void Player::addTerritory(Territory *territory)
     territories.push_back(territory);
 }
 
-// returns ARBITRARY list of territories to defend
+// returns list of territories to defend based on priority
+// for now the priority is:
+// 1. has adjacent territories that are not player's and has enemy armies (its based on who has more)
+// 2. has adjacent territories that are not the player's and has no enemy armies
+// 3. has adjacent territories that are the player's
 vector<Territory *> Player::toDefend()
 {
-    vector<Territory *> toDefend;
-    if (territories.size() == 0)
-    {
-        cout << "Player has no territories to defend" << endl;
-        return toDefend;
-    }
-    for (int i = 0; i < territories.size(); i++)
-    {
-        if (i % 2 == 0)
-        {
-            toDefend.push_back(territories[i]);
+    cout << "Before the sort: \n" <<  endl;
+
+    sort(territories.begin(), territories.end(), [this](Territory *t1, Territory *t2)
+         {
+        // number of enemy armies for territory 1
+        int numArmiesT1 = 0;
+        // number of enemy armies for territory 2
+        int numArmiesT2 = 0;
+
+        // if both territories have 0 enemy armies
+        // priority changes to number of enemy territories OR
+        // unowned territories surrounding Territory 1
+        int numEnemyAdjT1 = 0;
+        // number of enemy territories OR unowned territories
+        // surrounding Territory 2
+        int numEnemyAdjT2 = 0;
+
+        for (Territory* t : t1->getAdjTerritories()){
+            if (t->getPlayerOwner() != this){
+                numArmiesT1 += t->getNumArmies();
+                numEnemyAdjT1++;
+            }
         }
+
+        for (Territory* t : t2->getAdjTerritories()){
+            if (t->getPlayerOwner() != this){
+                numArmiesT2 += t->getNumArmies();
+                numEnemyAdjT2++;
+            }
+        }    
+
+        cout << "\n" << t1->getName() << " with " << numArmiesT1 << " enemy armies and " << numEnemyAdjT1 << " adjacent enemy territories !" << endl;
+        cout << t2->getName() << " with " << numArmiesT2 << " enemy armies and " << numEnemyAdjT2 << " adjacent enemy territories !\n" << endl;
+
+        if (numArmiesT1 == 0 && numArmiesT2 == 0)
+            {   
+                // Sort in descending order based on the number of adajcent enemy territories OR 
+                // adjacent unnowned territories 
+                return numEnemyAdjT1 > numEnemyAdjT2;
+            }
+        // Sort in descending order based on the number of enemy armies
+        return numArmiesT1 > numArmiesT2; 
+        });
+    cout << "\nAfter the sort: \n" << endl;
+        for (Territory *t : territories){
+        cout << t->getName() << ": " << t->getNumArmies() << endl;
     }
-    return toDefend;
+    return territories;
 }
 
 // returns ARBITRARY list of territories to attack
@@ -154,8 +192,8 @@ void Player::removeTerritory(Territory *territory)
     }
 }
 
-//attach observer to player's order list
-void Player::AttachObserver(Observer* observer){
+// attach observer to player's order list
+void Player::AttachObserver(Observer *observer)
+{
     orders->Attach(observer);
 }
-

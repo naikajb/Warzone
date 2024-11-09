@@ -4,10 +4,11 @@
 #include <iostream> 
 #include <string>
 #include <vector> 
+#include <algorithm>
 #include "Orders.h"
 #include "Cards.h"
 #include "Map.h"
-
+using std::sort;
 
 class Player{
 
