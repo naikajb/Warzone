@@ -1,0 +1,7 @@
+loadmap MapTextFiles/UK.map
+validatemap
+addplayer trishapaytes
+addplayer donaldtrump
+addplayer rizzler
+addplayer scoobydoo
+gamestart
