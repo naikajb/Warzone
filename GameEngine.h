@@ -1,13 +1,19 @@
-#ifndef GameEngine_h
-#define GameEngine_h
+#ifndef GAMEENGINE_H
+#define GAMEENGINE_H
 
 #include "CommandProcessor.h"
+#include "FileCommandProcessorAdapter.h"
 #include <iostream>
 #include <sstream>
 #include <string>
 #include <vector> 
 #include <map>
+#include <random>
 #include "LoggingObserver.h"
+#include "Map.h"
+#include "Player.h"
+#include "Cards.h"
+#include "Orders.h"
 using namespace std;
 
 
@@ -16,14 +22,20 @@ public:
     // declaring constructor
     GameEngine();
 
+    // function to handle the startup phase
+    void startupPhase();
+    
     // copy constructor
     GameEngine(const GameEngine& game_engine);
 
     // destructor
     virtual ~GameEngine();
 
-     // process commands entered by the user
-    void processCommand(std::string& command);
+     // process file commands
+    bool processFileCommand(std::string& command, CommandProcessor* commandProcessor);
+
+    // process console commands
+    bool processConsoleCommand(std::string& command, CommandProcessor* commandProcessor);
 
     std::string stringToLog();
 
@@ -36,6 +48,9 @@ public:
     // map to store the state transitions
     multimap<std::string, const char*> stateTransitionMap;
     static const char* GameStateStrings[];
+
+    // function to get the random numbers
+    vector<int> getRandomizedNumbers(int n);
 
 private:
     const char* currentState;

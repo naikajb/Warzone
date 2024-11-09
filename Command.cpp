@@ -1,7 +1,7 @@
 #include "Command.h"
 
 Command::Command(const std::string& command) : commandStr(command), effect("") {
-    std::cout << "Constructor called for command: " << commandStr << std::endl;
+    
 }    
 
 Command::Command(const Command& command) : commandStr(command.commandStr), effect(command.effect) {
