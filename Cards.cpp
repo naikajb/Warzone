@@ -171,6 +171,10 @@ void Hand::displayHand() {
     }
 }
 
+vector <Card *> Hand::getCardsHand(){
+    return cardsInHand;
+}
+
 //Output stream operator
 ostream& operator<<(ostream& out, const Hand& hand) {
     out << "Hand: ";
@@ -182,7 +186,6 @@ ostream& operator<<(ostream& out, const Hand& hand) {
 
 //Hand class constructor
 Hand::Hand() {
-
 }
 //Hand destructor
 Hand::~Hand() {

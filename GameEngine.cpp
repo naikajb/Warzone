@@ -171,48 +171,55 @@ void GameEngine::issueOrdersPhase(vector<Player *> v)
                 v[i]->issueOrder(a);
 
                 countAdvanceTerritories[i]++;
-                cout << "count for " << v[i]->getPlayerName() << " for advance " << countAdvanceTerritories[i]<< endl;
+                cout << "count for " << v[i]->getPlayerName() << " for advance " << countAdvanceTerritories[i] << endl;
                 continue;
             }
-            // the commented part of the code breaks !!!! Need to fix the if statement in the parantheses
-            // most likely the issue is from the vector index out of bounds
-            // need to determine how to keep track of the placement of the vector of Hand for each player !!!
 
             // // if it arrives at the end of the player's cardsInHand array, skip this statement
-            // else if (v[i]->getHand()->cardsInHand.size() != 0)
-            // {
-            //     if (v[i]->getHand()->cardsInHand[indexHandVector[i]]->getCardType().compare("Bomb"))
-            //     {
-            //         Bomb *b = new Bomb();
-            //         v[i]->issueOrder(b);
-            //     }
+            else if (v[i]->getHand()->cardsInHand.size() != 0 && indexHandVector[i] != v[i]->getHand()->cardsInHand.size())
+            {
+                if (v[i]->getHand()->cardsInHand[indexHandVector[i]]->getCardType().compare("Bomb") == 0)
+                {
+                    cout << "it bombs from player " << v[i]->getPlayerName() << " and " << v[i]->getHand()->cardsInHand[indexHandVector[i]]->getCardType() << endl;
+                    Bomb *b = new Bomb();
+                    v[i]->issueOrder(b);
+                }
 
-            //     if (v[i]->getHand()->cardsInHand[indexHandVector[i]]->getCardType().compare("Negotiate"))
-            //     {
-            //         Negotiate *n = new Negotiate();
-            //         v[i]->issueOrder(n);
-            //     }
+                if (v[i]->getHand()->cardsInHand[indexHandVector[i]]->getCardType().compare("Negotiate"))
+                {
+                    cout << "it negotiate from player " << v[i]->getPlayerName() << endl;
 
-            //     if (v[i]->getHand()->cardsInHand[indexHandVector[i]]->getCardType().compare("Blockade"))
-            //     {
-            //         Blockade *b = new Blockade();
-            //         v[i]->issueOrder(b);
-            //     }
+                    Negotiate *n = new Negotiate();
+                    v[i]->issueOrder(n);
+                }
 
-            //     if (v[i]->getHand()->cardsInHand[indexHandVector[i]]->getCardType().compare("Airlift"))
-            //     {
-            //         Airlift *a = new Airlift();
-            //         v[i]->issueOrder(a);
-            //     }
+                if (v[i]->getHand()->cardsInHand[indexHandVector[i]]->getCardType().compare("Blockade"))
+                {
+                    cout << "it blockade from player " << v[i]->getPlayerName() << endl;
 
-            //     indexHandVector[i]++;
-            //     continue;
-            // }
+                    Blockade *b = new Blockade();
+                    v[i]->issueOrder(b);
+                }
+
+                if (v[i]->getHand()->cardsInHand[indexHandVector[i]]->getCardType().compare("Airlift"))
+                {
+                    cout << "it airlift from player " << v[i]->getPlayerName() << endl;
+
+                    Airlift *a = new Airlift();
+                    v[i]->issueOrder(a);
+                }
+
+                cout << indexHandVector[i] << " from player " << v[i]->getPlayerName() << endl;
+                indexHandVector[i]++;
+                continue;
+            }
 
             // when all of the previous possible orders are done, change the value to 1 for that player
             else if (outOfOrder[i] != 1)
             {
-                cout<<"out of order" << endl;
+                cout << v[i]->getHand()->getCardsHand().size() << endl;
+                v[i]->getHand()->displayHand();
+                cout << "out of order" << endl;
                 outOfOrder[i] = 1;
             }
         }
@@ -223,7 +230,7 @@ void GameEngine::issueOrdersPhase(vector<Player *> v)
         {
             if (outOfOrder[j] == 1)
             {
-                cout<<"check"<<endl;
+                cout << "check" << endl;
                 countDone++;
             }
         }
@@ -231,7 +238,7 @@ void GameEngine::issueOrdersPhase(vector<Player *> v)
         // if all players are done, the loop is done !
         if (countDone == v.size())
         {
-            cout<<"end"<<endl;
+            cout << "end" << endl;
             moreOrder = false;
         }
     }
@@ -304,6 +311,16 @@ int main()
 
     p1->setReinforcementPool(50);
     p2->setReinforcementPool(50);
+
+    Card *bomb = new Card(Card::BOMB);
+    Card *blockade = new Card(Card::BLOCKADE);
+    Card *airlift = new Card(Card::AIRLIFT);
+    Card *negotiate = new Card(Card::NEGOTIATE);
+
+    p1->addCard(bomb);
+    p1->addCard(blockade);
+    p2->addCard(airlift);
+    p2->addCard(negotiate);
 
     g.issueOrdersPhase(pList);
 

@@ -19,6 +19,7 @@ Player::Player(string playerName)
     // temp value of the reinforcement pool for the issuing order phase
     // this is so that the values of the reinforcement pool can be manipulated/modfied without the actual execution of it (issue order phase)
     reinforcementTemp = 50;
+    hand = new Hand();
 }
 
 Player ::Player(const Player &orig)

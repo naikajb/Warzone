@@ -65,6 +65,7 @@ class Hand {
         //Creates an order & returns it to the player's 
         //list of orders and then returns the card to the deck 
         void displayHand();
+        vector <Card*> getCardsHand();// added
         //Arraylist equivalent in C++ that represents the hand of cards
         vector<Card*> cardsInHand; 
 
