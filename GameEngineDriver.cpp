@@ -70,13 +70,18 @@ void testGameStates() { // to accept command-line command, argc is the number of
     //         break;
     //     }
     //     parser.parseCommand(input);
-    // }
+ }
 };
+
+void testStartupPhase() {
+    GameEngine gm;
+    gm.startupPhase();
+}
 
 // int main() {
 
 //     //testGameStates();
-    testStartupPhase();
+//     testStartupPhase();
     
 
 //     return 0;
