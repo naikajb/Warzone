@@ -14,8 +14,11 @@ Player::Player(string playerName)
 {
     this->playerName = playerName;
     orders = new OrdersList();
-    reinforcementPool = 50; 
-    reinforcementTemp = 50; // temp value of the reinforcement pool for the issuing order phase
+    reinforcementPool = 50;
+
+    // temp value of the reinforcement pool for the issuing order phase
+    // this is so that the values of the reinforcement pool can be manipulated/modfied without the actual execution of it (issue order phase)
+    reinforcementTemp = 50;
 }
 
 Player ::Player(const Player &orig)
@@ -72,24 +75,127 @@ int Player::getReinforcementTemp()
     return reinforcementTemp;
 }
 
-Hand * Player::getHand(){
-    return hand;
-} 
-
-// adds order to the player's list of orders
-void Player::issueOrder()
+Hand *Player::getHand()
 {
-    if (reinforcementTemp != 0) {
-        Deploy *d = new Deploy();
-        orders->addOrder(d);
-        reinforcementTemp -= 10; // arbitrary for now
-        // add a randomizer with set probabilities for the territory to defend
-    }
-
-    
-
+    return hand;
 }
 
+// adds order to the player's list of orders
+void Player::issueOrder(Order *order)
+{
+    std::random_device rd;
+    std::mt19937 gen(rd());
+
+    // randomizer using a probability for toDefend
+    vector<double> probabilityToDefend;
+    for (int i = 0; i < toDefend().size(); i++)
+    {
+        probabilityToDefend.push_back(toDefend().size() - i);
+    }
+    std::discrete_distribution<> distToDefend(probabilityToDefend.begin(), probabilityToDefend.end());
+    int randomIndexDefend = distToDefend(gen);
+
+    // randomizer using a probability for toAttack
+    vector<double> probabilityToAttack;
+    for (int i = 0; i < toAttack().size(); i++)
+    {
+        probabilityToAttack.push_back(toAttack().size() - i);
+    }
+    std::discrete_distribution<> distToAttack(probabilityToAttack.begin(), probabilityToAttack.end());
+    int randomIndexAttack = distToAttack(gen);
+
+    Territory *selectedTerritoryToDefend = toDefend()[randomIndexDefend];
+    Territory *selectedTerritoryToAttack = toAttack()[randomIndexAttack];
+
+    if (Deploy *d = dynamic_cast<Deploy *>(order))
+    {
+        int min = 0;
+        int max = reinforcementTemp;
+        std::uniform_int_distribution<> distRandArmiesDeploy(min, max);
+        int randomNumArmiesDeploy = distRandArmiesDeploy(gen);
+
+        Deploy *dep = new Deploy(this, randomNumArmiesDeploy, selectedTerritoryToDefend);
+
+        reinforcementTemp -= randomNumArmiesDeploy;
+
+        orders->addOrder(dep);
+    }
+
+    if (Advance *a = dynamic_cast<Advance *>(order))
+    {
+        cout << "\nit still works part 2" << endl;
+
+        int defend = 0;
+        int attack = 1;
+        std::uniform_int_distribution<> distAttackOrDefend(defend, attack);
+        int answer = distAttackOrDefend(gen);
+        cout << "the answer is: " << answer << endl;
+
+        if (answer == 1)
+        {
+            cout << randomIndexAttack << " attack territory : " << selectedTerritoryToAttack->getName() << endl;
+            for (Territory *t : territories)
+            {
+                for (Territory *tadj : t->getAdjTerritories())
+                {
+                    if (selectedTerritoryToAttack->getName().compare(tadj->getName()) == 0 && t->getNumArmiesTemp() > 1 && t->getName().compare(selectedTerritoryToAttack->getName()) != 0)
+                    {
+                        int min = 0;
+                        int max = t->getNumArmiesTemp();
+                        std::uniform_int_distribution<> distAttackAdvance(min, max);
+                        int numArmiesAttack = distAttackAdvance(gen);
+                        Advance *a = new Advance(this, numArmiesAttack, t, selectedTerritoryToDefend);
+                        orders->addOrder(a);
+                        cout << selectedTerritoryToAttack->getName() << " is to attack territory and " << t->getName() << " is the territory to attack with " << numArmiesAttack << " with armies where originally has " << t->getNumArmiesTemp() << endl;
+                        t->setNumArmiesTemp(t->getNumArmiesTemp() - numArmiesAttack);
+
+                        return;
+                    }
+                }
+            }
+        }
+
+        else
+        {
+            cout << randomIndexDefend << " defend territory : " << selectedTerritoryToDefend->getName() << endl;
+            for (Territory *t : territories)
+            {
+                for (Territory *tadj : t->getAdjTerritories())
+                {
+                    if (selectedTerritoryToDefend->getName().compare(tadj->getName()) && t->getNumArmiesTemp() > 1 && t->getName().compare(selectedTerritoryToDefend->getName()) != 0)
+                    {
+                        int min = 0;
+                        int max = t->getNumArmiesTemp();
+                        std::uniform_int_distribution<> distDefendAdvance(min, max);
+                        int numArmiesDefend = distDefendAdvance(gen);
+                        Advance *a = new Advance(this, numArmiesDefend, t, selectedTerritoryToDefend);
+                        orders->addOrder(a);
+                        cout << selectedTerritoryToDefend->getName() << " is to defend territory and " << t->getName() << " is the territory to defend with" << numArmiesDefend << " with armies where originally has " << t->getNumArmiesTemp() << endl;
+                        t->setNumArmiesTemp(t->getNumArmiesTemp() - numArmiesDefend);
+
+                        return;
+                    }
+                }
+            }
+        }
+    }
+
+    if (Bomb *b = dynamic_cast<Bomb *>(order))
+    {
+    }
+
+    if (Negotiate *n = dynamic_cast<Negotiate *>(order))
+    {
+    }
+
+    if (Blockade *b = dynamic_cast<Blockade *>(order))
+    {
+    }
+
+    if (Airlift *a = dynamic_cast<Airlift *>(order))
+    {
+    }
+}
 // adds territory to the player's list of territories
 void Player::addTerritory(Territory *territory)
 {
@@ -120,14 +226,14 @@ vector<Territory *> Player::toDefend()
         int numEnemyAdjT2 = 0;
 
         for (Territory* t : t1->getAdjTerritories()){
-            if (t->getPlayerOwner() != this){
+            if (t->getPlayer() != this){
                 numArmiesT1 += t->getNumArmies();
                 numEnemyAdjT1++;
             }
         }
 
         for (Territory* t : t2->getAdjTerritories()){
-            if (t->getPlayerOwner() != this){
+            if (t->getPlayer() != this){
                 numArmiesT2 += t->getNumArmies();
                 numEnemyAdjT2++;
             }
@@ -182,13 +288,11 @@ vector<Territory *> Player::toAttack()
                      {
                         // increase priority of t1 by 2
                         priorityT1 += 2;
-                        cout << t1->getName() << " " << t1->getNumArmies() << " < " << t->getName() << " " << t->getNumArmies() << endl;
                      }
                      else
                      {
                         // else increase priority of t1 by 1
                         priorityT1 += 1;
-                        cout << t1->getName() << " " << t1->getNumArmies() << " >= " << t->getName() << " " << t->getNumArmies() << endl;
                      }
                  }
                 // if t2 from toAttack is adjacednt to the territory t
@@ -199,20 +303,17 @@ vector<Territory *> Player::toAttack()
                      {
                         // increase priority of t2 by 2
                         priorityT2 += 2;
-                        cout << t2->getName() << " " << t2->getNumArmies() << " < " << t->getName() << " " << t->getNumArmies() << endl;
                      }
                      else
                      {
                         // else increase priority of t2 by 1
                         priorityT2 += 1;
-                        cout << t2->getName() << " " << t2->getNumArmies() << " >= " << t->getName() << " " << t->getNumArmies() << endl;
                      }
                  }
              }
 
             // sort in descending
-            return priorityT1 > priorityT2;
-         });
+            return priorityT1 > priorityT2; });
     return toAttack;
 }
 
@@ -252,8 +353,8 @@ void Player::removeTerritory(Territory *territory)
     }
 }
 
-// attach observer to player's order list
-void Player::AttachObserver(Observer *observer)
-{
-    orders->Attach(observer);
-}
+// // attach observer to player's order list
+// void Player::AttachObserver(Observer *observer)
+// {
+//     orders->Attach(observer);
+// }

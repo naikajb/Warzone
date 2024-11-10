@@ -524,7 +524,7 @@ OrdersList::~OrdersList() {
 // Add an order to the list
 void OrdersList::addOrder(Order* order) {
     orders.push_back(order);
-    Notify(order);
+    // Notify(order);
 }
 
 // Move an order from one position to another in the list

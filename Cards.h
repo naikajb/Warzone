@@ -12,7 +12,7 @@ class Deck;
 
 class Card {
     public:
-        enum CardType {BOMB, REINFORCEMENT, BLOCKADE, AIRLIFT, DIPLOMACY };
+        enum CardType {BOMB, REINFORCEMENT, BLOCKADE, AIRLIFT, NEGOTIATE };
         
         //Card constructor that takes type 
         Card(CardType type);

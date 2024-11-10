@@ -6,7 +6,8 @@ class Continent; // forward declaration of Continent class
 // defines the Territory constructor with an initilizer list
 Territory::Territory(string name, Continent *continent) : name(name),
                                                           continent(continent), 
-                                                          numArmies(0)
+                                                          numArmies(0),
+                                                          numArmiesTemp(0)
 {
 }
 
@@ -31,6 +32,7 @@ Territory::Territory(const Territory &t)
     continent = t.continent;
     adjTerritories = t.adjTerritories;
     owner = t.owner;
+    numArmiesTemp = t.numArmiesTemp;
 }
 
 // Overloaded assignment operator for the Territory class definition
@@ -40,7 +42,8 @@ Territory &Territory::operator=(const Territory &o)
     this->numArmies = o.numArmies;
     this->continent = o.continent;
     this->adjTerritories = o.adjTerritories;
-    this->playerOwner = o.playerOwner;
+    this->owner = o.owner;
+    this->numArmiesTemp = o.numArmiesTemp;
 
     return *this;
 }
@@ -64,9 +67,11 @@ string Territory::getName() { return name; }                                  //
 int Territory::getNumArmies() { return numArmies; }                           // getNumArmies() definition
 Continent *Territory::getContinent() { return continent; }                    // getContinent() definition
 vector<Territory *> Territory::getAdjTerritories() { return adjTerritories; } // getAdjTerritories() definition
-Player* Territory::getPlayer(){return owner;};
+Player* Territory::getPlayer(){return owner;}
+int Territory::getNumArmiesTemp(){return numArmiesTemp;}
 
-void Territory::setNumArmies(int num) { numArmies = num; } // setNumArmies() definition
+void Territory::setNumArmies(int num) { numArmies = num; numArmiesTemp = num;} // setNumArmies() definition
+void Territory::setNumArmiesTemp(int num) {numArmiesTemp = num;}
 void Territory::addAdjTerritories(Territory *adjTerritory) { adjTerritories.push_back(adjTerritory); } // addAdjTerritories() definition
 void Territory::setPlayer(Player* p){owner = p;}
 // CONTINENT CLASS

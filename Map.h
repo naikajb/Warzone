@@ -23,6 +23,7 @@ class Territory // creation of Territory class
 private: // access identifier
     string name;
     int numArmies;
+    int numArmiesTemp; // temp value for number of armies for the IssueOrder
     Continent *continent;               // pointer to user-defined class Continent
     vector<Territory *> adjTerritories; // vector of pointers of user-defined type Territory
     Player* owner;
@@ -50,6 +51,8 @@ public: // access identifier
     Continent *getContinent();               // Getter Continent
     vector<Territory *> getAdjTerritories(); // Getter adjacent territories
     Player* getPlayer();
+    int getNumArmiesTemp();
+    void setNumArmiesTemp(int num);
 
     void setNumArmies(int numArmies); // Setter number of armies
     void addAdjTerritories(Territory *adjTerritory); // Add pointer of type Territory as adjacent territories in vector

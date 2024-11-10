@@ -8,7 +8,7 @@
 #include "Orders.h"
 #include "Cards.h"
 #include "Map.h"
-#include "LoggingObserver.h"
+// #include "LoggingObserver.h"
 using std::sort;
 class OrdersList;
 class Order;
@@ -40,7 +40,7 @@ class Player{
         std::vector<Territory*> toDefend();  //returns territories to be defended 
         std::vector<Territory*> toAttack();  //returns territories to be attacked
         
-        void issueOrder();  //adds order to player's list of orders
+        void issueOrder(Order *order);  //adds order to player's list of orders
         
         //stream insertion operator to print player's information
         friend std::ostream& operator<<(std::ostream& out, const Player& player);
@@ -49,13 +49,12 @@ class Player{
         void removeCard(Card* card);  //removes card from player's hand
         Hand *getHand();
         
-        vector<Territory*> getTerritories();
         void printTerritories();  //prints player's territories
         void printOrders();  //prints player's orders
 
         std::string getPlayerName();  //returns player's name
 
-        void AttachObserver(Observer* observer);  //attaches observer to player
+        // void AttachObserver(Observer* observer);  //attaches observer to player
         
 };
 

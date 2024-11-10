@@ -125,25 +125,106 @@ void GameEngine::reinforcementPhase(vector<Player *> v, Map *map)
 
 void GameEngine::issueOrdersPhase(vector<Player *> v)
 {
-    bool stillOrders = true;
-    // while (stillOrders == true)
-    // {
-    //     for (Player *p : v)
-    //     {
-    //         if (p->getReinforcementPool() != 0)
-    //         {
-    //             Deploy *d = new Deploy();
-    //             p->issueOrder(d);
-    //         }
-    //         Advance *a =  new Advance();
-    //         p->issueOrder(a);
+    // vector to keep track of the count of each player for the Advance order
+    // this is done so that the advance order is done a maximum of 3 times
+    // each box from this vector is of each player and represents the number of times they advanced
+    vector<int> countAdvanceTerritories(v.size());
 
-    //         if (p-> != 0) {
+    // vector to keep track of the index of each player for their Hand vector
+    // this is done so that the other order types from their hand can be
+    // kept track and used
+    // each box from this vector is of each player and represents the player's index in their vector cardsAtHand
+    vector<int> indexHandVector(v.size());
 
-    //         }
-    //     }
-    // }
+    // vector to keep track of all the players that does not have any more orders
+    // each box will either have a value of 0 or 1
+    // 0 represents the fact that there are still orders left
+    // 1 represents the fact that there are no more orders left
+    // if every value in the vector is 1, then no more orders for the player
+    vector<int> outOfOrder(v.size());
+
+    bool moreOrder = true;
+    while (moreOrder)
+    {
+        int countDone = 0;
+        for (int i = 0; i < v.size(); i++)
+        {
+            if (v[i]->getReinforcementTemp() != 0)
+            {
+                Deploy *d = new Deploy();
+                v[i]->issueOrder(d);
+                cout << "remaining armies for " << v[i]->getPlayerName() << " " << v[i]->getReinforcementTemp() << endl;
+                continue;
+            }
+
+            // if it arrives at the end of the player's territory array, skip this if statement
+            else if (countAdvanceTerritories[i] != 3)
+            {
+                Advance *a = new Advance();
+                v[i]->issueOrder(a);
+
+                countAdvanceTerritories[i]++;
+                cout << "count for " << v[i]->getPlayerName() << " for advance " << countAdvanceTerritories[i]<< endl;
+                continue;
+            }
+            // // if it arrives at the end of the player's cardsInHand array, skip this statement
+            // else if (v[i]->getHand()->cardsInHand.size() != 0)
+            // {
+            //     if (v[i]->getHand()->cardsInHand[indexHandVector[i]]->getCardType().compare("Bomb"))
+            //     {
+            //         Bomb *b = new Bomb();
+            //         v[i]->issueOrder(b);
+            //     }
+
+            //     if (v[i]->getHand()->cardsInHand[indexHandVector[i]]->getCardType().compare("Negotiate"))
+            //     {
+            //         Negotiate *n = new Negotiate();
+            //         v[i]->issueOrder(n);
+            //     }
+
+            //     if (v[i]->getHand()->cardsInHand[indexHandVector[i]]->getCardType().compare("Blockade"))
+            //     {
+            //         Blockade *b = new Blockade();
+            //         v[i]->issueOrder(b);
+            //     }
+
+            //     if (v[i]->getHand()->cardsInHand[indexHandVector[i]]->getCardType().compare("Airlift"))
+            //     {
+            //         Airlift *a = new Airlift();
+            //         v[i]->issueOrder(a);
+            //     }
+
+            //     indexHandVector[i]++;
+            //     continue;
+            // }
+
+            // when all of the previous possible orders are done, change the value to 1 for that player
+            else if (outOfOrder[i] != 1)
+            {
+                cout<<"out of order" << endl;
+                outOfOrder[i] = 1;
+            }
+        }
+
+        // calculate the total number of players that are done
+        for (int j : outOfOrder)
+        {
+            if (outOfOrder[j] == 1)
+            {
+                cout<<"check"<<endl;
+                countDone++;
+            }
+        }
+
+        // if all players are done, the loop is done !
+        if (countDone == v.size())
+        {
+            cout<<"end"<<endl;
+            moreOrder = false;
+        }
+    }
 }
+
 void GameEngine::executeOrdersPhase(vector<Player *> v)
 {
 }
@@ -181,16 +262,16 @@ int main()
 
     for (Territory *t : p1->getTerritories())
     {
-        t->setPlayerOwner(p1);
-        cout << "Player owner of " << t->getName() << " is " << t->getPlayerOwner()->getPlayerName() << endl;
+        t->setPlayer(p1);
+        cout << "Player owner of " << t->getName() << " is " << t->getPlayer()->getPlayerName() << endl;
     }
 
     cout << "\nplayer 2 territories: " << endl;
 
     for (Territory *t : p2->getTerritories())
     {
-        t->setPlayerOwner(p2);
-        cout << "Player owner of " << t->getName() << " is " << t->getPlayerOwner()->getPlayerName() << endl;
+        t->setPlayer(p2);
+        cout << "Player owner of " << t->getName() << " is " << t->getPlayer()->getPlayerName() << endl;
     }
 
     cout << "\nplayer 1 reinforcement pool at the beginning of the game: " << p1->getReinforcementPool() << endl;
@@ -204,10 +285,15 @@ int main()
     cout << "\nplayer 2 reinforcement pool after acquired territories: " << p2->getReinforcementPool() << "\n"
          << endl;
 
-    p1->toDefend();
-    p2->toDefend();
-    p1->toAttack();
-    p2->toAttack();
+    // p1->toDefend();
+    // p2->toDefend();
+    // p1->toAttack();
+    // p2->toAttack();
+
+    p1->setReinforcementPool(50);
+    p2->setReinforcementPool(50);
+
+    g.issueOrdersPhase(pList);
 
     return 0;
 }
