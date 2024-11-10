@@ -9,6 +9,20 @@ Territory::Territory(string name, Continent *continent) : name(name),
                                                           numArmies(0)
 {
 }
+
+Territory::~Territory(){
+
+    delete continent;
+    continent = NULL;
+
+    for(Territory* t:adjTerritories){
+        delete t;
+        t = NULL;
+    }
+    delete owner;
+    owner = NULL;
+}
+
 // defines the Territory copy constructor with an initilizer list
 Territory::Territory(const Territory &t)
 {
@@ -16,7 +30,7 @@ Territory::Territory(const Territory &t)
     numArmies = t.numArmies;
     continent = t.continent;
     adjTerritories = t.adjTerritories;
-    playerOwner = t.playerOwner;
+    owner = t.owner;
 }
 
 // Overloaded assignment operator for the Territory class definition
@@ -34,7 +48,6 @@ Territory &Territory::operator=(const Territory &o)
 // prints name of territory, the number of armies, the continent, and its adjacent territories
 ostream &operator<<(ostream &out, Territory &o)
 {
-
     string adjString;
 
     for (Territory *t : o.getAdjTerritories())
@@ -51,12 +64,11 @@ string Territory::getName() { return name; }                                  //
 int Territory::getNumArmies() { return numArmies; }                           // getNumArmies() definition
 Continent *Territory::getContinent() { return continent; }                    // getContinent() definition
 vector<Territory *> Territory::getAdjTerritories() { return adjTerritories; } // getAdjTerritories() definition
-Player *Territory::getPlayerOwner() {return playerOwner;}
+Player* Territory::getPlayer(){return owner;};
 
-void Territory::setNumArmies(int numArmies) { this->numArmies = numArmies; } // setNumArmies() definition
+void Territory::setNumArmies(int num) { numArmies = num; } // setNumArmies() definition
 void Territory::addAdjTerritories(Territory *adjTerritory) { adjTerritories.push_back(adjTerritory); } // addAdjTerritories() definition
-void Territory::setPlayerOwner(Player *p) {playerOwner = p;};
-
+void Territory::setPlayer(Player* p){owner = p;}
 // CONTINENT CLASS
 
 // defines the Continent constructor with an initilizer list
@@ -64,6 +76,14 @@ Continent::Continent(string name, int bonus) : name(name),
                                                bonus(bonus)
 {
 }
+
+Continent::~Continent(){
+    for(Territory* t:territories){
+        delete t;
+        t = NULL;
+    }
+}
+
 // defines the Continent copy constructor with an initilizer list
 Continent::Continent(const Continent &c)
 {
@@ -110,6 +130,20 @@ void Continent::addTerritory(Territory *t) { territories.push_back(t); } // addT
 Map::Map(string fileName) : fileName(fileName)
 {
 }
+
+Map::~Map(){
+
+    for(Territory* t:territories){
+        delete t;
+        t = NULL;
+    }
+    for(Continent* t:continents){
+        delete t;
+        t = NULL;
+    }
+
+}
+
 // defines the Map copy constructor with an initilizer list
 Map::Map(const Map &m)
 {
@@ -285,6 +319,12 @@ MapLoader::MapLoader(string fileName) : fileName(fileName),
                                         map(loadMap(fileName)) // as soon as you create a map loader and creates a map by using the loadmap function and the file inputted
 {
 }
+
+MapLoader::~MapLoader(){
+    delete map;
+    map = NULL;
+}
+
 // defines the MapLoader copy constructor with an initilizer list
 MapLoader::MapLoader(MapLoader &ml)
 {

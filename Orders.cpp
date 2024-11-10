@@ -46,20 +46,50 @@ std::string Order::stringToLog() {
 Deploy::Deploy() {
     orderDescription = "Deploy order - place armies on a territory";
 }
-Deploy::~Deploy() {} //destructor
+
+Deploy::Deploy(Player* p, int a, Territory* t): player(p), armies(a), target(t)
+{orderDescription = "Deploy order - place armies on a territory";}
+
+Deploy::~Deploy() {
+
+    delete player;
+    player = NULL;
+    delete target;
+    target = NULL;
+
+} //destructor
 
 // Validate if the deploy order can be executed 
 bool Deploy::validateOrder() {
-    return true;
+    
+    for(Territory* t : player->getTerritories()) if(target == t) return true;
+
+    return false;
 }
 
 // Execute the deploy order and set its effect
 void Deploy::executeOrder() {
+
+    target->setNumArmies(target->getNumArmies()+armies);
+    
     executed = true; //mark the order as executed
     orderEffect = "Armies have been deployed."; 
     Notify(this);
 }
 
+void Deploy::execute(){
+
+    if(!this->validateOrder()){
+        
+        cout << "Deploy Order is not valid." << endl;
+
+        return; }
+
+    cout << "Deploy Order is valid - > " << player->getPlayerName() << " is deploying " << armies << " units to Territory "<< target->getName() << endl;
+
+    this->executeOrder();
+
+}
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -69,19 +99,139 @@ void Deploy::executeOrder() {
 Advance::Advance() {
     orderDescription = "Advance Order - move armies to an adjacent territory";
 }
-Advance::~Advance() {} //destructor
+
+Advance::Advance(Player* p, int a, Territory* s, Territory* t): player(p), armies(a), source(s), target(t)
+{orderDescription = "Advance Order - move armies to an adjacent territory";}
+
+Advance::~Advance() {
+
+    delete player;
+    player = NULL;
+    delete source;
+    source = NULL;
+    delete target;
+    target = NULL;
+
+} //destructor
 
 // Validate if the advance order can be executed
 bool Advance::validateOrder() {
-    // Placeholder logic for validation
-    return true;
+    
+    bool validOwnership = false;
+    bool validAdj = false;
+
+    for(Territory* t : player->getTerritories()) {
+        if(source == t){
+            validOwnership = true;
+            break;
+        }
+    }
+
+    for(Territory* t : source->getAdjTerritories()){
+        if(target == t){
+            validAdj = true;
+            break;
+        }
+    }
+
+    for(Player* p : getPlayerList()){
+
+        for(Territory* t : p->getTerritories()){
+
+            if(t == target) return validAdj && !checkNegotiatePairs(player,p) && source->getNumArmies()>=armies;
+           
+        }
+    }
+
+    return false;
 }
 
 // Execute the advance order and set its effect
 void Advance::executeOrder() {
+    
+    bool attack = true;
+
+    for(Territory* t : player->getTerritories()){
+
+        if(target == t){
+            attack = false;
+            break;
+        }
+    }
+
+    if(attack){
+
+        cout << "Battle begins!" << endl;
+
+        source->setNumArmies(source->getNumArmies()-armies);
+
+        int attackerNum = armies;
+        int defenderNum = target->getNumArmies();
+
+        while(attackerNum!=0 && defenderNum!=0){
+
+            if(getRandomNum() <= 60) defenderNum--;
+            if(getRandomNum() <= 70) attackerNum--;
+        }
+
+        if(defenderNum == 0){
+
+            cout << "The defending army has lost the battle! Transferring ownership of Territory "<<target->getName()<< " to " << player->getPlayerName() << endl;
+
+            bool found = false;
+
+            for(Player* p : getPlayerList()){
+
+                for(Territory* t : p->getTerritories()){
+
+                    if(t == target){
+
+                        p->removeTerritory(t);
+                        found = true;
+                        break;
+                    }
+                }
+
+                if(found) break;
+            }
+
+            player->addTerritory(target);
+            target->setNumArmies(attackerNum);
+        }
+
+
+    }else{
+
+        cout << "No battle, both Territories belong to " << player->getPlayerName() << endl;
+        source->setNumArmies(source->getNumArmies()-armies);
+        target->setNumArmies(target->getNumArmies()+armies);
+
+    }
+
     executed = true; 
     orderEffect = "Armies have advanced.";
     Notify(this);
+}
+
+void Advance::execute(){
+
+    if(!this->validateOrder()){
+        
+        cout << "Advance Order is not valid." << endl;
+        return;
+    }
+    cout << "Advance Order is valid -> "<< player->getPlayerName() << " is advancing " << armies << " units from Territory " << source->getName() << " to Territory " << target->getName() << endl;
+
+    this->executeOrder();
+
+}
+
+int Advance::getRandomNum(){
+
+    random_device random;
+    mt19937 gen(random());
+    std::uniform_int_distribution<int> range(1,100);
+    return range(random);
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -92,20 +242,74 @@ void Advance::executeOrder() {
 Bomb::Bomb() {
     orderDescription = "Bomb Order - bomb a territory to weaken its defense";
 }
-Bomb::~Bomb() {} //destructor
+
+Bomb::Bomb(Player* p, Territory* t): player(p),target(t)
+{orderDescription = "Bomb Order - bomb a territory to weaken its defense";}
+
+Bomb::~Bomb() {
+
+    delete player;
+    player = NULL;
+    delete target;
+    target = NULL;
+
+} //destructor
 
 // Validate if the bomb order can be executed
 bool Bomb::validateOrder() {
-    // Placeholder logic for validation
-    return true;
+   
+    for(Territory* t : player->getTerritories()){
+        if(target == t) return false;
+    }
+
+    bool validAdj = false;
+
+    for(Territory* t : target->getAdjTerritories()){
+
+        for(Territory* t2 : player->getTerritories()){
+
+            if(t==t2){
+                validAdj = true;
+                break;
+            }
+            if(validAdj) break;
+        }
+    }
+
+    for(Player* p : getPlayerList()){
+
+        for(Territory* t : p->getTerritories()){
+
+            if(t == target) return validAdj && !checkNegotiatePairs(player,p);
+           
+        }
+    }
+
+    return false;
 }
 
 // Execute the bomb order and set its effect
 void Bomb::executeOrder() {
+    
+    target->setNumArmies(target->getNumArmies()/2);
+    
     executed = true;
     orderEffect = "Territory has been bombed.";
+    Notify(this);
 }
 
+void Bomb::execute(){
+
+    if(!this->validateOrder()){
+        cout << "Bomb Order is not valid." << endl;
+        return;
+    }
+
+    cout << "Bomb Order is valid -> "<< player->getPlayerName() << " is bombing Territory "<< target->getName() << endl;
+
+    this->executeOrder();
+
+}
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -115,20 +319,79 @@ void Bomb::executeOrder() {
 Blockade::Blockade() {
     orderDescription = "Blockade Order - blockade a territory to prevent movement";
 }
-Blockade::~Blockade() {} //destructor
+
+Blockade::Blockade(Player* p,Territory* t): player(p),target(t)
+{orderDescription = "Blockade Order - blockade a territory to prevent movement";}
+
+Blockade::~Blockade() {
+
+    delete player;
+    player = NULL;
+    delete target;
+    target = NULL;
+
+} //destructor
 
 // Validate if the blockade order can be executed 
 bool Blockade::validateOrder() {
     // Placeholder logic for validation
-    return true;
+
+    for(Territory* t : player->getTerritories()){
+
+        if(t == target) return true;
+
+    }
+
+    return false;
 }
 
 // Execute the bloackade order and set its effect
 void Blockade::executeOrder() {
+    
+    player->removeTerritory(target);
+
+    bool neutralCreated = false;
+
+    for(Player* p : getPlayerList()){
+
+        if((p->getPlayerName().compare("Neutral")) == 0){
+
+            p->addTerritory(target);
+            neutralCreated = true;
+            break;
+
+        }
+        if(neutralCreated) break;
+    }
+
+    if(!neutralCreated){
+
+        Player *n = new Player("Neutral");
+
+        addToPlayerList(n);
+
+        n->addTerritory(target);
+
+    }
+
+    target->setNumArmies(target->getNumArmies()*2);
+    
     executed = true;
     orderEffect = "Territory has been blockaded.";
+    Notify(this);
 }
 
+void Blockade::execute(){
+
+    if(!this->validateOrder()){
+        cout << "Blockade Order is not valid." << endl;
+        return;
+    }
+    
+    cout << "Blockade Order is valid - > " << player->getPlayerName() << " is transferring the ownership of Territory "<< target->getName() << " to the Neutral player, army units doubled to: "<< target->getNumArmies() << endl;
+    this->executeOrder();
+
+}
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -138,21 +401,60 @@ void Blockade::executeOrder() {
 Airlift::Airlift() {
     orderDescription = "Airlift Order - move armies from one territory to another by air";
 }
-Airlift::~Airlift() {} //destructor
+
+Airlift::Airlift(Player*p, int a, Territory* s, Territory* t): player(p),armies(a), source(s), target(t)
+{orderDescription = "Airlift Order - move armies from one territory to another by air";}
+
+Airlift::~Airlift() {
+
+    delete player;
+    player = NULL;
+    delete source;
+    source = NULL;
+    delete target;
+    target = NULL;
+
+} //destructor
 
 // Validate if the airlift order can be executed 
 bool Airlift::validateOrder() {
     // Placeholder logic for validation
-    return true;
+
+    bool validSource = false;
+    bool validTarget = false;
+
+    for(Territory* t : player->getTerritories()){
+
+        if(t == source) validSource = true;
+        if(t == target) validTarget = true;
+    }
+
+    return validSource && validTarget && armies <= source->getNumArmies();
 }
 
 // Execute the airlift order and set its effect
 void Airlift::executeOrder() {
+    
+    source->setNumArmies(source->getNumArmies()-armies);
+    target->setNumArmies(target->getNumArmies()+armies);
+    
     executed = true;
     orderEffect = "Armies have been airlifted";
     Notify(this);
 }
 
+void Airlift::execute(){
+
+    if(!this->validateOrder()){
+        cout << "Airlift Order is not valid." << endl;
+        return;
+    }
+
+    cout << "Airlift Order is valid -> "<< player->getPlayerName() << " is transferring " << armies << " from Territory " << source->getName() << " to Territory " << target->getName() << endl;
+
+    this->executeOrder();
+
+}
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -162,21 +464,47 @@ void Airlift::executeOrder() {
 Negotiate::Negotiate() {
     orderDescription = "Negotiate Order - negotiate a truce with another player";
 }
-Negotiate::~Negotiate() {} //destructor
+
+Negotiate::Negotiate(Player* p1, Player* p2): player(p1),targetPlayer(p2)
+{orderDescription = "Negotiate Order - negotiate a truce with another player";}
+
+Negotiate::~Negotiate() {
+
+    delete player;
+    player = NULL;
+    delete targetPlayer;
+    targetPlayer = NULL;
+
+} //destructor
 
 // Validate if the negoatiate order can be executed
 bool Negotiate::validateOrder() {
-    // Placeholder logic for validation
-    return true;
+
+    return player != targetPlayer && !checkNegotiatePairs(player,targetPlayer);
 }
 
 // Execute the negotiate order and set its effect
 void Negotiate::executeOrder() {
+    
+    addNegotiatePairs(player,targetPlayer);
+
     executed = true;
     orderEffect = "Truce has been negotiated.";
     Notify(this);
 }
 
+void Negotiate::execute(){
+
+    if(!this->validateOrder()){
+        cout << "Negotiate Order is not valid." << endl;
+        return;
+    }
+
+    cout << "Negotiate Order is valid -> "<<player->getPlayerName() << " and " << targetPlayer->getPlayerName() << " cannot attack eachother this round" << endl;
+
+    this->executeOrder();
+
+}
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -228,6 +556,37 @@ vector<Order*> OrdersList::getOrders(){
     return orders;
 }
 
+
+bool checkNegotiatePairs(Player* p1, Player* p2){
+
+    for(pair<Player*,Player*> p : negotiatePairs){
+
+        if((p.first == p1 && p.second == p2) || p.first == p2 && p.second == p1) return true;
+    }
+    return false;
+}
+
+void addNegotiatePairs(Player* p1, Player* p2){
+
+    pair<Player*,Player*> pear = make_pair(p1,p2);
+
+    negotiatePairs.push_back(pear);
+}
+
+void resetNegotiatePairs(){
+
+    negotiatePairs.clear();
+}
+
+void addToPlayerList(Player* p){
+
+    playerList.push_back(p);
+
+}
+
+vector<Player*> getPlayerList(){
+    return playerList;
+}
 std::string OrdersList::stringToLog() {
     std::string logString = "Current Orders List: \n";
     for (Order* order : orders) {
@@ -235,5 +594,3 @@ std::string OrdersList::stringToLog() {
     }
     return logString;
 }
-
-

@@ -8,7 +8,10 @@
 #include "Orders.h"
 #include "Cards.h"
 #include "Map.h"
+#include "LoggingObserver.h"
 using std::sort;
+class OrdersList;
+class Order;
 
 class Player{
 
@@ -46,7 +49,7 @@ class Player{
         void removeCard(Card* card);  //removes card from player's hand
         Hand *getHand();
         
-        
+        vector<Territory*> getTerritories();
         void printTerritories();  //prints player's territories
         void printOrders();  //prints player's orders
 
