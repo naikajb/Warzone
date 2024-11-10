@@ -173,6 +173,10 @@ void GameEngine::issueOrdersPhase(vector<Player *> v)
                 cout << "count for " << v[i]->getPlayerName() << " for advance " << countAdvanceTerritories[i]<< endl;
                 continue;
             }
+            // the commented part of the code breaks !!!! Need to fix the if statement in the parantheses
+            // most likely the issue is from the vector index out of bounds
+            // need to determine how to keep track of the placement of the vector of Hand for each player !!!
+
             // // if it arrives at the end of the player's cardsInHand array, skip this statement
             // else if (v[i]->getHand()->cardsInHand.size() != 0)
             // {
