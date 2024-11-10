@@ -78,11 +78,16 @@ void testGameStates() { // to accept command-line command, argc is the number of
     
 };
 
+void testStartupPhase() {
+    GameEngine engine;
+    engine.startupPhase();
+}
+
 int main() {
 
     //testGameStates();
-    GameEngine gm;
-    gm.startupPhase();
+    testStartupPhase();
+    
 
     return 0;
 }
