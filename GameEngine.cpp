@@ -163,7 +163,7 @@ void GameEngine::startupPhase()
 				}
 				else if (command == "validatemap")
 				{
-					bool isValidatedMap = mapP->validate;
+					bool isValidatedMap = Map::validate(mapP);
 					if (isValidatedMap)
 					{
 						std::cout << "Map is validated!" << std::endl;
@@ -258,7 +258,7 @@ void GameEngine::startupPhase()
 				}
 				else if (command == "validatemap")
 				{
-					bool isValidatedMap = mapP->validate;
+					bool isValidatedMap = Map::validate(mapP);
 					if (isValidatedMap)
 					{
 						std::cout << "Map is validated!" << std::endl;
