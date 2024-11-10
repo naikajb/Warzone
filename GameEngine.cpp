@@ -123,6 +123,7 @@ void GameEngine::reinforcementPhase(vector<Player *> v, Map *map)
     }
 }
 
+// everything works except for the commented part !!!
 void GameEngine::issueOrdersPhase(vector<Player *> v)
 {
     // vector to keep track of the count of each player for the Advance order

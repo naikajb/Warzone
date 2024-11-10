@@ -165,12 +165,12 @@ void Player::issueOrder(Order *order)
         int attack = 1;
         std::uniform_int_distribution<> distAttackOrDefend(defend, attack);
         int answer = distAttackOrDefend(gen);
-        cout << "the answer is: " << answer << endl;
+        cout << "the answer is: " << answer << " for player "<< this->getPlayerName() << endl;
 
         // attack
         if (answer == 1)
         {
-            cout << randomIndexAttack << " attack territory : " << selectedTerritoryToAttack->getName() << endl;
+            cout << randomIndexAttack << " is the index of vector and attack territory is: " << selectedTerritoryToAttack->getName() << endl;
             // go through all the territories the player has
             for (Territory *t : territories)
             {
@@ -179,7 +179,7 @@ void Player::issueOrder(Order *order)
                 {
                     // if the territory is adjacent to the one selected to attack
                     // AND it has more than 1 army unit
-                    if (selectedTerritoryToAttack->getName().compare(tadj->getName()) == 0 && t->getNumArmiesTemp() > 1)
+                    if (selectedTerritoryToAttack->getName().compare(tadj->getName()) == 0 && t->getNumArmiesTemp() >= 1)
                     {
                         // choose a random number of armies to send from the player's territory to the selected territory to attack
                         // numArmiesTemp is to be able to modify and keep track of the number of armies in a territory
@@ -193,7 +193,7 @@ void Player::issueOrder(Order *order)
                         Advance *adv = new Advance(this, numArmiesAttack, t, selectedTerritoryToDefend);
                         // add order to orderlist
                         orders->addOrder(adv);
-                        cout << selectedTerritoryToAttack->getName() << " is to attack territory and " << t->getName() << " is the territory to attack with " << numArmiesAttack << " with armies where originally has " << t->getNumArmiesTemp() << endl;
+                        cout << "the territory to attack is : " << selectedTerritoryToAttack->getName() << "\nand the territory chosen from the player to attack with is: " << t->getName() << "\nthe number of armies to attack with is: " << numArmiesAttack << "\nthe number of armies it originally had was: " << t->getNumArmiesTemp() << endl;
                         // keep track of the number of armies the territory can actually advance with
                         t->setNumArmiesTemp(t->getNumArmiesTemp() - numArmiesAttack);
 
@@ -206,7 +206,7 @@ void Player::issueOrder(Order *order)
         // defend
         else
         {
-            cout << randomIndexDefend << " defend territory : " << selectedTerritoryToDefend->getName() << endl;
+            cout << randomIndexDefend << " is the index of vector and defend territory is: " << selectedTerritoryToDefend->getName() << endl;
             // go through all the territories the player has
             for (Territory *t : territories)
             {
@@ -216,7 +216,7 @@ void Player::issueOrder(Order *order)
                     // if the territory is adjacent to the one selected to defend
                     // AND it has more than 1 army unit
                     // AND it is not the same territory
-                    if (selectedTerritoryToDefend->getName().compare(tadj->getName()) && t->getNumArmiesTemp() > 1 && t->getName().compare(selectedTerritoryToDefend->getName()) != 0)
+                    if (selectedTerritoryToDefend->getName().compare(tadj->getName()) && t->getNumArmiesTemp() >= 1 && t->getName().compare(selectedTerritoryToDefend->getName()) != 0)
                     {
                         // choose a random number of armies to send from the player's territory to the selected territory to derend
                         // numArmiesTemp is to be able to modify and keep track of the number of armies in a territory
@@ -230,7 +230,7 @@ void Player::issueOrder(Order *order)
                         Advance *adv = new Advance(this, numArmiesDefend, t, selectedTerritoryToDefend);
                         // add order to orderlist
                         orders->addOrder(adv);
-                        cout << selectedTerritoryToDefend->getName() << " is to defend territory and " << t->getName() << " is the territory to defend with" << numArmiesDefend << " with armies where originally has " << t->getNumArmiesTemp() << endl;
+                        cout << "the territory to defend is : " << selectedTerritoryToDefend->getName() << "\nand the territory chosen from the player to defend with is: " << t->getName() << "\nthe number of armies to defend with is: " << numArmiesDefend << "\nthe number of armies it originally had was: " << t->getNumArmiesTemp() << endl;
                         // keep track of the number of armies the territory can actually advance with
                         t->setNumArmiesTemp(t->getNumArmiesTemp() - numArmiesDefend);
 
