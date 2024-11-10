@@ -1,6 +1,8 @@
 #include "PlayerDriver.h"
 using namespace std; 
 
+
+/*
 void testPlayers(){
     vector<Player* > players;
 
@@ -18,7 +20,7 @@ void testPlayers(){
     //std:cout << players.size() <<  " players were created" << std::endl;
 
     std::cout << "New game starting with " << player1->getPlayerName() 
-                /*<< " and " << player2->getPlayerName() */ << endl;
+                << " and " << player2->getPlayerName()  << endl;
 
     MapLoader ml("MapTextFiles//USA.map"); 
     addTerritoriesToPlayers(&ml, player1);
@@ -112,7 +114,7 @@ void createOrder(string order, Player* player){
     else{
         cout << "Invalid order." << endl;
     }
-}
+}*/
 // int main(){
 //     testPlayers();
 //     return 0;  

@@ -1,25 +1,24 @@
 // #include <iostream>
 
 // // Include headers for each part's test function
-// #include "OrdersDriver.h"
+#include "OrdersDriver.h"
 // #include "MapDriver.h"
 // #include "GameEngine.h"
 // #include "PlayerDriver.h"
 // #include "CardDriver.h"
 // #include <cstring>
 
-// int main(int argc, char **argv){
+int main(int argc, char **argv){
 
     testOrderExecution();
-
-    /*
+    
     //if there is more than one argument passed to the program print error message
-    if (argc > 2){
-        std::cout << "Invalid arguments. \nPlease run the program without any arguments to start the game or with '-test' to run the tests." << std::endl;
-        return 0;
-    }
+    //if (argc > 2){
+     //   std::cout << "Invalid arguments. \nPlease run the program without any arguments to start the game or with '-test' to run the tests." << std::endl;
+     //   return 0;
+    //}
     //if one argument passed --> check that it is '-test' to run the tests otherwise print error message
-    else if (argc == 2){
+    /*else if (argc == 2){
         if (strcmp(argv[1], "-test") == 0)
         {
             std::cout << "Running tests..." << std::endl;
@@ -83,7 +82,6 @@
 //     //if no arguments passed --> start the game
 //     }else{
         
-        std::cout << "Starting the game..." << std::endl;
+        std::cout << "Starting the game..." << std::endl;*/
         return 0;
-    }
 }
