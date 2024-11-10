@@ -17,6 +17,8 @@ Player::Player(string playerName)
     canDrawCard = true;
     reinforcementPool = 50; 
     reinforcementTemp = 50; // temp value of the reinforcement pool for the issuing order phase
+    hand = new Hand();
+    territories = vector<Territory*>();
 }
 
 Player ::Player(const Player &orig)
