@@ -1,6 +1,7 @@
 #include "Orders.h"
 #include "OrdersDriver.h"
 #include "Player.h"
+#include "GameEngine.h"
 
 // Function to test the functuonality of the OrdersList class
 void testOrdersLists() {
@@ -106,23 +107,22 @@ void testOrderExecution(){
 
     p3->addTerritory(t4);
 
+    //Deploy Test Works
 
-    /* Deploy Test Works
-    
+    cout << "Deploy Order Test" << endl << endl;
+
     Order* deployTest = new Deploy(p1,4,t1);
 
     deployTest->Attach(ob);
 
-    cout << t1->getNumArmies() << endl;
-
     deployTest->execute();
 
-    cout << t1->getNumArmies() << endl;*/
+    cout << endl << endl;
 
-
-
-    /*//Advance Test Works -> Tried everything
+    //Advance Test Works -> Tried everything
     
+    cout << "Advance Order Test (Battle)" << endl << endl;
+
     t1->setNumArmies(10);
     t2->setNumArmies(2);
     t3->setNumArmies(3);
@@ -133,10 +133,26 @@ void testOrderExecution(){
 
     advanceTest->execute();
 
-    cout << t3->getNumArmies() << endl;*/
+    cout << endl << endl;
+
+    cout << "Advance Order Test (Friendly)" << endl << endl;
+
+    t1->setNumArmies(10);
+    t2->setNumArmies(2);
+    t3->setNumArmies(3);
+
+    Order* advanceTest2 = new Advance(p1,6,t1,t2);
+
+    advanceTest2->Attach(ob);
+
+    advanceTest2->execute();
+
+    cout << endl << endl;
 
 
-    /* Airlift Test Works
+    //Airlift Test Works
+
+    cout << "Airlift Order Test" << endl << endl;
     
     t1->setNumArmies(12);
     t6->setNumArmies(2);
@@ -147,10 +163,11 @@ void testOrderExecution(){
 
     airliftTest->execute();
 
-    cout << t6->getNumArmies() << endl; */
+    cout << endl << endl;
 
+    //Bomb Test Works
 
-    /* Bomb Test Works
+    cout << "Bomb Order Test" << endl << endl;
 
     t5->setNumArmies(10);
 
@@ -160,45 +177,25 @@ void testOrderExecution(){
 
     bombTest->execute();
 
-    cout << t5->getNumArmies() << endl; */
+    cout << endl << endl;
 
+    //Blockade Test Works
 
-    /* Blockade Test Works
+    cout << "Blockade Order Test" << endl << endl;
 
     Order* blockadeTest = new Blockade(p1,t6);
 
     blockadeTest->Attach(ob);
 
-    for(Player* p:getPlayerList()){
-
-        cout << p->getPlayerName() << endl;
-
-    }
-
     blockadeTest->execute();
-
-    for(Player* p:getPlayerList()){
-
-        cout << p->getPlayerName() << endl;
-
-    }
-
-    for(Territory* t: getPlayerList().at(0)->getTerritories()){
-
-        cout << t->getName()<< endl;
-
-    }
 
     cout << endl << endl;
 
-    for(Territory* t: getPlayerList().at(3)->getTerritories()){
+    // Negotiate Test Works
 
-        cout << t->getName()<< endl;
-    } */
+    cout << "Negotiate Order Test" << endl << endl;
 
-
-
-    /*Order* o = new Negotiate(p1,p2);
+    Order* o = new Negotiate(p1,p2);
     o->Attach(ob);
     Order* o2 = new Negotiate(p1,p3);
     o2->Attach(ob);
@@ -212,7 +209,9 @@ void testOrderExecution(){
 
     boomboom->execute();
 
+    cout << "Negotiation pair reset." << endl;
+
     resetNegotiatePairs();
 
-    boomboom->execute();*/
+    boomboom->execute();
 }
