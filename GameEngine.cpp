@@ -143,12 +143,18 @@ void GameEngine::issueOrdersPhase(vector<Player *> v)
     // if every value in the vector is 1, then no more orders for the player
     vector<int> outOfOrder(v.size());
 
+    // boolean moreOrder to continue this loop until there are no more orders
     bool moreOrder = true;
     while (moreOrder)
     {
+        // a count that determines the number of players that does not have any more orders
         int countDone = 0;
+
+        // go through the vector of players
         for (int i = 0; i < v.size(); i++)
         {
+            // if the player still has armies in reinforcement, deploy order
+            // temp is used to avoid modifying the original reinforcement pool values until order execution
             if (v[i]->getReinforcementTemp() != 0)
             {
                 Deploy *d = new Deploy();
@@ -157,7 +163,7 @@ void GameEngine::issueOrdersPhase(vector<Player *> v)
                 continue;
             }
 
-            // if it arrives at the end of the player's territory array, skip this if statement
+            // the player is allowed to advance order a maximum of 3 times, else move to the next
             else if (countAdvanceTerritories[i] != 3)
             {
                 Advance *a = new Advance();
@@ -207,6 +213,7 @@ void GameEngine::issueOrdersPhase(vector<Player *> v)
         }
 
         // calculate the total number of players that are done
+        // of the countDone is equal to the number of players, end the loop (no more orders) !
         for (int j : outOfOrder)
         {
             if (outOfOrder[j] == 1)
