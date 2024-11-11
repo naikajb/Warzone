@@ -246,6 +246,50 @@ void GameEngine::issueOrdersPhase(vector<Player *> v)
 
 void GameEngine::executeOrdersPhase(vector<Player *> v)
 {
+
+    // vector to keep track of the index of each player for their OrderList vector
+    // this is done so that the orders from their OrderList can be kept track and used
+    // each box from this vector is of each player and represents the player's index in their vector orders->getOrders() vector
+    vector<int> indexOrderList(v.size());
+
+    // vector to keep track of all the players that does not have any more orders to execute
+    // each box will either have a value of 0 or 1
+    // 0 represents the fact that there are still orders left
+    // 1 represents the fact that there are no more orders left
+    // if every value in the vector is 1, then no more orders for the player
+    vector<int> outOfOrder(v.size());
+
+    // boolean moreOrder to continue this loop until there are no more orders
+    bool moreOrder = true;
+    while (moreOrder)
+    {
+        int countDone = 0;
+        for (int i = 0; i < v.size(); i++)
+        {
+            if (indexOrderList[i] != v[i]->getOrderList()->getOrders().size())
+            {
+                v[i]->getOrderList()->getOrders()[indexOrderList[i]]->execute();
+                // cout << *(v[i]->getOrderList()->getOrders()[indexOrderList[i]]) << endl;
+                indexOrderList[i]++;
+            }
+            else if (outOfOrder[i] != 1)
+            {
+                outOfOrder[i] = 1;
+            }
+        }
+
+        for (int j = 0; j < outOfOrder.size(); j++)
+        {
+            if (outOfOrder[j] == 1)
+            countDone++;
+        }
+
+        if (countDone == v.size())
+        {
+            cout << "\ndone with all executions !" << endl;
+            moreOrder = false;
+        }
+    }
 }
 void GameEngine::mainGameLoop(vector<Player *> v)
 {
@@ -327,6 +371,8 @@ int main()
     p1->addCard(airlift);
 
     g.issueOrdersPhase(pList);
+
+    g.executeOrdersPhase(pList);
 
     return 0;
 }

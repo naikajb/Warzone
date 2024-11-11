@@ -71,10 +71,9 @@ bool Deploy::validateOrder() {
 void Deploy::executeOrder() {
 
     target->setNumArmies(target->getNumArmies()+armies);
-    
     executed = true; //mark the order as executed
     orderEffect = "Armies have been deployed."; 
-    Notify(this);
+    // Notify(this);
 }
 
 void Deploy::execute(){
@@ -210,7 +209,8 @@ void Advance::executeOrder() {
 
     executed = true; 
     orderEffect = "Armies have advanced.";
-    Notify(this);
+    // Notify(this);
+
 }
 
 void Advance::execute(){
@@ -295,7 +295,7 @@ void Bomb::executeOrder() {
     
     executed = true;
     orderEffect = "Territory has been bombed.";
-    Notify(this);
+    // Notify(this);
 }
 
 void Bomb::execute(){
@@ -378,7 +378,7 @@ void Blockade::executeOrder() {
     
     executed = true;
     orderEffect = "Territory has been blockaded.";
-    Notify(this);
+    // Notify(this);
 }
 
 void Blockade::execute(){
@@ -440,7 +440,7 @@ void Airlift::executeOrder() {
     
     executed = true;
     orderEffect = "Armies have been airlifted";
-    Notify(this);
+    // Notify(this);
 }
 
 void Airlift::execute(){
@@ -490,7 +490,7 @@ void Negotiate::executeOrder() {
 
     executed = true;
     orderEffect = "Truce has been negotiated.";
-    Notify(this);
+    // Notify(this);
 }
 
 void Negotiate::execute(){
