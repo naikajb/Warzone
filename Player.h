@@ -8,7 +8,7 @@
 #include "Orders.h"
 #include "Cards.h"
 #include "Map.h"
-// #include "LoggingObserver.h"
+#include "LoggingObserver.h"
 using std::sort;
 class OrdersList;
 class Order;
@@ -20,6 +20,7 @@ class Player{
         std::vector<Territory*> territories; // collection of Territory objects
         Hand* hand; // hand of Card objects
         OrdersList* orders; // list of Order objects
+        bool canDrawCard;
         int reinforcementPool; // nb of armies recieved added
         int reinforcementTemp;
 
@@ -56,7 +57,11 @@ class Player{
 
         std::string getPlayerName();  //returns player's name
 
-        // void AttachObserver(Observer* observer);  //attaches observer to player
+        void AttachObserver(Observer* observer);  //attaches observer to player
+
+        void drewCard();
+        void roundReset();
+        bool getCanDrawCard();
         
 };
 

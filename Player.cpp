@@ -14,12 +14,14 @@ Player::Player(string playerName)
 {
     this->playerName = playerName;
     orders = new OrdersList();
+    canDrawCard = true;
     reinforcementPool = 50;
 
     // temp value of the reinforcement pool for the issuing order phase
+    hand = new Hand();
+    territories = vector<Territory*>();
     // this is so that the values of the reinforcement pool can be manipulated/modfied without the actual execution of it (issue order phase)
     reinforcementTemp = 50;
-    hand = new Hand();
 }
 
 Player ::Player(const Player &orig)
@@ -54,11 +56,6 @@ Player::~Player()
         delete territory;
     }
     // TODO: check if i need to delete the cards in the hand first
-}
-
-std::vector<Territory *> Player::getTerritories()
-{
-    return territories;
 }
 
 void Player::setReinforcementPool(int armies)
@@ -369,6 +366,8 @@ void Player::addTerritory(Territory *territory)
     territories.push_back(territory);
 }
 
+vector<Territory*> Player::getTerritories(){return territories;}
+
 // returns list of territories to defend based on priority
 // for now the priority is:
 // 1. has adjacent territories that are not player's and has enemy armies (its based on who has more)
@@ -520,8 +519,13 @@ void Player::removeTerritory(Territory *territory)
     }
 }
 
-// // attach observer to player's order list
-// void Player::AttachObserver(Observer *observer)
-// {
-//     orders->Attach(observer);
-// }
+// attach observer to player's order list
+void Player::AttachObserver(Observer *observer)
+{
+    orders->Attach(observer);
+}
+
+void Player::drewCard(){canDrawCard = false;}
+void Player::roundReset(){canDrawCard = true;}
+bool Player::getCanDrawCard(){return canDrawCard;}
+

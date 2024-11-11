@@ -1,33 +1,67 @@
 #include "GameEngine.h"
+#include <iostream>
 
 
 // free function, it controls the command loop that interacts with the GameEngine through the CommandParser
-void testGameStates() {
+void testGameStates() { // to accept command-line command, argc is the number of arguments, argv is the array of arguments
+
+    std::string inputMode;
+    bool useConsole = false;
+    std::cout << "Welcome to the Game Engine!\n\n" << "Choose a mode to input commands: \n" << "1. Console\n" << "2. File\n" << "\nEnter 1 or 2:\n" << "> ";
+    std::cin >> inputMode;
+
+     // Select the appropriate CommandProcessor based on command-line argument
+    CommandProcessor* commandProcessor = nullptr;
+    FileLineReader* fileLineReader = nullptr;
+
+    if (inputMode == "1") {
+        commandProcessor = new CommandProcessor();
+        useConsole = true;
+    } 
+    else if (inputMode == "2") {
+        std::string fileName;
+        while (true) {
+            std::cout << "\nEnter the file name: ";
+            std::cin >> fileName;
+            try {
+                fileLineReader = new FileLineReader(fileName);
+                commandProcessor = new FileCommandProcessorAdapter(fileLineReader);
+                break;
+            } catch (std::invalid_argument& e) {
+                std::cerr << e.what() << std::endl;
+            }
+        }
+    } 
+    else {
+        std::cerr << "\nInvalid input mode. Exiting..." << std::endl;
+        return;
+    }
 
     GameEngine engine;
-    std::cout << "\nStarting Game Engine, Please Type A Command\n\n";
+    std::cout << "\nStarting Game Engine\n\n";
+
     std::string input;
+    std::string unknown = "";
+
     while (true) {
-        
-        std::cout << "> ";
-        std::getline(std::cin >> std::ws, input);
-        
-        if (input == "exit") {
-            break;
+        if(useConsole) {
+            std::cout << "Type a command " << std::endl;
+            std::cout << "> ";
+            std::getline(std::cin >> std::ws, input);
+            bool temp1 = engine.processConsoleCommand(input, commandProcessor);
+            if (input == "exit") {
+                break;
+            }
         }
-        engine.processCommand(input);
-    }
-    
-
-    
-
-    
-    //passing engine pointer to parser object
-    // CommandParser parser(&engine);
-
-    // std::cout << "\nStarting Game Engine, Please Type A Command\n\n";
-    // std::string input;
-    // while (true) {
+        else {
+            bool temp2 = engine.processFileCommand(unknown, commandProcessor);
+        }
+        
+        
+        // Command* cmd = commandProcessor->getCommand(input);
+        // if (!cmd) {
+        //     break;
+        // }
         
     //     std::cout << "> ";
     //     std::getline(std::cin >> std::ws, input);
@@ -36,12 +70,19 @@ void testGameStates() {
     //         break;
     //     }
     //     parser.parseCommand(input);
-    // }
+ }
 };
+
+void testStartupPhase() {
+    GameEngine gm;
+    gm.startupPhase();
+}
 
 // int main() {
 
-//     testGameStates();
+//     //testGameStates();
+//     testStartupPhase();
+    
 
 //     return 0;
 // }

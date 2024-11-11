@@ -1,27 +1,20 @@
+#ifndef FILE_COMMAND_PROCESSOR_ADAPTER_H
+#define FILE_COMMAND_PROCESSOR_ADAPTER_H
+
 #include "CommandProcessor.h"
-#include <fstream>
-#include <iostream>
+#include "FileLineReader.h"
 
 class FileCommandProcessorAdapter : public CommandProcessor {
 private:
-    std::ifstream fileStream;
-    std::string currentCommand;
+    FileLineReader *fileLineReader;
 
 public:
-    FileCommandProcessorAdapter(const std::string& fileName);
+    FileCommandProcessorAdapter(FileLineReader* fileLine);
     ~FileCommandProcessorAdapter();
-
-    // ~FileCommandProcessorAdapter() {
-    //     fileStream.close();
-    // }
-
-    Command* getCommand() {
-        if (fileStream.is_open()) {
-            if (std::getline(fileStream, currentCommand)) {
-                return CommandProcessor::getCommand(currentCommand);
-            }
-        }
-        return nullptr;
-    }
-
+    Command* readCommand(std::string& commandstr) override;
+    void saveCommand(Command* cmd) override;
+    Command* getCommand(std::string& commandstr) override;
+    bool validate(Command* cmd, const char* state) override;
 };
+
+#endif

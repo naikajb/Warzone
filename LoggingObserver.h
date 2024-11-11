@@ -35,7 +35,7 @@ class LogObserver: public Observer{
 //classes Order, OrderList, GameEngine, Command and CommandProcessor are Subject and ILoggable objects
 class Subject{
     public: 
-        ~Subject();
+        //~Subject();
         void Attach(Observer* observer);
         void Detach(Observer* observer);
         void Notify(ILoggable* loggableObject);
