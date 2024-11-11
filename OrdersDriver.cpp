@@ -4,67 +4,58 @@
 #include "GameEngine.h"
 
 // Function to test the functuonality of the OrdersList class
-void testOrdersLists() {
+// void testOrdersLists() {
 
-    // Create an instance of OrdersList to manage orders
-    OrdersList ordersList;
+//     // Create an instance of OrdersList to manage orders
+//     OrdersList ordersList;
 
-    // Create different TYPES of orders 
-    Order* deploy = new Deploy();
-    Order* advance = new Advance();
-    Order* bomb = new Bomb();
-    Order* blockade = new Blockade();
-    Order* airlift = new Airlift();
-    Order* negotiate = new Negotiate();
+//     // Create different TYPES of orders 
+//     Order* deploy = new Deploy();
+//     Order* advance = new Advance();
+//     Order* bomb = new Bomb();
+//     Order* blockade = new Blockade();
+//     Order* airlift = new Airlift();
+//     Order* negotiate = new Negotiate();
 
-    // Add created orders to the orders list
-    ordersList.addOrder(deploy);
-    ordersList.addOrder(advance);
-    ordersList.addOrder(bomb);
-    ordersList.addOrder(blockade);
-    ordersList.addOrder(airlift);
-    ordersList.addOrder(negotiate);
+//     // Add created orders to the orders list
+//     ordersList.addOrder(deploy);
+//     ordersList.addOrder(advance);
+//     ordersList.addOrder(bomb);
+//     ordersList.addOrder(blockade);
+//     ordersList.addOrder(airlift);
+//     ordersList.addOrder(negotiate);
 
-    // Print the initial list of orders
-    std::cout << "Initial Orders List:" << std::endl;
-    std::cout << ordersList << std::endl;
+//     // Print the initial list of orders
+//     std::cout << "Initial Orders List:" << std::endl;
+//     std::cout << ordersList << std::endl;
 
-    // Move the 1rst order (deploy) to the end of the list
-    ordersList.move(0, 5);  // Move the first order to the end
-    std::cout << "After Moving Deploy to Last:" << std::endl;
-    std::cout << ordersList << std::endl;
+//     // Move the 1rst order (deploy) to the end of the list
+//     ordersList.move(0, 5);  // Move the first order to the end
+//     std::cout << "After Moving Deploy to Last:" << std::endl;
+//     std::cout << ordersList << std::endl;
 
-    // Remove an order from the orders list
-    ordersList.remove(2);  // Remove Bomb order
-    std::cout << "After Removing Bomb Order:" << std::endl;
-    std::cout << ordersList << std::endl;
+//     // Remove an order from the orders list
+//     ordersList.remove(2);  // Remove Bomb order
+//     std::cout << "After Removing Bomb Order:" << std::endl;
+//     std::cout << ordersList << std::endl;
 
-    // Execute the 'deploy' and the 'advance' orders to change their state
-    deploy->executeOrder();
-    advance->executeOrder();
+//     // Execute the 'deploy' and the 'advance' orders to change their state
+//     deploy->executeOrder();
+//     advance->executeOrder();
 
-    // Print the orders list after executing 'deploy' order and 'advance' order
-    std::cout << "After Executing Deploy and Advance Orders:" << std::endl;
-    std::cout << ordersList << std::endl;
-}
+//     // Print the orders list after executing 'deploy' order and 'advance' order
+//     std::cout << "After Executing Deploy and Advance Orders:" << std::endl;
+//     std::cout << ordersList << std::endl;
+// }
 
-// Main function to run the test
-int main_OrdersDriver() {
-    testOrdersLists(); //Call the function to test OrdersList functionality
-    return 0;
-}
 
 void testOrderExecution(){
 
     Observer* ob = new LogObserver();
 
-    Player* p1 = new Player("Jake");
-    Player* p2 = new Player("Joop");
-    Player* p3 = new Player("Tanya");
-
-    // p1->AttachObserver(ob);
-    // p2->AttachObserver(ob);
-    // p3->AttachObserver(ob);
+    Player* p1 = new Player(ob,"Jake");
+    Player* p2 = new Player(ob,"Joop");
+    Player* p3 = new Player(ob,"Tanya");
 
     addToPlayerList(p1);
     addToPlayerList(p2);
@@ -111,7 +102,7 @@ void testOrderExecution(){
 
     cout << "Deploy Order Test" << endl << endl;
 
-    Order* deployTest = new Deploy(p1,4,t1);
+    Order* deployTest = new Deploy(ob,p1,4,t1);
 
     deployTest->Attach(ob);
 
@@ -127,7 +118,7 @@ void testOrderExecution(){
     t2->setNumArmies(2);
     t3->setNumArmies(3);
 
-    Order* advanceTest = new Advance(p1,6,t1,t3);
+    Order* advanceTest = new Advance(ob,p1,6,t1,t3);
 
     advanceTest->Attach(ob);
 
@@ -141,7 +132,7 @@ void testOrderExecution(){
     t2->setNumArmies(2);
     t3->setNumArmies(3);
 
-    Order* advanceTest2 = new Advance(p1,6,t1,t2);
+    Order* advanceTest2 = new Advance(ob,p1,6,t1,t2);
 
     advanceTest2->Attach(ob);
 
@@ -157,7 +148,7 @@ void testOrderExecution(){
     t1->setNumArmies(12);
     t6->setNumArmies(2);
 
-    Order* airliftTest = new Airlift(p1,12,t1,t6);
+    Order* airliftTest = new Airlift(ob,p1,12,t1,t6);
 
     airliftTest->Attach(ob);
 
@@ -171,7 +162,7 @@ void testOrderExecution(){
 
     t5->setNumArmies(10);
 
-    Order* bombTest = new Bomb(p3,t1);
+    Order* bombTest = new Bomb(ob,p3,t1);
 
     bombTest->Attach(ob);
 
@@ -183,7 +174,7 @@ void testOrderExecution(){
 
     cout << "Blockade Order Test" << endl << endl;
 
-    Order* blockadeTest = new Blockade(p1,t6);
+    Order* blockadeTest = new Blockade(ob,p1,t6);
 
     blockadeTest->Attach(ob);
 
@@ -195,15 +186,15 @@ void testOrderExecution(){
 
     cout << "Negotiate Order Test" << endl << endl;
 
-    Order* o = new Negotiate(p1,p2);
+    Order* o = new Negotiate(ob,p1,p2);
     o->Attach(ob);
-    Order* o2 = new Negotiate(p1,p3);
+    Order* o2 = new Negotiate(ob,p1,p3);
     o2->Attach(ob);
 
     o->execute();
     o2->execute();
 
-    Order* boomboom = new Bomb(p3,t2);
+    Order* boomboom = new Bomb(ob,p3,t2);
 
     boomboom->Attach(ob);
 
@@ -214,4 +205,10 @@ void testOrderExecution(){
     resetNegotiatePairs();
 
     boomboom->execute();
+}
+
+// Main function to run the test
+int main_OrdersDriver() {
+    testOrderExecution();
+    return 0;
 }

@@ -40,7 +40,7 @@ class Subject{
         void Attach(Observer* observer);
         void Detach(Observer* observer);
         void Notify(ILoggable* loggableObject);
-    private: 
+    protected: 
         Observer* observer;
 };
 

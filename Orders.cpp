@@ -5,7 +5,9 @@ using namespace std;
 
 // Base class order implementation
 // Default constructor --> initializes an Order with default values
-Order::Order() : orderDescription("undefined"), orderEffect("none"), executed(false) {}
+Order::Order(Observer* o) : orderDescription("undefined"), orderEffect("none"), executed(false) {
+    Attach(o);
+}
 
 //Destructor --> ensure derived class destructors are called properly
 Order::~Order() {}
@@ -43,11 +45,11 @@ std::string Order::stringToLog() {
 // Deploy Order - derived class Deploy implementation
 
 // Constructor sets the order description specific to deploy
-Deploy::Deploy() {
-    orderDescription = "Deploy order - place armies on a territory";
-}
+// Deploy::Deploy() {
+//     orderDescription = "Deploy order - place armies on a territory";
+// }
 
-Deploy::Deploy(Player* p, int a, Territory* t): player(p), armies(a), target(t)
+Deploy::Deploy(Observer* o, Player* p, int a, Territory* t): Order(o),player(p), armies(a), target(t)
 {orderDescription = "Deploy order - place armies on a territory";} // parameterized constructor
 
 Deploy::~Deploy() { // Deploy Destructor
@@ -96,11 +98,11 @@ void Deploy::execute(){
 // Advance Order - derived class 
 
 // Constructor sets the porder description to advance
-Advance::Advance() {
-    orderDescription = "Advance Order - move armies to an adjacent territory";
-}
+// Advance::Advance() {
+//     orderDescription = "Advance Order - move armies to an adjacent territory";
+// }
 
-Advance::Advance(Player* p, int a, Territory* s, Territory* t): player(p), armies(a), source(s), target(t)
+Advance::Advance(Observer* o,Player* p, int a, Territory* s, Territory* t): Order(o),player(p), armies(a), source(s), target(t)
 {orderDescription = "Advance Order - move armies to an adjacent territory";} // parameterized constructor
 
 Advance::~Advance() { // Advance destructor
@@ -261,11 +263,11 @@ int Advance::getRandomNum(){ // returns a random number in the range of 1-100
 // Bomb Order - derived class
 
 // Constructor sets the order description specific to bomb order
-Bomb::Bomb() {
-    orderDescription = "Bomb Order - bomb a territory to weaken its defense";
-}
+// Bomb::Bomb() {
+//     orderDescription = "Bomb Order - bomb a territory to weaken its defense";
+// }
 
-Bomb::Bomb(Player* p, Territory* t): player(p),target(t) // parameterized constructor for the Bomb class
+Bomb::Bomb(Observer* o,Player* p, Territory* t): Order(o),player(p),target(t) // parameterized constructor for the Bomb class
 {orderDescription = "Bomb Order - bomb a territory to weaken its defense";}
 
 Bomb::~Bomb() { // Bomb destructor
@@ -338,11 +340,11 @@ void Bomb::execute(){
 // Blockade Order - derived class
 
 // Constructor sets the order description specific to blockade order
-Blockade::Blockade() {
-    orderDescription = "Blockade Order - blockade a territory to prevent movement";
-}
+// Blockade::Blockade() {
+//     orderDescription = "Blockade Order - blockade a territory to prevent movement";
+// }
 
-Blockade::Blockade(Player* p,Territory* t): player(p),target(t) // paramterized constructor for the Blockade class
+Blockade::Blockade(Observer* o,Player* p,Territory* t): Order(o),player(p),target(t) // paramterized constructor for the Blockade class
 {orderDescription = "Blockade Order - blockade a territory to prevent movement";}
 
 Blockade::~Blockade() { // Blockade destructor
@@ -388,7 +390,7 @@ void Blockade::executeOrder() {
 
     if(!neutralCreated){ // if the neutral player doesnt already exist
 
-        Player *n = new Player("Neutral"); // creates Neutral player
+        Player *n = new Player(observer,"Neutral"); // creates Neutral player
 
         addToPlayerList(n); // adds the neutral player to the list
 
@@ -420,11 +422,11 @@ void Blockade::execute(){
 // Airlift Order - derived class
 
 // Constructor sets the order description specific to airlift
-Airlift::Airlift() {
-    orderDescription = "Airlift Order - move armies from one territory to another by air";
-}
+// Airlift::Airlift() {
+//     orderDescription = "Airlift Order - move armies from one territory to another by air";
+// }
 
-Airlift::Airlift(Player*p, int a, Territory* s, Territory* t): player(p),armies(a), source(s), target(t) // parameterized constructor for the Airlift class
+Airlift::Airlift(Observer* o,Player*p, int a, Territory* s, Territory* t): Order(o),player(p),armies(a), source(s), target(t) // parameterized constructor for the Airlift class
 {orderDescription = "Airlift Order - move armies from one territory to another by air";}
 
 Airlift::~Airlift() { // destructor for the Airlift class
@@ -483,11 +485,11 @@ void Airlift::execute(){
 // Negotiate Order - derived class
 
 // Constructor sets the order description specific to negotiate
-Negotiate::Negotiate() {
-    orderDescription = "Negotiate Order - negotiate a truce with another player";
-}
+// Negotiate::Negotiate() {
+//     orderDescription = "Negotiate Order - negotiate a truce with another player";
+// }
 
-Negotiate::Negotiate(Player* p1, Player* p2): player(p1),targetPlayer(p2) // parameterized constructor for Negotiate class
+Negotiate::Negotiate(Observer* o,Player* p1, Player* p2):  Order(o),player(p1),targetPlayer(p2) // parameterized constructor for Negotiate class
 {orderDescription = "Negotiate Order - negotiate a truce with another player";}
 
 Negotiate::~Negotiate() { // destructor for negotiate class
@@ -533,7 +535,9 @@ void Negotiate::execute(){
 // OrdersList class implementation
 
 // Constructor for OrdersList
-OrdersList::OrdersList() {}
+OrdersList::OrdersList(Observer* o) {
+    Attach(o);
+}
 
 // Destructor for OrdersList --> ensure all dynamically allocated orders are deleted
 OrdersList::~OrdersList() {

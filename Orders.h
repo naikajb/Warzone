@@ -21,7 +21,7 @@ class Territory;
 // Base class representing a general order in the game
 class Order: public ILoggable, public Subject{
 public:
-    Order(); //default constructor
+    Order(Observer*); //default constructor
     Order(const Order& original); //copy constructor
     virtual ~Order(); //destructor to ensure proper cleanup in derived classes
 
@@ -59,8 +59,8 @@ private:
     Territory* target;
 
 public:
-    Deploy(); //constructor
-    Deploy(Player*, int, Territory*);
+    //Deploy(); //constructor
+    Deploy(Observer*,Player*, int, Territory*);
     ~Deploy(); //destrcutor
 
     bool validateOrder() override; //validate if the deploy order can be executed
@@ -81,8 +81,8 @@ private:
     Territory* target;
 
 public:
-    Advance(); //constructor
-    Advance(Player*,int,Territory*,Territory*);
+    //Advance(); //constructor
+    Advance(Observer*,Player*,int,Territory*,Territory*);
     ~Advance(); //destructor
 
     bool validateOrder() override; //validate if the advance order can be executed
@@ -103,8 +103,8 @@ private:
     Territory* target;
 
 public:
-    Bomb(); //constructor
-    Bomb(Player*,Territory*);
+    //Bomb(); //constructor
+    Bomb(Observer*,Player*,Territory*);
     ~Bomb(); //destructor
 
     bool validateOrder() override; //validate if the bomb order can be executed
@@ -122,8 +122,8 @@ private:
     Territory* target;
 
 public:
-    Blockade(); //constructor
-    Blockade(Player*,Territory*);
+   // Blockade(); //constructor
+    Blockade(Observer*,Player*,Territory*);
     ~Blockade(); //destructor
 
     bool validateOrder() override; //validate if the blockade order can be executed
@@ -144,8 +144,8 @@ private:
     Territory* target;
 
 public:
-    Airlift(); //constructor
-    Airlift(Player*,int,Territory*,Territory*);
+   // Airlift(); //constructor
+    Airlift(Observer*,Player*,int,Territory*,Territory*);
     ~Airlift(); //destructor
 
     bool validateOrder() override; //validate if the airlift order can be executed
@@ -164,8 +164,8 @@ private:
     Player* targetPlayer;
 
 public:
-    Negotiate(); //constructor
-    Negotiate(Player*,Player*);
+    //Negotiate(); //constructor
+    Negotiate(Observer*,Player*,Player*);
     ~Negotiate(); //destructor
 
     bool validateOrder() override; //validate if the negotiate order can be executed
@@ -177,7 +177,7 @@ public:
 // Class to manage a list of orders --> operations like adding, moving, and removing orders
 class OrdersList: public ILoggable, public Subject{
 public:
-    OrdersList(); //constructor
+    OrdersList(Observer*); //constructor
     ~OrdersList(); //destructor
     
     void addOrder(Order* order); //add a new order to the list
