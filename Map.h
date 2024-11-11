@@ -17,17 +17,17 @@ using std::string;  // class template add features support strings
 using std::vector;  // class template that contains vector container and its member functions
 class Continent;     // forward declaration of Continent class
 class Player;
-class Player; // added
 
 class Territory // creation of Territory class
 {
 private: // access identifier
     string name;
     int numArmies;
+    int numArmiesTemp; // temp value for number of armies for the IssueOrder
     Continent *continent;               // pointer to user-defined class Continent
     vector<Territory *> adjTerritories; // vector of pointers of user-defined type Territory
+    Player* owner;
 
-    Player *playerOwner; // added
 
 public: // access identifier
     // Territory parametrized constructor declaration
@@ -50,11 +50,13 @@ public: // access identifier
     int getNumArmies();                      // Getter number of armies
     Continent *getContinent();               // Getter Continent
     vector<Territory *> getAdjTerritories(); // Getter adjacent territories
-    Player *getPlayerOwner(); //  added
+    Player* getPlayer();
+    int getNumArmiesTemp();
+    void setNumArmiesTemp(int num);
 
     void setNumArmies(int numArmies); // Setter number of armies
     void addAdjTerritories(Territory *adjTerritory); // Add pointer of type Territory as adjacent territories in vector
-    void setPlayerOwner(Player *p); // added
+    void setPlayer(Player*);
 };
 
 class Continent // creation of Continent class

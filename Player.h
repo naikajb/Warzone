@@ -41,17 +41,19 @@ class Player{
         std::vector<Territory*> toDefend();  //returns territories to be defended 
         std::vector<Territory*> toAttack();  //returns territories to be attacked
         
-        void issueOrder();  //adds order to player's list of orders
+        void issueOrder(Order *order);  //adds order to player's list of orders
         
         //stream insertion operator to print player's information
         friend std::ostream& operator<<(std::ostream& out, const Player& player);
         
         void addCard(Card* card);  //adds card to player's hand
         void removeCard(Card* card);  //removes card from player's hand
-        Hand *getHand();
+        Hand *getHand(); // returns players hand
+
+        OrdersList* getOrderList();
         
         void printTerritories();  //prints player's territories
-        void printOrders();  //prints player's orders
+        // void printOrders();  //prints player's orders
 
         std::string getPlayerName();  //returns player's name
 
