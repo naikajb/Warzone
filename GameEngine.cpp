@@ -280,7 +280,7 @@ void GameEngine::startupPhase()
     if (useFile)
     {   
         std::string cmmd = "";
-        CommandProcessor *commandP = new CommandProcessor();
+        CommandProcessor *commandP = new CommandProcessor(observer);
      
             Command *cmd = nullptr;
             Command *fileC = nullptr;
