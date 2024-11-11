@@ -11,10 +11,7 @@
 #include <cmath>
 #include <random>
 #include "LoggingObserver.h"
-#include "Player.h" //added
-#include "Map.h"
-#include "Orders.h"
-#include "Cards.h"
+
 #include "Map.h"
 #include "Player.h"
 #include "Cards.h"
