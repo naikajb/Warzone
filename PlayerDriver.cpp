@@ -89,27 +89,27 @@ void handleChoice(int option, Player* player){
 void createOrder(string order, Player* player){
     if(order == "deploy"){
         Deploy d = Deploy();
-        player->issueOrder(&d);
+        // player->issueOrder(&d);
     }
     else if(order == "advance"){
         Advance a = Advance();
-        player->issueOrder(&a);
+        // player->issueOrder(&a);
     }
     else if(order == "bomb"){
         Bomb b = Bomb();
-        player->issueOrder(&b);
+        // player->issueOrder(&b);
     }
     else if(order == "blockade"){
         Blockade b = Blockade();
-        player->issueOrder(&b);
+        // player->issueOrder(&b);
     }
     else if(order == "airlift"){
         Airlift a = Airlift();
-        player->issueOrder(&a);
+        // player->issueOrder(&a);
     }
     else if(order == "negotiate"){
         Negotiate n = Negotiate();
-        player->issueOrder(&n);
+        // player->issueOrder(&n);
     }
     else{
         cout << "Invalid order." << endl;

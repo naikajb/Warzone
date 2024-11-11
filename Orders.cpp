@@ -74,14 +74,14 @@ void Deploy::executeOrder() {
     
     executed = true; //mark the order as executed
     orderEffect = "Armies have been deployed."; 
-    Notify(this);
+    // Notify(this);
 }
 
 void Deploy::execute(){
 
     if(!this->validateOrder()){
         
-        cout << "Deploy Order is not valid." << endl; // invalid Order message
+        cout << "Deploy Order is not valid for player " << player->getPlayerName() << endl; // invalid Order message
 
         return; }
 
@@ -231,14 +231,15 @@ void Advance::executeOrder() {
 
     executed = true; 
     orderEffect = "Armies have advanced.";
-    Notify(this);
+    // Notify(this);
+
 }
 
 void Advance::execute(){
 
     if(!this->validateOrder()){
         
-        cout << "Advance Order is not valid." << endl; // invalid Order message
+        cout << "Advance Order is not valid for player " << player->getPlayerName() << endl; // invalid Order message
         return;
     }
     cout << "Advance Order is valid -> "<< player->getPlayerName() << " is advancing " << armies << " units from Territory " << source->getName() << " to Territory " << target->getName() << endl;
@@ -316,13 +317,13 @@ void Bomb::executeOrder() {
     
     executed = true;
     orderEffect = "Territory has been bombed.";
-    Notify(this);
+    // Notify(this);
 }
 
 void Bomb::execute(){
 
     if(!this->validateOrder()){
-        cout << "Bomb Order is not valid." << endl; // invalid order message
+        cout << "Bomb Order is not valid for player " << player->getPlayerName() << endl; // invalid order message
         return;
     }
 
@@ -399,13 +400,13 @@ void Blockade::executeOrder() {
     
     executed = true;
     orderEffect = "Territory has been blockaded.";
-    Notify(this);
+    // Notify(this);
 }
 
 void Blockade::execute(){
 
     if(!this->validateOrder()){
-        cout << "Blockade Order is not valid." << endl; // invalid order message
+        cout << "Blockade Order is not valid for player " << player->getPlayerName() << endl; // invalid order message
         return;
     }
     
@@ -461,13 +462,13 @@ void Airlift::executeOrder() {
     
     executed = true;
     orderEffect = "Armies have been airlifted";
-    Notify(this);
+    // Notify(this);
 }
 
 void Airlift::execute(){
 
     if(!this->validateOrder()){
-        cout << "Airlift Order is not valid." << endl; // invalid order message
+        cout << "Airlift Order is not valid for player " << player->getPlayerName() << endl; // invalid order message
         return;
     }
 
@@ -511,13 +512,13 @@ void Negotiate::executeOrder() {
 
     executed = true;
     orderEffect = "Truce has been negotiated.";
-    Notify(this);
+    // Notify(this);
 }
 
 void Negotiate::execute(){
 
     if(!this->validateOrder()){
-        cout << "Negotiate Order is not valid." << endl; // invalid Order message
+        cout << "Negotiate Order is not valid for player " << player->getPlayerName() << endl; // invalid Order message
         return;
     }
 
@@ -545,7 +546,7 @@ OrdersList::~OrdersList() {
 // Add an order to the list
 void OrdersList::addOrder(Order* order) {
     orders.push_back(order);
-    Notify(order);
+    // Notify(order);
 }
 
 // Move an order from one position to another in the list

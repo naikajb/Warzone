@@ -36,8 +36,8 @@ string Card::getCardType() const{
             return "Blockade";
         case AIRLIFT:
             return "Airlift";
-        case DIPLOMACY:
-            return "Diplomacy";
+        case NEGOTIATE:
+            return "Negotiate";
         default:
             return "Invalid card type";
     }
@@ -71,13 +71,13 @@ Deck::Deck() {
         Card* reinforcement = new Card(Card::REINFORCEMENT);
         Card* blockade = new Card(Card::BLOCKADE);
         Card* airlift = new Card(Card::AIRLIFT);
-        Card* diplomacy = new Card(Card::DIPLOMACY);
+        Card* negotiate = new Card(Card::NEGOTIATE);
 
         cardsInDeck.push_back(bomb);
         cardsInDeck.push_back(reinforcement);
         cardsInDeck.push_back(blockade);
         cardsInDeck.push_back(airlift);
-        cardsInDeck.push_back(diplomacy);
+        cardsInDeck.push_back(negotiate);
 
     }
 
@@ -171,6 +171,10 @@ void Hand::displayHand() {
     }
 }
 
+vector <Card *> Hand::getCardsHand(){
+    return cardsInHand;
+}
+
 //Output stream operator
 ostream& operator<<(ostream& out, const Hand& hand) {
     out << "Hand: ";
@@ -182,7 +186,6 @@ ostream& operator<<(ostream& out, const Hand& hand) {
 
 //Hand class constructor
 Hand::Hand() {
-
 }
 //Hand destructor
 Hand::~Hand() {

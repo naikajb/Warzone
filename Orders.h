@@ -196,7 +196,7 @@ private:
     std::vector<Order*> orders;
 };
 
-static vector<pair<Player*,Player*>> negotiatePairs;
+static vector<pair<Player*, Player*> > negotiatePairs;
 
 bool checkNegotiatePairs(Player*,Player*);
 void addNegotiatePairs(Player*,Player*);

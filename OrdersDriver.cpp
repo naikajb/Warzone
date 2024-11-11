@@ -62,9 +62,9 @@ void testOrderExecution(){
     Player* p2 = new Player("Joop");
     Player* p3 = new Player("Tanya");
 
-    p1->AttachObserver(ob);
-    p2->AttachObserver(ob);
-    p3->AttachObserver(ob);
+    // p1->AttachObserver(ob);
+    // p2->AttachObserver(ob);
+    // p3->AttachObserver(ob);
 
     addToPlayerList(p1);
     addToPlayerList(p2);

@@ -12,7 +12,7 @@ class Deck;
 
 class Card {
     public:
-        enum CardType {BOMB, REINFORCEMENT, BLOCKADE, AIRLIFT, DIPLOMACY };
+        enum CardType {BOMB, REINFORCEMENT, BLOCKADE, AIRLIFT, NEGOTIATE };
         
         //Card constructor that takes type 
         Card(CardType type);
@@ -65,6 +65,7 @@ class Hand {
         //Creates an order & returns it to the player's 
         //list of orders and then returns the card to the deck 
         void displayHand();
+        vector <Card*> getCardsHand();// added
         //Arraylist equivalent in C++ that represents the hand of cards
         vector<Card*> cardsInHand; 
 

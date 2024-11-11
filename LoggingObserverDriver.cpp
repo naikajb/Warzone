@@ -45,7 +45,7 @@ void testLoggingObserver(){
         << endl;
     engine->Attach(observer);
     //order->Attach(observer);
-    player->AttachObserver(observer);
+    // player->AttachObserver(observer);
    //TODO: add the observer to the Command and CommandProcessor 
     
     cout << "\nExample of the observer being notified when an order is added to the order list of a player\n----------------------------------------------" 

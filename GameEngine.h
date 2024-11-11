@@ -60,7 +60,7 @@ public:
     void reinforcementPhase(vector <Player*>, Map *map);
     void issueOrdersPhase(vector <Player*>);
     void executeOrdersPhase(vector <Player*>);
-    void mainGameLoop(vector <Player*>);
+    void mainGameLoop(vector <Player*>, Map *map);
 
     // function to get the random numbers
     vector<int> getRandomizedNumbers(int n);
