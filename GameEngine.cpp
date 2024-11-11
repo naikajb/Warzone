@@ -117,12 +117,14 @@ void GameEngine::startupPhase()
 
 	if (inputMode == "1") {
 		commandProcessor = new CommandProcessor();
+        commandProcessor -> Attach(observer);
 		useConsole = true;
 	}
 	else if (inputMode == "2") {
 		std::cout << "\nEnter the file name: ";
 		std::cin >> fileName;
 		commandProcessor = new CommandProcessor();
+        commandProcessor -> Attach(observer);
 		file.open(fileName);
 		useFile = true;
 	}

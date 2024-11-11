@@ -4,7 +4,14 @@
 using namespace std;
 
 // Base class order implementation
-// Default constructor --> initializes an Order with default values
+Order::Order() {
+   Attach(NULL);
+   orderDescription = "undefined";
+    orderEffect = "none";
+    executed = false;
+}
+
+// constructor --> initializes an Order with default values
 Order::Order(Observer* o) : orderDescription("undefined"), orderEffect("none"), executed(false) {
     Attach(o);
 }
@@ -45,12 +52,12 @@ std::string Order::stringToLog() {
 // Deploy Order - derived class Deploy implementation
 
 // Constructor sets the order description specific to deploy
-// Deploy::Deploy() {
-//     orderDescription = "Deploy order - place armies on a territory";
-// }
+Deploy::Deploy() {
+    orderDescription = "Deploy order - place armies on a territory";
+}
 
 Deploy::Deploy(Observer* o, Player* p, int a, Territory* t): Order(o),player(p), armies(a), target(t)
-{orderDescription = "Deploy order - place armies on a territory";} // parameterized constructor
+{orderDescription = "Deploy order ";} // parameterized constructor
 
 Deploy::~Deploy() { // Deploy Destructor
 
@@ -75,8 +82,8 @@ void Deploy::executeOrder() {
     target->setNumArmies(target->getNumArmies()+armies); // sending a number of troops to another Territory
     
     executed = true; //mark the order as executed
-    orderEffect = "Armies have been deployed."; 
-    // Notify(this);
+    orderEffect = to_string(armies) + " units have been deployed to " + target->getName() + " by " + player->getPlayerName(); // set the order effect
+    Notify(this);
 }
 
 void Deploy::execute(){
@@ -98,12 +105,12 @@ void Deploy::execute(){
 // Advance Order - derived class 
 
 // Constructor sets the porder description to advance
-// Advance::Advance() {
-//     orderDescription = "Advance Order - move armies to an adjacent territory";
-// }
+Advance::Advance() {
+    orderDescription = "Advance Order";
+}
 
 Advance::Advance(Observer* o,Player* p, int a, Territory* s, Territory* t): Order(o),player(p), armies(a), source(s), target(t)
-{orderDescription = "Advance Order - move armies to an adjacent territory";} // parameterized constructor
+{orderDescription = "Advance Order ";} // parameterized constructor
 
 Advance::~Advance() { // Advance destructor
 
@@ -232,8 +239,8 @@ void Advance::executeOrder() {
     }
 
     executed = true; 
-    orderEffect = "Armies have advanced.";
-    // Notify(this);
+    orderEffect = to_string(armies) + " units have been advanced from " + source->getName() + " to " + target->getName() + " by " + player->getPlayerName();
+    Notify(this);
 
 }
 
@@ -263,12 +270,12 @@ int Advance::getRandomNum(){ // returns a random number in the range of 1-100
 // Bomb Order - derived class
 
 // Constructor sets the order description specific to bomb order
-// Bomb::Bomb() {
-//     orderDescription = "Bomb Order - bomb a territory to weaken its defense";
-// }
+Bomb::Bomb() {
+    orderDescription = "Bomb Order - bomb a territory to weaken its defense";
+}
 
 Bomb::Bomb(Observer* o,Player* p, Territory* t): Order(o),player(p),target(t) // parameterized constructor for the Bomb class
-{orderDescription = "Bomb Order - bomb a territory to weaken its defense";}
+{orderDescription = "Bomb Order ";}
 
 Bomb::~Bomb() { // Bomb destructor
 
@@ -318,7 +325,7 @@ void Bomb::executeOrder() {
     target->setNumArmies(target->getNumArmies()/2); // killing half the army units on the target territory
     
     executed = true;
-    orderEffect = "Territory has been bombed.";
+    orderEffect = "Territory " + target->getName() + " has been bombed by " + player->getPlayerName();
     // Notify(this);
 }
 
@@ -340,12 +347,12 @@ void Bomb::execute(){
 // Blockade Order - derived class
 
 // Constructor sets the order description specific to blockade order
-// Blockade::Blockade() {
-//     orderDescription = "Blockade Order - blockade a territory to prevent movement";
-// }
+Blockade::Blockade() {
+    orderDescription = "Blockade Order - blockade a territory to prevent movement";
+}
 
 Blockade::Blockade(Observer* o,Player* p,Territory* t): Order(o),player(p),target(t) // paramterized constructor for the Blockade class
-{orderDescription = "Blockade Order - blockade a territory to prevent movement";}
+{orderDescription = "Blockade Order ";}
 
 Blockade::~Blockade() { // Blockade destructor
  
@@ -401,8 +408,8 @@ void Blockade::executeOrder() {
     target->setNumArmies(target->getNumArmies()*2); // doubles the number of units on the target Territory
     
     executed = true;
-    orderEffect = "Territory has been blockaded.";
-    // Notify(this);
+    orderEffect = "Territory " + target->getName()+ "has been blockaded by " + player->getPlayerName();
+    Notify(this);
 }
 
 void Blockade::execute(){
@@ -422,12 +429,12 @@ void Blockade::execute(){
 // Airlift Order - derived class
 
 // Constructor sets the order description specific to airlift
-// Airlift::Airlift() {
-//     orderDescription = "Airlift Order - move armies from one territory to another by air";
-// }
+Airlift::Airlift() {
+    orderDescription = "Airlift Order - move armies from one territory to another by air";
+}
 
 Airlift::Airlift(Observer* o,Player*p, int a, Territory* s, Territory* t): Order(o),player(p),armies(a), source(s), target(t) // parameterized constructor for the Airlift class
-{orderDescription = "Airlift Order - move armies from one territory to another by air";}
+{orderDescription = "Airlift Order ";}
 
 Airlift::~Airlift() { // destructor for the Airlift class
 
@@ -463,8 +470,8 @@ void Airlift::executeOrder() {
     target->setNumArmies(target->getNumArmies()+armies); // 
     
     executed = true;
-    orderEffect = "Armies have been airlifted";
-    // Notify(this);
+    orderEffect = "Armies have been airlifted from " + source->getName() + " to " + target->getName() + " by " + player->getPlayerName();
+    Notify(this);
 }
 
 void Airlift::execute(){
@@ -485,12 +492,12 @@ void Airlift::execute(){
 // Negotiate Order - derived class
 
 // Constructor sets the order description specific to negotiate
-// Negotiate::Negotiate() {
-//     orderDescription = "Negotiate Order - negotiate a truce with another player";
-// }
+Negotiate::Negotiate() {
+    orderDescription = "Negotiate Order - negotiate a truce with another player";
+}
 
 Negotiate::Negotiate(Observer* o,Player* p1, Player* p2):  Order(o),player(p1),targetPlayer(p2) // parameterized constructor for Negotiate class
-{orderDescription = "Negotiate Order - negotiate a truce with another player";}
+{orderDescription = "Negotiate Order ";}
 
 Negotiate::~Negotiate() { // destructor for negotiate class
 
@@ -513,8 +520,8 @@ void Negotiate::executeOrder() {
     addNegotiatePairs(player,targetPlayer); // adds this pair of players to the list
 
     executed = true;
-    orderEffect = "Truce has been negotiated.";
-    // Notify(this);
+    orderEffect = "Truce has been negotiated between " + player->getPlayerName() + " and " + targetPlayer->getPlayerName();
+    Notify(this);
 }
 
 void Negotiate::execute(){
@@ -550,7 +557,7 @@ OrdersList::~OrdersList() {
 // Add an order to the list
 void OrdersList::addOrder(Order* order) {
     orders.push_back(order);
-    // Notify(order);
+    Notify(order);
 }
 
 // Move an order from one position to another in the list

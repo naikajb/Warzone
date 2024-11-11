@@ -21,7 +21,8 @@ class Territory;
 // Base class representing a general order in the game
 class Order: public ILoggable, public Subject{
 public:
-    Order(Observer*); //default constructor
+    Order(); // default constructor
+    Order(Observer*); // constructor
     Order(const Order& original); //copy constructor
     virtual ~Order(); //destructor to ensure proper cleanup in derived classes
 
@@ -59,7 +60,7 @@ private:
     Territory* target;
 
 public:
-    //Deploy(); //constructor
+    Deploy(); //constructor
     Deploy(Observer*,Player*, int, Territory*);
     ~Deploy(); //destrcutor
 
@@ -81,7 +82,7 @@ private:
     Territory* target;
 
 public:
-    //Advance(); //constructor
+    Advance(); //constructor
     Advance(Observer*,Player*,int,Territory*,Territory*);
     ~Advance(); //destructor
 
@@ -103,7 +104,7 @@ private:
     Territory* target;
 
 public:
-    //Bomb(); //constructor
+    Bomb(); //constructor
     Bomb(Observer*,Player*,Territory*);
     ~Bomb(); //destructor
 
@@ -122,7 +123,7 @@ private:
     Territory* target;
 
 public:
-   // Blockade(); //constructor
+   Blockade(); //constructor
     Blockade(Observer*,Player*,Territory*);
     ~Blockade(); //destructor
 
@@ -144,7 +145,7 @@ private:
     Territory* target;
 
 public:
-   // Airlift(); //constructor
+    Airlift(); //constructor
     Airlift(Observer*,Player*,int,Territory*,Territory*);
     ~Airlift(); //destructor
 
@@ -164,7 +165,7 @@ private:
     Player* targetPlayer;
 
 public:
-    //Negotiate(); //constructor
+    Negotiate(); //constructor
     Negotiate(Observer*,Player*,Player*);
     ~Negotiate(); //destructor
 
