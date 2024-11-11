@@ -37,7 +37,7 @@ void testGameStates() { // to accept command-line command, argc is the number of
         return;
     }
 
-    GameEngine engine;
+    GameEngine engine =  GameEngine(new LogObserver());
     std::cout << "\nStarting Game Engine\n\n";
 
     std::string input;
@@ -74,7 +74,8 @@ void testGameStates() { // to accept command-line command, argc is the number of
 };
 
 void testStartupPhase() {
-    GameEngine gm;
+    Observer* o = new LogObserver();
+    GameEngine gm = GameEngine(o);
     gm.startupPhase();
 }
 

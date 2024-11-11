@@ -20,4 +20,9 @@ Command::~Command() {}
 
 void Command::saveEffect(const std::string& effectStr) {
     effect = effectStr;
+    Notify(this);
+}
+
+std::string Command::stringToLog() {
+    return "command " + commandStr + " has been executed. It had the effect: " + effect;
 }

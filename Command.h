@@ -2,8 +2,9 @@
 #define COMMAND_H
 
 #include <iostream>
+#include "LoggingObserver.h"
 
-class Command {
+class Command: public Subject , public ILoggable{
 private:
     std::string commandStr;
     std::string effect;
@@ -15,6 +16,8 @@ public:
     virtual ~Command();
     std::string getCommandStr() const;
     friend std::ostream& operator<<(std::ostream& os, const Command& command); //overloading the << operator
+
+    std::string stringToLog() override;
 };
 
 

@@ -30,6 +30,7 @@ Command* FileCommandProcessorAdapter::getCommand(std::string& commandstr) {
 
 void FileCommandProcessorAdapter::saveCommand(Command* cmd) {
     fileLineReader->saveLine(cmd->getCommandStr());
+    Notify(this);
 }
 
 bool FileCommandProcessorAdapter::validate(Command* cmd, const char* state) {

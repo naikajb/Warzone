@@ -20,12 +20,14 @@ CommandProcessor::~CommandProcessor() {
 //REMEBER TO DELETE POINTER WHEN FUNCTION IS CALLED
 Command* CommandProcessor::readCommand(std::string& commandstr) {
     Command* command = new Command(commandstr);
+    command->Attach(observer);
     return command;
 }
 
 void CommandProcessor::saveCommand(Command* cmd) {
     if (cmd != nullptr) {
         commands.push_back(cmd);
+        Notify(this);
     } else {
         std::cout << "Error: Command is null!" << std::endl;
     }
@@ -70,4 +72,12 @@ bool CommandProcessor::validate(Command* cmd, const char* state) {
     }
     cmd->saveEffect("Invalid command " + commandStr + " for current state " + state);
     return false;
+}
+
+std::string CommandProcessor::stringToLog() {
+    std::string log = "CommandProcessor: ";
+    for (Command* cmd : commands) {
+        log += cmd->stringToLog() + "\n";
+    }
+    return log;
 }
