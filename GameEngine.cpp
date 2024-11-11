@@ -82,7 +82,7 @@ void GameEngine::processFileCommand(std::string& command, CommandProcessor* comm
     std::cout << "\nNo more commands to process.\nCurrent State: " << getCurrentState() << "\n" << std::endl;
     delete cmd;
     exit(0);
-}
+};
 
 
 
