@@ -26,6 +26,7 @@ private: // access identifier
     int numArmiesTemp; // temp value for number of armies for the IssueOrder
     Continent *continent;               // pointer to user-defined class Continent
     vector<Territory *> adjTerritories; // vector of pointers of user-defined type Territory
+    Player* owner;
 
 
 public: // access identifier

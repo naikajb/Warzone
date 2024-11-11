@@ -20,8 +20,8 @@ Territory::~Territory(){
         delete t;
         t = NULL;
     }
-    delete playerOwner;
-    playerOwner = NULL;
+    delete owner;
+    owner = NULL;
 }
 
 // defines the Territory copy constructor with an initilizer list
