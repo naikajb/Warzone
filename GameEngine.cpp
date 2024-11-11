@@ -214,7 +214,7 @@ void GameEngine::issueOrdersPhase(vector<Player *> v)
         }
 
         // calculate the total number of players that are done
-        // of the countDone is equal to the number of players, end the loop (no more orders) !
+        // if the countDone is equal to the number of players, end the loop (no more orders) !
         for (int j : outOfOrder)
         {
             if (outOfOrder[j] == 1)
@@ -263,27 +263,31 @@ void GameEngine::executeOrdersPhase(vector<Player *> v)
     bool moreOrder = true;
     while (moreOrder)
     {
+        // a counter that keeps track of the number of players that are done
         int countDone = 0;
+        // go through the vector of players
         for (int i = 0; i < v.size(); i++)
         {
+            // if it arrives at the end of the orders list for the player, skip this statement
             if (indexOrderList[i] != v[i]->getOrderList()->getOrders().size())
             {
                 v[i]->getOrderList()->getOrders()[indexOrderList[i]]->execute();
-                // cout << *(v[i]->getOrderList()->getOrders()[indexOrderList[i]]) << endl;
                 indexOrderList[i]++;
             }
+            // when all of the previous possible orders are done, change the value to 1 for that player
             else if (outOfOrder[i] != 1)
             {
                 outOfOrder[i] = 1;
             }
         }
-
+        // calculate the total number of players that are done
+        // of the countDone is equal to the number of players, end the loop (no more orders) !
         for (int j = 0; j < outOfOrder.size(); j++)
         {
             if (outOfOrder[j] == 1)
-            countDone++;
+                countDone++;
         }
-
+        // if all players are done, the loop is done !
         if (countDone == v.size())
         {
             cout << "\ndone with all executions !" << endl;
@@ -291,8 +295,33 @@ void GameEngine::executeOrdersPhase(vector<Player *> v)
         }
     }
 }
-void GameEngine::mainGameLoop(vector<Player *> v)
+void GameEngine::mainGameLoop(vector<Player *> v, Map *map)
 {
+    bool noWinner = true;
+    do
+    {
+        reinforcementPhase(v, map);
+        issueOrdersPhase(v);
+        executeOrdersPhase(v);
+
+        for (int i; i < v.size(); i++)
+        {
+            if (v[i]->getTerritories().size() == 0)
+            {
+                v.erase(v.begin() + i);
+            }
+        }
+
+        if (v.size() == 1)
+        {
+            noWinner = false;
+        }
+    } while (noWinner);
+
+    string answer;
+    cout << "Winner ! Player: " << v[0]->getPlayerName() << endl;
+    cout << "\nWould you like to play again ?\n<replay> if you want to replay !\n<quit> if you want to end the game..." << endl;
+    cin >> answer;
 }
 
 int main()
@@ -309,7 +338,7 @@ int main()
     for (Territory *t : ml->getMap()->getTerritories())
     {
         // randomly assign an original value of armies for debugging for each territory
-        t->setNumArmies(t->getName().length());
+        // t->setNumArmies(t->getName().length());
 
         if (t->getContinent()->getName().compare("Central America") == 0 || t->getContinent()->getName().compare("The Highlands") == 0)
         {
@@ -337,24 +366,24 @@ int main()
         cout << "Player owner of " << t->getName() << " is " << t->getPlayer()->getPlayerName() << endl;
     }
 
-    cout << "\nplayer 1 reinforcement pool at the beginning of the game: " << p1->getReinforcementPool() << endl;
-    cout << "\nplayer 2 reinforcement pool at the beginning of the game: " << p2->getReinforcementPool() << "\n"
-         << endl;
+    // cout << "\nplayer 1 reinforcement pool at the beginning of the game: " << p1->getReinforcementPool() << endl;
+    // cout << "\nplayer 2 reinforcement pool at the beginning of the game: " << p2->getReinforcementPool() << "\n"
+    //      << endl;
 
     GameEngine g;
-    g.reinforcementPhase(pList, ml->getMap());
+    // g.reinforcementPhase(pList, ml->getMap());
 
-    cout << "\nplayer 1 reinforcement pool after acquired territories: " << p1->getReinforcementPool() << endl;
-    cout << "\nplayer 2 reinforcement pool after acquired territories: " << p2->getReinforcementPool() << "\n"
-         << endl;
+    // cout << "\nplayer 1 reinforcement pool after acquired territories: " << p1->getReinforcementPool() << endl;
+    // cout << "\nplayer 2 reinforcement pool after acquired territories: " << p2->getReinforcementPool() << "\n"
+    //      << endl;
 
-    // p1->toDefend();
-    // p2->toDefend();
-    // p1->toAttack();
-    // p2->toAttack();
+    // // p1->toDefend();
+    // // p2->toDefend();
+    // // p1->toAttack();
+    // // p2->toAttack();
 
-    p1->setReinforcementPool(50);
-    p2->setReinforcementPool(50);
+    // p1->setReinforcementPool(50);
+    // p2->setReinforcementPool(50);
 
     Card *bomb = new Card(Card::BOMB);
     Card *blockade = new Card(Card::BLOCKADE);
@@ -370,9 +399,8 @@ int main()
     p2->addCard(airlift);
     p1->addCard(airlift);
 
-    g.issueOrdersPhase(pList);
-
-    g.executeOrdersPhase(pList);
-
+    // g.issueOrdersPhase(pList);
+    // g.executeOrdersPhase(pList);
+    g.mainGameLoop(pList, ml->getMap());
     return 0;
 }

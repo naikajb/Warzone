@@ -47,7 +47,7 @@ public:
     void reinforcementPhase(vector <Player*>, Map *map);
     void issueOrdersPhase(vector <Player*>);
     void executeOrdersPhase(vector <Player*>);
-    void mainGameLoop(vector <Player*>);
+    void mainGameLoop(vector <Player*>, Map *map);
 
 private:
     const char* currentState;

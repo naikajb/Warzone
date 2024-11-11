@@ -80,7 +80,7 @@ void Deploy::execute(){
 
     if(!this->validateOrder()){
         
-        cout << "Deploy Order is not valid." << endl;
+        cout << "Deploy Order is not valid for player " << player->getPlayerName() << endl;
 
         return; }
 
@@ -217,7 +217,7 @@ void Advance::execute(){
 
     if(!this->validateOrder()){
         
-        cout << "Advance Order is not valid." << endl;
+        cout << "Advance Order is not valid for player " << player->getPlayerName() << endl;
         return;
     }
     cout << "Advance Order is valid -> "<< player->getPlayerName() << " is advancing " << armies << " units from Territory " << source->getName() << " to Territory " << target->getName() << endl;
@@ -301,7 +301,7 @@ void Bomb::executeOrder() {
 void Bomb::execute(){
 
     if(!this->validateOrder()){
-        cout << "Bomb Order is not valid." << endl;
+        cout << "Bomb Order is not valid for player " << player->getPlayerName() << endl;
         return;
     }
 
@@ -384,7 +384,7 @@ void Blockade::executeOrder() {
 void Blockade::execute(){
 
     if(!this->validateOrder()){
-        cout << "Blockade Order is not valid." << endl;
+        cout << "Blockade Order is not valid for player " << player->getPlayerName() << endl;
         return;
     }
     
@@ -446,7 +446,7 @@ void Airlift::executeOrder() {
 void Airlift::execute(){
 
     if(!this->validateOrder()){
-        cout << "Airlift Order is not valid." << endl;
+        cout << "Airlift Order is not valid for player " << player->getPlayerName() << endl;
         return;
     }
 
@@ -496,7 +496,7 @@ void Negotiate::executeOrder() {
 void Negotiate::execute(){
 
     if(!this->validateOrder()){
-        cout << "Negotiate Order is not valid." << endl;
+        cout << "Negotiate Order is not valid for player " << player->getPlayerName() << endl;
         return;
     }
 
