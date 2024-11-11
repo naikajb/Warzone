@@ -21,14 +21,14 @@ CommandProcessor::~CommandProcessor() {
 //REMEBER TO DELETE POINTER WHEN FUNCTION IS CALLED
 Command* CommandProcessor::readCommand(std::string& commandstr) {
     Command* command = new Command(commandstr);
-    command->Attach(observer);
+    //command->Attach(observer);
     return command;
 }
 
 void CommandProcessor::saveCommand(Command* cmd) {
     if (cmd != nullptr) {
         commands.push_back(cmd);
-        Notify(this);
+       // Notify(this);
     } else {
         std::cout << "Error: Command is null!" << std::endl;
     }

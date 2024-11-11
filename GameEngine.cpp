@@ -124,7 +124,7 @@ void GameEngine::startupPhase()
 		std::cout << "\nEnter the file name: ";
 		std::cin >> fileName;
 		commandProcessor = new FileCommandProcessorAdapter(fileLineReader);
-        commandProcessor -> Attach(observer);
+        //commandProcessor -> Attach(observer);
 		file.open(fileName);
 		useFile = true;
 	}
