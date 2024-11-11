@@ -10,7 +10,7 @@
 #include "Player.h"
 using namespace std;
 
-Player::Player(string playerName)
+Player::Player(Observer* o, string playerName)
 {
     this->playerName = playerName;
     orders = new OrdersList();
@@ -22,6 +22,7 @@ Player::Player(string playerName)
     territories = vector<Territory*>();
     // this is so that the values of the reinforcement pool can be manipulated/modfied without the actual execution of it (issue order phase)
     reinforcementTemp = 50;
+    observer = o;
 }
 
 Player ::Player(const Player &orig)

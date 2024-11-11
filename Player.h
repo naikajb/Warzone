@@ -23,9 +23,10 @@ class Player{
         bool canDrawCard;
         int reinforcementPool; // nb of armies recieved added
         int reinforcementTemp;
+        Observer* observer;
 
     public: 
-        Player(string playerName); //constructor function
+        Player(Observer*,string playerName); //constructor function
         Player(const Player& orig);
         ~Player(); // TODO: implement destructor function 
     
