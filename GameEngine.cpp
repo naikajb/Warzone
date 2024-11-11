@@ -231,17 +231,17 @@ void GameEngine::issueOrdersPhase(vector<Player *> v)
     }
     // checks all the orders of the players:
 
-    for (int i = 0; i < v[0]->getOrderList()->getOrders().size(); i++)
-    {
-        cout << v[0]->getPlayerName() << endl;
-        cout << *(v[0]->getOrderList()->getOrders()[i]) << endl;
-    }
+    // for (int i = 0; i < v[0]->getOrderList()->getOrders().size(); i++)
+    // {
+    //     cout << v[0]->getPlayerName() << endl;
+    //     cout << *(v[0]->getOrderList()->getOrders()[i]) << endl;
+    // }
 
-    for (int i = 0; i < v[1]->getOrderList()->getOrders().size(); i++)
-    {
-        cout << v[1]->getPlayerName() << endl;
-        cout << *(v[1]->getOrderList()->getOrders()[i]) << endl;
-    }
+    // for (int i = 0; i < v[1]->getOrderList()->getOrders().size(); i++)
+    // {
+    //     cout << v[1]->getPlayerName() << endl;
+    //     cout << *(v[1]->getOrderList()->getOrders()[i]) << endl;
+    // }
 }
 
 void GameEngine::executeOrdersPhase(vector<Player *> v)
@@ -319,8 +319,12 @@ int main()
 
     p1->addCard(bomb);
     p1->addCard(blockade);
+    p1->addCard(airlift);
     p2->addCard(airlift);
     p2->addCard(negotiate);
+    p2->addCard(airlift);
+    p2->addCard(airlift);
+    p1->addCard(airlift);
 
     g.issueOrdersPhase(pList);
 

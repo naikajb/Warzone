@@ -81,7 +81,8 @@ Hand *Player::getHand()
     return hand;
 }
 
-OrdersList* Player::getOrderList(){
+OrdersList *Player::getOrderList()
+{
     return orders;
 }
 
@@ -277,29 +278,88 @@ void Player::issueOrder(Order *order)
     // if the order is of type airlift
     if (Airlift *a = dynamic_cast<Airlift *>(order))
     {
-        // the maximum represents a randomly selected territory to attack, take the player that owns that territory
-        // and take the size of the vector of all of its owned territories
-        int min1 = 0;
-        int max1 = selectedTerritoryToAttack->getPlayer()->getTerritories().size();
-        std::uniform_int_distribution<> distRandomTerritory(min1, max1);
-        int randomTerritory = distRandomTerritory(gen); // from the vector of all of its owned territories, take a random one
+        // decide randomly if the player wants to attack or defend
+        int defend = 0;
+        int attack = 1;
+        std::uniform_int_distribution<> distAttackOrDefend(defend, attack);
+        int answer = distAttackOrDefend(gen);
 
-        // territory to airlift to, chosen from the randomly selected territory to attack, take the player
-        // that owns it, choose a randomly selected territory that they own to airlift
-        Territory* airlift = selectedTerritoryToAttack->getPlayer()->getTerritories()[randomTerritory];
+        // if the player chooses to attack
+        if (answer == 1)
+        {
+            cout << answer << " attack" << endl;
 
-        // take a random amount of armies from the randomly selected territory from toDefend and attack
-        int min2 = 0;
-        int max2 = selectedTerritoryToDefend->getNumArmiesTemp() - 1;
-        std::uniform_int_distribution<> distAirliftArmies(min2, max2);
-        int numArmiesAirlift = distAirliftArmies(gen);
+            // the maximum represents a randomly selected territory to attack, take the player that owns that territory
+            // and take the size of the vector of all of its owned territories
+            // (this allows a random selection of a territory in the map)
+            int min1 = 0;
+            int max1 = selectedTerritoryToAttack->getPlayer()->getTerritories().size() - 1;
+            std::uniform_int_distribution<> distRandomTerritory(min1, max1);
+            int randomTerritory = distRandomTerritory(gen); // from the vector of all of its owned territories, take a random one
 
-        // airlift
-        Airlift *air = new Airlift(this, numArmiesAirlift, selectedTerritoryToAttack, airlift);
-        cout << this->getPlayerName() << " airlifts number of armies: " << numArmiesAirlift << " to: " << selectedTerritoryToAttack->getName() << endl;
-        // add order to orderlist
-        orders->addOrder(air);
-        return;
+            // territory to airlift to 
+            // chosen from the randomly selected territory to attack, take the player that owns
+            // then, choose a randomly selected territory that they own to airlift
+            Territory *airlift = selectedTerritoryToAttack->getPlayer()->getTerritories()[randomTerritory];
+
+            // take a random amount of armies from the randomly selected territory from toDefend and airlift
+            int min2 = 0;
+            int max2 = selectedTerritoryToDefend->getNumArmiesTemp();
+            std::uniform_int_distribution<> distAirliftArmies(min2, max2);
+            int numArmiesAirlift = distAirliftArmies(gen);
+
+            // airlift
+            Airlift *air = new Airlift(this, numArmiesAirlift, selectedTerritoryToDefend, airlift);
+            cout << this->getPlayerName() << " airlifts number of armies: " << numArmiesAirlift << " from: " << selectedTerritoryToDefend->getName() << " to: " << airlift->getName() << endl;
+            // add order to orderlist
+            orders->addOrder(air);
+            return;
+        }
+        // if the player chooses to defend
+        else
+        {
+            cout << answer << " defend" << endl;
+
+            // a while loop to ensure that the randomly generated territory from toDefend() is not the same as 
+            // the randomly generated territory to airlift to
+            while (true)
+            {
+                // the maximum represents a randomly selected territory to defend based on the player's territories to defend
+                int min1 = 0;
+                int max1 = toDefend().size() - 1;
+                std::uniform_int_distribution<> distRandomTerritory(min1, max1);
+                int randomTerritory = distRandomTerritory(gen); // from the vector of all of its owned territories, take a random one
+
+                // territory to airlift to,
+                // take a random territory from the toDefend() vector
+                Territory *airlift = toDefend()[randomTerritory];
+
+                // if the randomly generated territory from toDefend() is not the same as the randomly generated territory to airlift to,
+                // continue the code
+                if (selectedTerritoryToDefend->getName().compare(airlift->getName()) != 0)
+                {
+                    // take a random amount of armies from the randomly selected territory from toDefend and airlift
+                    int min2 = 0;
+                    int max2 = selectedTerritoryToDefend->getNumArmiesTemp();
+                    std::uniform_int_distribution<> distAirliftArmies(min2, max2);
+                    int numArmiesAirlift = distAirliftArmies(gen);
+
+                    // airlift
+                    Airlift *air = new Airlift(this, numArmiesAirlift, selectedTerritoryToDefend, airlift);
+                    cout << this->getPlayerName() << " airlifts number of armies: " << numArmiesAirlift << " from: " << selectedTerritoryToDefend->getName() << " to: " << airlift->getName() << endl;
+                    // add order to orderlist
+                    orders->addOrder(air);
+                    return;
+                }
+                // if the randomly generated territory from toDefend() is the same as the randomly generated territory to airlift to,
+                //  continue the while loop and restart the randomizer for the airlift
+                else
+                {
+                    cout << selectedTerritoryToDefend->getName() <<  " is the same " << airlift->getName() << endl;
+                    continue;
+                }
+            }
+        }
     }
 }
 
