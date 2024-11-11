@@ -18,13 +18,13 @@ Command* FileCommandProcessorAdapter::readCommand(std::string& command) {
 }
 
 Command* FileCommandProcessorAdapter::getCommand(std::string& commandstr) {
-    std::cout << "Getting command from file..." << std::endl;
+    // std::cout << "Getting command from file..." << std::endl;
     std::string line = fileLineReader->getLine();
     if (line.empty()) {
         return nullptr;  // No more commands to read
     }
     Command* command = new Command(line);
-    std::cout << "Command: " << command->getCommandStr() << std::endl;
+    std::cout << "Command from file: " << command->getCommandStr() << std::endl;
     return command;
 }
 

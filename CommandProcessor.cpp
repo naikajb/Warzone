@@ -46,17 +46,10 @@ void CommandProcessor::createMap() {
     commandStateMap.insert(std::make_pair("gamestart", "playersAdded"));
     commandStateMap.insert(std::make_pair("replay", "win"));
     commandStateMap.insert(std::make_pair("quit", "win"));
-    // commandStateMap.insert(pair<Command*, std::string>(new Command("assigncountries"), "playersAdded"));
-    // commandStateMap.insert(pair<Command*, std::string>(new Command("issueorder"), "assignReinforcement"));
-    // commandStateMap.insert(pair<Command*, std::string>(new Command("execorder"), "issueOrders"));
-    // commandStateMap.insert(pair<Command*, std::string>(new Command("endexecorders"), "executeOrders"));
-    // commandStateMap.insert(pair<Command*, std::string>(new Command("win"), "executeOrders"));
-    // commandStateMap.insert(pair<Command*, std::string>(new Command("play"), "win"));
-    // commandStateMap.insert(pair<Command*, std::string>(new Command("end"), "win"));
 }
 
 bool CommandProcessor::validate(Command* cmd, const char* state) {
-    std::cout << "Validating command: " << *cmd << " against state: " << state << std::endl;
+    // std::cout << "Validating command: " << *cmd << " against state: " << state << std::endl;
     
     std::string commandStr = cmd->getCommandStr();
     auto range = commandStateMap.equal_range(commandStr);

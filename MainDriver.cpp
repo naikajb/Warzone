@@ -9,7 +9,7 @@
 // #include "GameEngine.h"
 // #include "PlayerDriver.h"
 // #include "CardDriver.h"
-// #include <cstring>
+#include <cstring>
 
 int main(int argc, char **argv){
 //if there is more than one argument passed to the program print error message
