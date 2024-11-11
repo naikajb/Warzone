@@ -1,7 +1,8 @@
 #include "FileCommandProcessorAdapter.h"
 
 
-FileCommandProcessorAdapter::FileCommandProcessorAdapter(FileLineReader* fileLine) : fileLineReader(fileLine) {
+FileCommandProcessorAdapter::FileCommandProcessorAdapter(Observer* o,FileLineReader* fileLine) : fileLineReader(fileLine), CommandProcessor(o) {
+    
 }
 
 

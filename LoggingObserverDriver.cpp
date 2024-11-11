@@ -28,7 +28,7 @@ using namespace std;
 
 void testLoggingObserver(){
    LogObserver* observer = new LogObserver();
-    GameEngine* engine = new GameEngine(observer);
+   
     Continent* c = new Continent("America", 10);
     Territory* t = new Territory("Canada", c);
     Territory* t2 = new Territory("United States", c);
@@ -52,7 +52,7 @@ void testLoggingObserver(){
         << "\n\texecuting order2->execute();"
         << endl;
     order->executeOrder();
-    order2->executeOrder();
+    //order2->executeOrder();
     order3->executeOrder();
 
     
@@ -62,13 +62,14 @@ void testLoggingObserver(){
             << "\n\tengine->stateTransition(loadCommmand);"
             << "\n\tCommand* validateCommand = new Command(\"validatemap\");"
             << "\n\tengine->stateTransition(validateCommand);"
-            << "\n\tCommand* addPlayerCommand = new Command(\"addplayer Trump\");"
+            << "\n\tCommand* addPlayerCommand = new Command(\"addplayer Tina\");"
             << "\n\tengine->stateTransition(addPlayerCommand);"
-            << "\n\tCommand* addPlayerCommand2 = new Command(\"addplayer Harris\");"
+            << "\n\tCommand* addPlayerCommand2 = new Command(\"addplayer Bob\");"
             << "\n\tengine->stateTransition(addPlayerCommand2);"
             << "\n\tCommand* gameStartCommand = new Command(\"gamestart\");"
             << "\n\tengine->stateTransition(gameStartCommand);" << endl;
     
+    GameEngine* engine = new GameEngine(observer);
     Command* loadCommmand = new Command("loadmap MapTextFiles/UK.map");
     loadCommmand->Attach(observer);
     engine->stateTransition(loadCommmand);
@@ -78,12 +79,15 @@ void testLoggingObserver(){
     validateCommand->Attach(observer);
     engine->stateTransition(validateCommand); 
     
+    std::string argument;
+    cout << "Enter a command: ";
+    cin >> argument;
     
-    Command* addPlayerCommand = new Command("addplayer Trump");
+    Command* addPlayerCommand = new Command(argument);
     addPlayerCommand->Attach(observer);
     engine->stateTransition(addPlayerCommand);
 
-    Command* addPlayerCommand2 = new Command("addplayer Harris");
+    Command* addPlayerCommand2 = new Command("addplayer Bob");
     addPlayerCommand2->Attach(observer);
     engine->stateTransition(addPlayerCommand2);
    
@@ -91,18 +95,8 @@ void testLoggingObserver(){
     gameStartCommand->Attach(observer);
     engine->stateTransition(gameStartCommand);
    
-    
-    //Example of observer notified when command is saved
-    cout << "\nExample of the observer being notified when a command is saved\n----------------------------------------------" 
-        << "\n\tCommand* command = new Command(\"loadmap MapTextFiles/UK.map\");"
-        << "\n\tcommand->saveEffect(\"mapLoadedState\");"
-        << endl;
-    
-    
-    //Example of observer notified when command is save (saveEffect())
-    Command* command = new Command("loadmap MapTextFiles/UK.map");
-    command->Attach(observer);
-    command->saveEffect("The map has been loaded");
+
+
 
     //Example of observer notified when commandProcessor saves a command
     //TODO: COMMAND PROCESSOR
