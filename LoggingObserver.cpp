@@ -32,10 +32,10 @@ void LogObserver::update(ILoggable* loggableObject){
 }
 
 //SUBJECT CLASS
-Subject::~Subject(){
-    Detach(observer);
-    observer = NULL;
-}
+// Subject::~Subject(){
+//     Detach(observer);
+//     observer = NULL;
+// }
 void Subject::Attach(Observer* observer){
     this->observer = observer;
 }
