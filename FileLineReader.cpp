@@ -23,7 +23,9 @@ std::string FileLineReader::readLine() {
 }
 
 std::string FileLineReader::getLine() {
+    std::cout << "Getting line from file..." << std::endl;
     if (fileStream.is_open() && getline(fileStream, str)) {
+        std::cout << "Line: " << str << std::endl;
         saveLine(str);
         return str;
     }

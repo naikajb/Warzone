@@ -107,7 +107,7 @@ void GameEngine::startupPhase()
 			  << "\nEnter 1 or 2:\n"
 			  << "> ";
 	std::cin >> inputMode;
-	CommandProcessor *commandProcessor = nullptr;
+	//CommandProcessor *commandProcessor = nullptr;
 	FileLineReader *fileLineReader = nullptr;
 	Map *mapP = nullptr;
 	int nbPlayers = 0;
@@ -123,7 +123,7 @@ void GameEngine::startupPhase()
 	else if (inputMode == "2") {
 		std::cout << "\nEnter the file name: ";
 		std::cin >> fileName;
-		commandProcessor = new CommandProcessor();
+		commandProcessor = new FileCommandProcessorAdapter(fileLineReader);
         commandProcessor -> Attach(observer);
 		file.open(fileName);
 		useFile = true;
@@ -248,7 +248,7 @@ void GameEngine::startupPhase()
 			std::string command, argument;
 			iss >> command;
 			std::getline(iss >> std::ws, argument);
-			bool isRightCommand = engine.processConsoleCommand(command, commandProcessor);
+			bool isRightCommand = engine.processFileCommand(command, commandProcessor);
 			if (isRightCommand)
 			{
 				if (command == "loadmap")

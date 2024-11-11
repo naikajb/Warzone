@@ -14,6 +14,7 @@ CommandProcessor::~CommandProcessor() {
         cmd = NULL;
     }
     commands.clear();
+    Detach(observer);
 
 }
 
