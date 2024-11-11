@@ -27,7 +27,7 @@ void testStartupPhase();
 class GameEngine : public Subject, public ILoggable  {
 public:
     // declaring constructor
-    GameEngine();
+    GameEngine(Observer*);
 
     // function to handle the startup phase
     void startupPhase();
@@ -44,7 +44,7 @@ public:
     // process console commands
     bool processConsoleCommand(std::string& command, CommandProcessor* commandProcessor);
 
-    std::string stringToLog();
+    std::string stringToLog() override;
 
     // function that handles changing states
     void stateTransition(Command* cmd);
@@ -68,6 +68,7 @@ public:
 private:
     const char* currentState;
     CommandProcessor* commandProcessor;
+    Observer* observer;
 };
 
 #endif

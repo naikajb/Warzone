@@ -12,9 +12,9 @@ const char *GameEngine::GameStateStrings[] = {
     "win"};
 
 // defining the GameEngine constructor, creating the state transition map which maps commands to the states they transition to
-GameEngine::GameEngine() : currentState(GameStateStrings[0])
+GameEngine::GameEngine(Observer* o) : currentState(GameStateStrings[0])
 {
-
+    Attach(o);
     stateTransitionMap.insert(pair<std::string, const char *>("loadmap", GameStateStrings[1]));
     stateTransitionMap.insert(pair<std::string, const char *>("validatemap", GameStateStrings[2]));
     stateTransitionMap.insert(pair<std::string, const char *>("addplayer", GameStateStrings[3]));
@@ -132,7 +132,7 @@ void GameEngine::startupPhase()
 		return;
 	}
 
-	GameEngine engine;
+	GameEngine engine = GameEngine(observer);
 	std::cout << "\nStarting Game Engine\n\n";
 
 	std::string input;
@@ -177,7 +177,7 @@ void GameEngine::startupPhase()
 				{
 					if (argument != "")
 					{
-						players.push_back(Player(argument)); // Add player with the specified name
+						players.push_back(Player(observer,argument)); // Add player with the specified name
 						nbPlayers++;
 						std::cout << "Player " << argument << " added successfully!" << std::endl;
 					}
@@ -272,7 +272,7 @@ void GameEngine::startupPhase()
 				{
 					if (argument != "")
 					{
-						players.push_back(Player(argument)); // Add player with the specified name
+						players.push_back(Player(observer,argument)); // Add player with the specified name
 						nbPlayers++;
 						std::cout << "Player " << argument << " added successfully!" << std::endl;
 					}
