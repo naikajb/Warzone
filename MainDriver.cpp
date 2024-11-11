@@ -48,19 +48,19 @@ int main(int argc, char **argv){
                     break;
                 case 2:
                     // test the player component
-                    std::cout << "\nTesting Part 2 - Game Play Implementation :\n"
+                    std::cout << "\nTesting Part 2 - Game Play Implementation :\n--------------------------------------\n"
                               << std::endl;
                     
                     break;
                 case 3:
                     // test the orders list component
-                    std::cout << "\nTesting Part 3 - Order Execution Implemetation :\n"
+                    std::cout << "\nTesting Part 3 - Order Execution Implemetation :\n--------------------------------------\n"
                               << std::endl;
                     testOrderExecution();
                     break;
                 case 4:
                     // test the game log observer 
-                    std::cout << "\nTesting Part 4 - Game Log Observer\n"
+                    std::cout << "\nTesting Part 4 - Game Log Observer\n--------------------------------------\n"
                               << std::endl;
                     testLoggingObserver();
                     break;

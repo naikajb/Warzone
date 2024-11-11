@@ -21,14 +21,18 @@ LogObserver::LogObserver(){
     logFileName = "gamelog.txt";
     logFile = std::ofstream(logFileName, std::ios::out);
     logFile << "Game Log\n---------------------------------------------" << std::endl;
-    logFile.close();
+    
 }
 
 // LogObserver update method to write to the log file
 void LogObserver::update(ILoggable* loggableObject){
-    logFile.open(logFileName, std::ios::app);
+    if(!logFile.is_open()){
+        logFile.open(logFileName, std::ios::app);
+    }
+        
     logFile << loggableObject->stringToLog() << std::endl;
-    logFile.close();
+    
+    
 }
 
 //SUBJECT CLASS
@@ -41,10 +45,18 @@ void Subject::Attach(Observer* observer){
 }
 
 void Subject::Detach(Observer* observer){
-    observer = NULL;
+    if (observer != NULL){
+        observer = NULL;
+    }
+    
 }
 
 void Subject::Notify(ILoggable* loggableObject){
-    observer->update(loggableObject);
+    if (observer != NULL){
+        observer->update(loggableObject);
+    }
+    // else{
+    //     std::cout << "No observer attached" << std::endl;
+    // }
 }
 

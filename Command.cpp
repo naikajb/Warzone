@@ -9,6 +9,7 @@ Command::Command(const Command& command) : commandStr(command.commandStr), effec
 }
 
 std::string Command::getCommandStr() const {
+    //std::cout << "Command observer " << (observer) << std::endl;
     return commandStr;
 }
 std::ostream& operator<<(std::ostream& os, const Command& command) {
@@ -20,4 +21,9 @@ Command::~Command() {}
 
 void Command::saveEffect(const std::string& effectStr) {
     effect = effectStr;
+    Notify(this);
+}
+
+std::string Command::stringToLog() {
+    return "command " + commandStr + " has been executed. It had the effect: " + effect;
 }

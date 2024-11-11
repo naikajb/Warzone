@@ -5,6 +5,7 @@
 // free function, it controls the command loop that interacts with the GameEngine through the CommandParser
 void testGameStates() { // to accept command-line command, argc is the number of arguments, argv is the array of arguments
 
+    Observer* obs = new LogObserver();
     std::string inputMode;
     bool useConsole = false;
     std::cout << "Welcome to the Game Engine!\n\n" << "Choose a mode to input commands: \n" << "1. Console\n" << "2. File\n" << "\nEnter 1 or 2:\n" << "> ";
@@ -15,7 +16,8 @@ void testGameStates() { // to accept command-line command, argc is the number of
     FileLineReader* fileLineReader = nullptr;
 
     if (inputMode == "1") {
-        commandProcessor = new CommandProcessor();
+        commandProcessor = new CommandProcessor(obs);
+        //commandProcessor->Attach(obs);
         useConsole = true;
     } 
     else if (inputMode == "2") {
@@ -25,7 +27,8 @@ void testGameStates() { // to accept command-line command, argc is the number of
             std::cin >> fileName;
             try {
                 fileLineReader = new FileLineReader(fileName);
-                commandProcessor = new FileCommandProcessorAdapter(fileLineReader);
+                commandProcessor = new FileCommandProcessorAdapter(obs,fileLineReader);
+                //commandProcessor->Attach(obs);
                 break;
             } catch (std::invalid_argument& e) {
                 std::cerr << e.what() << std::endl;
@@ -37,7 +40,7 @@ void testGameStates() { // to accept command-line command, argc is the number of
         return;
     }
 
-    GameEngine engine;
+    GameEngine engine =  GameEngine(obs);
     std::cout << "\nStarting Game Engine\n\n";
 
     std::string input;
@@ -74,7 +77,8 @@ void testGameStates() { // to accept command-line command, argc is the number of
 };
 
 void testStartupPhase() {
-    GameEngine gm;
+    Observer* o = new LogObserver();
+    GameEngine gm = GameEngine(o);
     gm.startupPhase();
 }
 

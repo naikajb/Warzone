@@ -10,10 +10,10 @@
 #include "Player.h"
 using namespace std;
 
-Player::Player(string playerName)
+Player::Player(Observer* o, string playerName)
 {
     this->playerName = playerName;
-    orders = new OrdersList();
+    orders = new OrdersList(o);
     canDrawCard = true;
     reinforcementPool = 50;
 
@@ -22,6 +22,7 @@ Player::Player(string playerName)
     territories = vector<Territory*>();
     // this is so that the values of the reinforcement pool can be manipulated/modfied without the actual execution of it (issue order phase)
     reinforcementTemp = 50;
+    observer = o;
 }
 
 Player ::Player(const Player &orig)
@@ -149,7 +150,7 @@ void Player::issueOrder(Order *order)
         int randomNumArmiesDeploy = distRandArmiesDeploy(gen);
 
         // deploy random number of army units to a random territory to defend
-        Deploy *dep = new Deploy(this, randomNumArmiesDeploy, selectedTerritoryToDefend);
+        Deploy *dep = new Deploy(observer,this, randomNumArmiesDeploy, selectedTerritoryToDefend);
 
         reinforcementTemp -= randomNumArmiesDeploy;
 
@@ -191,7 +192,7 @@ void Player::issueOrder(Order *order)
                         int numArmiesAttack = distAttackAdvance(gen);
 
                         // advance
-                        Advance *adv = new Advance(this, numArmiesAttack, t, selectedTerritoryToDefend);
+                        Advance *adv = new Advance(observer,this, numArmiesAttack, t, selectedTerritoryToDefend);
                         // add order to orderlist
                         orders->addOrder(adv);
                         // cout << "the territory to attack is : " << selectedTerritoryToAttack->getName() << "\nand the territory chosen from the player to attack with is: " << t->getName() << "\nthe number of armies to attack with is: " << numArmiesAttack << "\nthe number of armies it originally had was: " << t->getNumArmiesTemp() << endl;
@@ -228,7 +229,7 @@ void Player::issueOrder(Order *order)
                         int numArmiesDefend = distDefendAdvance(gen);
 
                         // advance
-                        Advance *adv = new Advance(this, numArmiesDefend, t, selectedTerritoryToDefend);
+                        Advance *adv = new Advance(observer,this, numArmiesDefend, t, selectedTerritoryToDefend);
                         // add order to orderlist
                         orders->addOrder(adv);
                         // cout << "the territory to defend is : " << selectedTerritoryToDefend->getName() << "\nand the territory chosen from the player to defend with is: " << t->getName() << "\nthe number of armies to defend with is: " << numArmiesDefend << "\nthe number of armies it originally had was: " << t->getNumArmiesTemp() << endl;
@@ -247,7 +248,7 @@ void Player::issueOrder(Order *order)
     {
         // bomb random selected territory to attack
         cout << this->getPlayerName() << " bomb ! territory: " << selectedTerritoryToAttack->getName() << endl;
-        Bomb *bomb = new Bomb(this, selectedTerritoryToAttack);
+        Bomb *bomb = new Bomb(observer,this, selectedTerritoryToAttack);
         orders->addOrder(bomb);
         return;
     }
@@ -257,7 +258,7 @@ void Player::issueOrder(Order *order)
     {
         // from a random selected territory to attack, negotiate with the player that owns it
         cout << this->getPlayerName() << " negotiate ! with " << selectedTerritoryToAttack->getPlayer()->getPlayerName() << endl;
-        Negotiate *negotiate = new Negotiate(this, selectedTerritoryToAttack->getPlayer());
+        Negotiate *negotiate = new Negotiate(observer,this, selectedTerritoryToAttack->getPlayer());
         orders->addOrder(negotiate);
         return;
     }
@@ -267,7 +268,7 @@ void Player::issueOrder(Order *order)
     {
         // blockade random selected territory to attack
         cout << this->getPlayerName() << " blockade ! territory: " << selectedTerritoryToAttack->getName() << endl;
-        Blockade *block = new Blockade(this, selectedTerritoryToAttack);
+        Blockade *block = new Blockade(observer,this, selectedTerritoryToAttack);
         orders->addOrder(block);
         return;
     }
@@ -306,7 +307,7 @@ void Player::issueOrder(Order *order)
             int numArmiesAirlift = distAirliftArmies(gen);
 
             // airlift
-            Airlift *air = new Airlift(this, numArmiesAirlift, selectedTerritoryToDefend, airlift);
+            Airlift *air = new Airlift(observer,this, numArmiesAirlift, selectedTerritoryToDefend, airlift);
             cout << this->getPlayerName() << " airlifts number of armies: " << numArmiesAirlift << " from: " << selectedTerritoryToDefend->getName() << " to: " << airlift->getName() << endl;
             // add order to orderlist
             orders->addOrder(air);
@@ -342,7 +343,7 @@ void Player::issueOrder(Order *order)
                     int numArmiesAirlift = distAirliftArmies(gen);
 
                     // airlift
-                    Airlift *air = new Airlift(this, numArmiesAirlift, selectedTerritoryToDefend, airlift);
+                    Airlift *air = new Airlift(observer,this, numArmiesAirlift, selectedTerritoryToDefend, airlift);
                     cout << this->getPlayerName() << " airlifts number of armies: " << numArmiesAirlift << " from: " << selectedTerritoryToDefend->getName() << " to: " << airlift->getName() << endl;
                     // add order to orderlist
                     orders->addOrder(air);

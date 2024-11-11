@@ -9,13 +9,15 @@
 #include <map>
 using namespace std;
 
-class CommandProcessor {
+class CommandProcessor: public Subject, public ILoggable {
     public:
-        CommandProcessor();
+        CommandProcessor(Observer* o);
         CommandProcessor(const CommandProcessor& commandProcessor);
         virtual ~CommandProcessor();
         virtual Command* getCommand(std::string& commandstr);
         virtual bool validate(Command* cmd, const char* state);
+
+        std::string stringToLog() override;
     private:
         virtual Command* readCommand(std::string& commandstr);
         virtual void saveCommand(Command* cmd);

@@ -27,58 +27,88 @@ function must be in the LoggingObserverDriver.cpp file.*/
 using namespace std;
 
 void testLoggingObserver(){
-    LogObserver* observer = new LogObserver();
-    GameEngine* engine = new GameEngine();
-    // CommandParser parser(engine);
-    Deploy* order = new Deploy();
-    Player* player = new Player("naika");
-    OrdersList* orders = new OrdersList();
-    
-    orders->Attach(observer);
-    orders->addOrder(order);
-    //TODO: add the observer to the Command and CommandProcessor
+   LogObserver* observer = new LogObserver();
+   
+    Continent* c = new Continent("America", 10);
+    Territory* t = new Territory("Canada", c);
+    Territory* t2 = new Territory("United States", c);
+    c->addTerritory(t);
+    c->addTerritory(t2);
 
-    cout<< "\nAttaching observer to GameEngine, Order, and Player\n----------------------------------------------" 
-        << "\n\texecuting engine->Attach(observer);"
-        //<< "\n\texecuting order->Attach(observer);"
-        << "\n\texecuting player->AttachObserver(observer);"
-        << endl;
-    engine->Attach(observer);
-    //order->Attach(observer);
-    // player->AttachObserver(observer);
-   //TODO: add the observer to the Command and CommandProcessor 
     
-    cout << "\nExample of the observer being notified when an order is added to the order list of a player\n----------------------------------------------" 
-        << "\n\texecuting player->issueOrder(order);"
-        << endl;
-    //player->issueOrder();
-    
-    // cout << "\nExample of the observer being notified when an order is executed\n----------------------------------------------" 
-    //     << "\n\texecuting order->executeOrder();"
-    //     << "\n\tExecuting order->executeOrder();"
-    //     << endl;
-    // //order->executeOrder();
+    Player* player = new Player(observer,"Trump");
+    player->addTerritory(t);
+    Player* player2 = new Player(observer,"Harris");
+    player2->addTerritory(t2);
+    OrdersList* orders = new OrdersList(observer);
 
+    Deploy* order = new Deploy(observer, player, 10, t);
+    Advance* order2 = new Advance(observer,player, 10, t, t2);
+    Negotiate* order3 = new Negotiate(observer, player, player2);
+
+    // Example of observer notified when command is executed
+    cout << "\nExample of the observer being notified when an order is executed\n----------------------------------------------" 
+        << "\n\texecuting order->execute();"
+        << "\n\texecuting order2->execute();"
+        << endl;
+    order->executeOrder();
+    //order2->executeOrder();
+    order3->executeOrder();
+
+    
+    // Example of observer notified when GameEngine changes its state
     cout << "\nExample of the observer being notified when the GameEngine changes its state\n----------------------------------------------" 
-        << "\n\texecuting parser.parseCommand(\"loadmap\");"
-        << "\n\texecuting parser.parseCommand(\"validatemap\");"
-        << endl;
-    // parser.parseCommand("loadmap");
-    // parser.parseCommand("validatemap");
-    string input;
-    cout << "Enter a command: ";
-    cin >> input;
-    // parser.parseCommand(input);
-    cout << "Enter a command: ";
-    cin >> input;
-    // parser.parseCommand(input);
+         << "\n\tCommand* loadCommmand = new Command(\"loadmap MapTextFiles/UK.map\");"
+            << "\n\tengine->stateTransition(loadCommmand);"
+            << "\n\tCommand* validateCommand = new Command(\"validatemap\");"
+            << "\n\tengine->stateTransition(validateCommand);"
+            << "\n\tCommand* addPlayerCommand = new Command(\"addplayer Tina\");"
+            << "\n\tengine->stateTransition(addPlayerCommand);"
+            << "\n\tCommand* addPlayerCommand2 = new Command(\"addplayer Bob\");"
+            << "\n\tengine->stateTransition(addPlayerCommand2);"
+            << "\n\tCommand* gameStartCommand = new Command(\"gamestart\");"
+            << "\n\tengine->stateTransition(gameStartCommand);" << endl;
     
-    cout << "player address: " << player << endl;
-    cout << "order address: " << order << endl;
-    cout << "observer address: " << observer << endl;
-    cout << "engine address: " << engine << endl;
+    GameEngine* engine = new GameEngine(observer);
+    Command* loadCommmand = new Command("loadmap MapTextFiles/UK.map");
+    loadCommmand->Attach(observer);
+    engine->stateTransition(loadCommmand);
 
-    delete player;
+
+    Command* validateCommand = new Command("validatemap");
+    validateCommand->Attach(observer);
+    engine->stateTransition(validateCommand); 
+    
+    std::string argument;
+    cout << "Enter a command: ";
+    cin >> argument;
+    
+    Command* addPlayerCommand = new Command(argument);
+    addPlayerCommand->Attach(observer);
+    engine->stateTransition(addPlayerCommand);
+
+    Command* addPlayerCommand2 = new Command("addplayer Bob");
+    addPlayerCommand2->Attach(observer);
+    engine->stateTransition(addPlayerCommand2);
+   
+    Command* gameStartCommand = new Command("gamestart");
+    gameStartCommand->Attach(observer);
+    engine->stateTransition(gameStartCommand);
+   
+
+
+
+    //Example of observer notified when commandProcessor saves a command
+    //TODO: COMMAND PROCESSOR
+    cout << "\nExample of the observer being notified when a command is saved by the command processor\n----------------------------------------------" 
+        << "\n\tCommandProcessor* commandProcessor = new CommandProcessor();"
+        << "\n\tcommandProcessor->saveCommand(command);"
+        << endl;
+    CommandProcessor* commandProcessor = new CommandProcessor(observer);
+    
+
+    //player->DetachObservers(observer);
+   // delete player;
     engine->Detach(observer);
     delete engine;
     delete observer;

@@ -12,9 +12,10 @@ const char *GameEngine::GameStateStrings[] = {
     "win"};
 
 // defining the GameEngine constructor, creating the state transition map which maps commands to the states they transition to
-GameEngine::GameEngine() : currentState(GameStateStrings[0])
+GameEngine::GameEngine(Observer* o) : currentState(GameStateStrings[0])
 {
-
+   Attach(o);
+    observer = o;
     stateTransitionMap.insert(pair<std::string, const char *>("loadmap", GameStateStrings[1]));
     stateTransitionMap.insert(pair<std::string, const char *>("validatemap", GameStateStrings[2]));
     stateTransitionMap.insert(pair<std::string, const char *>("addplayer", GameStateStrings[3]));
@@ -44,6 +45,7 @@ const char *GameEngine::getCurrentState()
 // function to handle state transitions, it finds the command in the map and changes the state associated with it
 void GameEngine::stateTransition(Command *cmd)
 {
+  
     std::string command = cmd->getCommandStr();
 
     if (stateTransitionMap.find(command) != stateTransitionMap.end())
@@ -53,7 +55,7 @@ void GameEngine::stateTransition(Command *cmd)
         std::cout << "Changing state to: " << currentState << "...\n"
                   << std::endl;
     }
-    //    Notify(this);
+    Notify(this);
 }
 
 std::string GameEngine::stringToLog()
@@ -86,7 +88,7 @@ void GameEngine::startupPhase()
 
     if (inputMode == "1")
     {
-        commandProcessor = new CommandProcessor();
+        commandProcessor = new CommandProcessor(observer);
         useConsole = true;
     }
     else if (inputMode == "2")
@@ -103,7 +105,7 @@ void GameEngine::startupPhase()
             try
             {
                 fileLineReader = new FileLineReader(fileName);
-                commandProcessor = new FileCommandProcessorAdapter(fileLineReader);
+                commandProcessor = new FileCommandProcessorAdapter(observer, fileLineReader);
                 break;
             }
             catch (std::invalid_argument &e)
@@ -119,9 +121,9 @@ void GameEngine::startupPhase()
         return;
     }
 
-    // Initializing the Game Engine
-    GameEngine engine;
-    std::cout << "\nStarting Game Engine\n\n";
+	GameEngine engine = GameEngine(observer);
+    
+	std::cout << "\nStarting Game Engine\n\n";
 
     std::string input;
     std::string unknown = "";
@@ -201,7 +203,7 @@ void GameEngine::startupPhase()
                 {
                     if (argument != "")
                     {
-                        players.push_back(Player(argument)); // Add player with the specified name
+                        players.push_back(Player(observer, argument)); // Add player with the specified name
                         nbPlayers++;
                         std::cout << "Player " << argument << " added successfully!" << std::endl;
                         stateTransition(cmd);
@@ -341,7 +343,7 @@ void GameEngine::startupPhase()
                     {
                         if (argument != "")
                         {
-                            players.push_back(Player(argument)); // Add player with the specified name
+                            players.push_back(Player(observer, argument)); // Add player with the specified name
                             nbPlayers++;
                             std::cout << "Player " << argument << " added successfully!" << std::endl;
                             stateTransition(fileC);
