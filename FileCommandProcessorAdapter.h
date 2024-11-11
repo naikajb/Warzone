@@ -9,7 +9,7 @@ private:
     FileLineReader *fileLineReader;
 
 public:
-    FileCommandProcessorAdapter(FileLineReader* fileLine);
+    FileCommandProcessorAdapter(Observer*,FileLineReader* fileLine);
     ~FileCommandProcessorAdapter();
     Command* readCommand(std::string& commandstr) override;
     void saveCommand(Command* cmd) override;

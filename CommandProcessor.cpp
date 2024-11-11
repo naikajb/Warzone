@@ -1,6 +1,7 @@
 #include "CommandProcessor.h"
 
-CommandProcessor::CommandProcessor() {
+CommandProcessor::CommandProcessor(Observer* o) {
+    Attach(o);
     createMap();
 }
 
@@ -21,14 +22,15 @@ CommandProcessor::~CommandProcessor() {
 //REMEBER TO DELETE POINTER WHEN FUNCTION IS CALLED
 Command* CommandProcessor::readCommand(std::string& commandstr) {
     Command* command = new Command(commandstr);
-    //command->Attach(observer);
+    command->Attach(observer);
+    //std::cout << "Command is created: " << *command << std::endl;
     return command;
 }
 
 void CommandProcessor::saveCommand(Command* cmd) {
     if (cmd != nullptr) {
         commands.push_back(cmd);
-       // Notify(this);
+        Notify(this);
     } else {
         std::cout << "Error: Command is null!" << std::endl;
     }
@@ -76,9 +78,12 @@ bool CommandProcessor::validate(Command* cmd, const char* state) {
 }
 
 std::string CommandProcessor::stringToLog() {
-    std::string log = "CommandProcessor: ";
+    std::string str =  "CommandProcessor is processing command " + commands.back()->getCommandStr()
+            + "\n\tpast commands: ";
     for (Command* cmd : commands) {
-        log += cmd->stringToLog() + "\n";
+        str += cmd->getCommandStr() + ", ";
     }
-    return log;
+    return str;
+            
+
 }
