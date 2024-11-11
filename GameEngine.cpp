@@ -180,36 +180,28 @@ void GameEngine::issueOrdersPhase(vector<Player *> v)
             {
                 if (v[i]->getHand()->cardsInHand[indexHandVector[i]]->getCardType().compare("Bomb") == 0)
                 {
-                    cout << "it bombs from player " << v[i]->getPlayerName() << " and " << v[i]->getHand()->cardsInHand[indexHandVector[i]]->getCardType() << endl;
                     Bomb *b = new Bomb();
                     v[i]->issueOrder(b);
                 }
 
-                if (v[i]->getHand()->cardsInHand[indexHandVector[i]]->getCardType().compare("Negotiate"))
+                if (v[i]->getHand()->cardsInHand[indexHandVector[i]]->getCardType().compare("Negotiate") == 0)
                 {
-                    cout << "it negotiate from player " << v[i]->getPlayerName() << endl;
-
                     Negotiate *n = new Negotiate();
                     v[i]->issueOrder(n);
                 }
 
-                if (v[i]->getHand()->cardsInHand[indexHandVector[i]]->getCardType().compare("Blockade"))
+                if (v[i]->getHand()->cardsInHand[indexHandVector[i]]->getCardType().compare("Blockade") == 0)
                 {
-                    cout << "it blockade from player " << v[i]->getPlayerName() << endl;
-
                     Blockade *b = new Blockade();
                     v[i]->issueOrder(b);
                 }
 
-                if (v[i]->getHand()->cardsInHand[indexHandVector[i]]->getCardType().compare("Airlift"))
+                if (v[i]->getHand()->cardsInHand[indexHandVector[i]]->getCardType().compare("Airlift") == 0)
                 {
-                    cout << "it airlift from player " << v[i]->getPlayerName() << endl;
-
                     Airlift *a = new Airlift();
                     v[i]->issueOrder(a);
                 }
 
-                cout << indexHandVector[i] << " from player " << v[i]->getPlayerName() << endl;
                 indexHandVector[i]++;
                 continue;
             }
