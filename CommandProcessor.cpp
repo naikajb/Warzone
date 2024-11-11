@@ -1,14 +1,17 @@
 #include "CommandProcessor.h"
 
+// Constructor
 CommandProcessor::CommandProcessor(Observer* o) {
     Attach(o);
     createMap();
 }
 
+// Copy Constructor
 CommandProcessor::CommandProcessor(const CommandProcessor& commandProcessor) {
     std::cout << "Copy Constructor of CommandProcessor";
 }
 
+// Destructor
 CommandProcessor::~CommandProcessor() {
     for (Command* cmd : commands) {
         delete cmd;
@@ -16,10 +19,9 @@ CommandProcessor::~CommandProcessor() {
     }
     commands.clear();
     Detach(observer);
-
 }
 
-//REMEBER TO DELETE POINTER WHEN FUNCTION IS CALLED
+// Read the command from the input
 Command* CommandProcessor::readCommand(std::string& commandstr) {
     Command* command = new Command(commandstr);
     command->Attach(observer);
@@ -27,6 +29,7 @@ Command* CommandProcessor::readCommand(std::string& commandstr) {
     return command;
 }
 
+// Save the command to the stored vector
 void CommandProcessor::saveCommand(Command* cmd) {
     if (cmd != nullptr) {
         commands.push_back(cmd);
@@ -35,13 +38,14 @@ void CommandProcessor::saveCommand(Command* cmd) {
         std::cout << "Error: Command is null!" << std::endl;
     }
 }
-
+// Get the command from the input
 Command* CommandProcessor::getCommand(std::string& commandstr) {
     Command* cmd = readCommand(commandstr);
     saveCommand(cmd);
     return cmd;
 }
 
+// Create the map of commands and states
 void CommandProcessor::createMap() {
     commandStateMap.insert(std::make_pair("loadmap", "startState"));
     commandStateMap.insert(std::make_pair("loadmap", "mapLoadedState"));
@@ -53,6 +57,7 @@ void CommandProcessor::createMap() {
     commandStateMap.insert(std::make_pair("quit", "win"));
 }
 
+// Validate the command with the current state
 bool CommandProcessor::validate(Command* cmd, const char* state) {
     // std::cout << "Validating command: " << *cmd << " against state: " << state << std::endl;
     
@@ -70,6 +75,7 @@ bool CommandProcessor::validate(Command* cmd, const char* state) {
     return false;
 }
 
+// Convert the command processor to a string
 std::string CommandProcessor::stringToLog() {
     std::string str =  "CommandProcessor is processing command " + commands.back()->getCommandStr()
             + "\n\tpast commands: ";

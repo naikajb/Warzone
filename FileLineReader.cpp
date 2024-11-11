@@ -1,6 +1,7 @@
 #include "FileLineReader.h"
 #include <iostream>
 
+// Constructor
 FileLineReader::FileLineReader(const std::string& fileName) {
     fileStream.open(fileName);
     if (!fileStream.is_open()) {
@@ -9,12 +10,14 @@ FileLineReader::FileLineReader(const std::string& fileName) {
     }
 }
 
+// Destructor
 FileLineReader::~FileLineReader() {
     if (fileStream.is_open()) {
         fileStream.close();
     }
 }
 
+// Read the line from the file
 std::string FileLineReader::readLine() {
     if (fileStream.is_open() && getline(fileStream, str)) {
         return str;
@@ -22,6 +25,7 @@ std::string FileLineReader::readLine() {
     return "";
 }
 
+// Get the line from the file
 std::string FileLineReader::getLine() {
     std::cout << "Getting line from file..." << std::endl;
     if (fileStream.is_open() && getline(fileStream, str)) {
@@ -32,15 +36,7 @@ std::string FileLineReader::getLine() {
     return "";
 }
 
+// Save the line to the storedLines vector
 void FileLineReader::saveLine(std::string line) {
     storedLines.push_back(line);
 }
-
-// main() {
-//     FileLineReader fileLineReader("commands.txt");
-//     std::string line;
-//     while ((line = fileLineReader.getLine()) != "") {
-//         std::cout << line << std::endl;
-//     }
-//     return 0;
-// }

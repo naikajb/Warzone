@@ -58,12 +58,13 @@ void GameEngine::stateTransition(Command *cmd)
     Notify(this);
 }
 
+
 std::string GameEngine::stringToLog()
 {
     return "GameEngine changed state to " + std::string(currentState);
 }
 
-
+// function to process console or file commands
 void GameEngine::startupPhase()
 {
     std::string inputMode;
