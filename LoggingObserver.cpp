@@ -45,6 +45,8 @@ void Subject::Detach(Observer* observer){
 }
 
 void Subject::Notify(ILoggable* loggableObject){
-    observer->update(loggableObject);
+    if (observer != NULL){
+        observer->update(loggableObject);
+    }
 }
 

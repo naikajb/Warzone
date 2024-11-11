@@ -29,18 +29,22 @@ using namespace std;
 void testLoggingObserver(){
    LogObserver* observer = new LogObserver();
     GameEngine* engine = new GameEngine(observer);
-    Continent* c = new Continent("c", 10);
-    Territory* t = new Territory("t", c);
-    Territory* t2 = new Territory("t2", c);
+    Continent* c = new Continent("America", 10);
+    Territory* t = new Territory("Canada", c);
+    Territory* t2 = new Territory("United States", c);
     c->addTerritory(t);
     c->addTerritory(t2);
 
     
-    Player* player = new Player("naika", observer);
+    Player* player = new Player(observer,"Trump");
+    player->addTerritory(t);
+    Player* player2 = new Player(observer,"Harris");
+    player2->addTerritory(t2);
     OrdersList* orders = new OrdersList(observer);
 
-    Deploy* order = new Deploy(player, 10, t, observer);
-    Advance* order2 = new Advance(player, 10, t, t2, observer);
+    Deploy* order = new Deploy(observer, player, 10, t);
+    Advance* order2 = new Advance(observer,player, 10, t, t2);
+    Negotiate* order3 = new Negotiate(observer, player, player2);
 
     // Example of observer notified when command is executed
     cout << "\nExample of the observer being notified when an order is executed\n----------------------------------------------" 
@@ -49,14 +53,8 @@ void testLoggingObserver(){
         << endl;
     order->executeOrder();
     order2->executeOrder();
+    order3->executeOrder();
 
-    // Example of observer notified when order is added to the order list of a player
-    cout << "\nExample of the observer being notified when an order is added to the order list of a player\n----------------------------------------------" 
-        << "\n\torders->addOrder(order);"
-        << "\n\torders->addOrder(order2);"
-        << endl;
-    // player->issueOrder(order);
-    // player->issueOrder(order2);
     
     // Example of observer notified when GameEngine changes its state
     cout << "\nExample of the observer being notified when the GameEngine changes its state\n----------------------------------------------" 
@@ -113,6 +111,7 @@ void testLoggingObserver(){
         << "\n\tcommandProcessor->saveCommand(command);"
         << endl;
     CommandProcessor* commandProcessor = new CommandProcessor();
+    
 
     //player->DetachObservers(observer);
    // delete player;
