@@ -158,9 +158,9 @@ void GameEngine::startupPhase()
 			{
 				if (command == "loadmap")
 				{
-					MapLoader ml(argument);
+					MapLoader* ml = new MapLoader(argument);
 					// Map object of the map from the filename
-					mapP = ml.getMap();
+					mapP = ml->getMap();
 					std::cout << "Map loaded successfully!" << std::endl;
 				}
 				else if (command == "validatemap")
