@@ -23,6 +23,7 @@ using namespace std;
 using std::vector; // added 
 using std::floor;
 
+void testStartupPhase();
 class GameEngine : public Subject, public ILoggable  {
 public:
     // declaring constructor
