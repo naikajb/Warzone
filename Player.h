@@ -47,10 +47,12 @@ class Player{
         
         void addCard(Card* card);  //adds card to player's hand
         void removeCard(Card* card);  //removes card from player's hand
-        Hand *getHand();
+        Hand *getHand(); // returns players hand
+
+        OrdersList* getOrderList();
         
         void printTerritories();  //prints player's territories
-        void printOrders();  //prints player's orders
+        // void printOrders();  //prints player's orders
 
         std::string getPlayerName();  //returns player's name
 

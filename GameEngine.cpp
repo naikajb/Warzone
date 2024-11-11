@@ -160,7 +160,7 @@ void GameEngine::issueOrdersPhase(vector<Player *> v)
             {
                 Deploy *d = new Deploy();
                 v[i]->issueOrder(d);
-                cout << "remaining armies for " << v[i]->getPlayerName() << " " << v[i]->getReinforcementTemp() << endl;
+                // cout << "remaining armies for " << v[i]->getPlayerName() << " " << v[i]->getReinforcementTemp() << endl;
                 continue;
             }
 
@@ -171,7 +171,7 @@ void GameEngine::issueOrdersPhase(vector<Player *> v)
                 v[i]->issueOrder(a);
 
                 countAdvanceTerritories[i]++;
-                cout << "count for " << v[i]->getPlayerName() << " for advance " << countAdvanceTerritories[i] << endl;
+                // cout << "count for " << v[i]->getPlayerName() << " for advance " << countAdvanceTerritories[i] << endl;
                 continue;
             }
 
@@ -209,9 +209,6 @@ void GameEngine::issueOrdersPhase(vector<Player *> v)
             // when all of the previous possible orders are done, change the value to 1 for that player
             else if (outOfOrder[i] != 1)
             {
-                cout << v[i]->getHand()->getCardsHand().size() << endl;
-                v[i]->getHand()->displayHand();
-                cout << "out of order" << endl;
                 outOfOrder[i] = 1;
             }
         }
@@ -222,7 +219,6 @@ void GameEngine::issueOrdersPhase(vector<Player *> v)
         {
             if (outOfOrder[j] == 1)
             {
-                cout << "check" << endl;
                 countDone++;
             }
         }
@@ -230,9 +226,21 @@ void GameEngine::issueOrdersPhase(vector<Player *> v)
         // if all players are done, the loop is done !
         if (countDone == v.size())
         {
-            cout << "end" << endl;
             moreOrder = false;
         }
+    }
+    // checks all the orders of the players:
+
+    for (int i = 0; i < v[0]->getOrderList()->getOrders().size(); i++)
+    {
+        cout << v[0]->getPlayerName() << endl;
+        cout << *(v[0]->getOrderList()->getOrders()[i]) << endl;
+    }
+
+    for (int i = 0; i < v[1]->getOrderList()->getOrders().size(); i++)
+    {
+        cout << v[1]->getPlayerName() << endl;
+        cout << *(v[1]->getOrderList()->getOrders()[i]) << endl;
     }
 }
 
