@@ -7,6 +7,7 @@
 #include <iostream>
 #include <fstream>
 
+void testLoggingObserver();
 
 class ILoggable{
     public: 

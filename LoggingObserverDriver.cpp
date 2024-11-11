@@ -51,7 +51,7 @@ void testLoggingObserver(){
     cout << "\nExample of the observer being notified when an order is added to the order list of a player\n----------------------------------------------" 
         << "\n\texecuting player->issueOrder(order);"
         << endl;
-    // player->issueOrder(order);
+    //player->issueOrder();
     
     // cout << "\nExample of the observer being notified when an order is executed\n----------------------------------------------" 
     //     << "\n\texecuting order->executeOrder();"
