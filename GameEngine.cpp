@@ -14,7 +14,8 @@ const char *GameEngine::GameStateStrings[] = {
 // defining the GameEngine constructor, creating the state transition map which maps commands to the states they transition to
 GameEngine::GameEngine(Observer* o) : currentState(GameStateStrings[0])
 {
-    Attach(o);
+   Attach(o);
+    observer = o;
     stateTransitionMap.insert(pair<std::string, const char *>("loadmap", GameStateStrings[1]));
     stateTransitionMap.insert(pair<std::string, const char *>("validatemap", GameStateStrings[2]));
     stateTransitionMap.insert(pair<std::string, const char *>("addplayer", GameStateStrings[3]));
@@ -45,6 +46,7 @@ const char *GameEngine::getCurrentState()
 // function to handle state transitions, it finds the command in the map and changes the state associated with it
 void GameEngine::stateTransition(Command *cmd)
 {
+  
     std::string command = cmd->getCommandStr();
 
     if (stateTransitionMap.find(command) != stateTransitionMap.end())
@@ -54,7 +56,7 @@ void GameEngine::stateTransition(Command *cmd)
         std::cout << "Changing state to: " << currentState << "...\n"
                   << std::endl;
     }
- //    Notify(this);
+    Notify(this);
 }
 
 std::string GameEngine::stringToLog()
@@ -66,6 +68,8 @@ std::string GameEngine::stringToLog()
 bool GameEngine::processConsoleCommand(std::string& command, CommandProcessor* commandProcessor) {
 
     Command* cmd = commandProcessor->getCommand(command);
+   // cmd -> Attach(observer);
+    
     std::cout << "\nCurrent State: " << getCurrentState() << "\n" << std::endl;
     if((commandProcessor->validate(cmd, this->getCurrentState())) == true) {
         stateTransition(cmd); //command is good
@@ -97,6 +101,7 @@ bool GameEngine::processFileCommand(std::string& command, CommandProcessor* comm
 
 void GameEngine::startupPhase()
 {
+
 	std::string inputMode;
 	bool useConsole = false;
 	bool useFile = false;
@@ -116,14 +121,13 @@ void GameEngine::startupPhase()
 	vector<Player> players;
 
 	if (inputMode == "1") {
-		commandProcessor = new CommandProcessor();
-        commandProcessor -> Attach(observer);
+		commandProcessor = new CommandProcessor(observer);
 		useConsole = true;
 	}
 	else if (inputMode == "2") {
 		std::cout << "\nEnter the file name: ";
 		std::cin >> fileName;
-		commandProcessor = new FileCommandProcessorAdapter(fileLineReader);
+		commandProcessor = new FileCommandProcessorAdapter(observer, fileLineReader);
         //commandProcessor -> Attach(observer);
 		file.open(fileName);
 		useFile = true;
@@ -135,6 +139,7 @@ void GameEngine::startupPhase()
 	}
 
 	GameEngine engine = GameEngine(observer);
+    
 	std::cout << "\nStarting Game Engine\n\n";
 
 	std::string input;
@@ -248,14 +253,14 @@ void GameEngine::startupPhase()
 			std::string command, argument;
 			iss >> command;
 			std::getline(iss >> std::ws, argument);
-			bool isRightCommand = engine.processFileCommand(command, commandProcessor);
+			bool isRightCommand = engine.processConsoleCommand(command, commandProcessor);
 			if (isRightCommand)
 			{
 				if (command == "loadmap")
 				{
-					MapLoader ml(argument);
+					MapLoader* ml = new MapLoader(argument);
 					// Map object of the map from the filename
-					mapP = ml.getMap();
+					mapP = ml->getMap();
 					std::cout << "Map " << argument << " loaded successfully!" << std::endl;
 				}
 				else if (command == "validatemap")

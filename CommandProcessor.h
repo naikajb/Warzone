@@ -11,7 +11,7 @@ using namespace std;
 
 class CommandProcessor: public Subject, public ILoggable {
     public:
-        CommandProcessor();
+        CommandProcessor(Observer* o);
         CommandProcessor(const CommandProcessor& commandProcessor);
         virtual ~CommandProcessor();
         virtual Command* getCommand(std::string& commandstr);

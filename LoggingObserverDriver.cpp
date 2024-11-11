@@ -110,7 +110,7 @@ void testLoggingObserver(){
         << "\n\tCommandProcessor* commandProcessor = new CommandProcessor();"
         << "\n\tcommandProcessor->saveCommand(command);"
         << endl;
-    CommandProcessor* commandProcessor = new CommandProcessor();
+    CommandProcessor* commandProcessor = new CommandProcessor(observer);
     
 
     //player->DetachObservers(observer);

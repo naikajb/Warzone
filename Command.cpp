@@ -9,6 +9,7 @@ Command::Command(const Command& command) : commandStr(command.commandStr), effec
 }
 
 std::string Command::getCommandStr() const {
+    std::cout << "Command observer " << (observer) << std::endl;
     return commandStr;
 }
 std::ostream& operator<<(std::ostream& os, const Command& command) {

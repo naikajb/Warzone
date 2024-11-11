@@ -1,6 +1,7 @@
 #include "CommandProcessor.h"
 
-CommandProcessor::CommandProcessor() {
+CommandProcessor::CommandProcessor(Observer* o) {
+    Attach(o);
     createMap();
 }
 
@@ -21,14 +22,13 @@ CommandProcessor::~CommandProcessor() {
 //REMEBER TO DELETE POINTER WHEN FUNCTION IS CALLED
 Command* CommandProcessor::readCommand(std::string& commandstr) {
     Command* command = new Command(commandstr);
-    //command->Attach(observer);
+    std::cout << "Command is created: " << *command << std::endl;
     return command;
 }
 
 void CommandProcessor::saveCommand(Command* cmd) {
     if (cmd != nullptr) {
         commands.push_back(cmd);
-       // Notify(this);
     } else {
         std::cout << "Error: Command is null!" << std::endl;
     }

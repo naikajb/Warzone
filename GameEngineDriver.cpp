@@ -16,8 +16,8 @@ void testGameStates() { // to accept command-line command, argc is the number of
     FileLineReader* fileLineReader = nullptr;
 
     if (inputMode == "1") {
-        commandProcessor = new CommandProcessor();
-        commandProcessor->Attach(obs);
+        commandProcessor = new CommandProcessor(obs);
+        //commandProcessor->Attach(obs);
         useConsole = true;
     } 
     else if (inputMode == "2") {
@@ -27,8 +27,8 @@ void testGameStates() { // to accept command-line command, argc is the number of
             std::cin >> fileName;
             try {
                 fileLineReader = new FileLineReader(fileName);
-                commandProcessor = new FileCommandProcessorAdapter(fileLineReader);
-                commandProcessor->Attach(obs);
+                commandProcessor = new FileCommandProcessorAdapter(obs,fileLineReader);
+                //commandProcessor->Attach(obs);
                 break;
             } catch (std::invalid_argument& e) {
                 std::cerr << e.what() << std::endl;
