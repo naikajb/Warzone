@@ -106,12 +106,12 @@ void Deploy::execute()
     if (!this->validateOrder())
     {
         cout << target->getName() << " is not deployed " << armies << " amount of armies when they have " << player->getReinforcementPool() << " and " << player->getReinforcementTemp() << endl;
-        cout << "Deploy Order is not valid for player " << player->getPlayerName() << endl; // invalid Order message
+        cout << "\nDeploy Order is not valid for player " << player->getPlayerName() << endl; // invalid Order message
 
         return;
     }
 
-    cout << "Deploy Order is valid - > " << player->getPlayerName() << " is deploying " << armies << " units to Territory " << target->getName() << endl;
+    cout << "\nDeploy Order is valid - > " << player->getPlayerName() << " is deploying " << armies << " units to Territory " << target->getName() << endl;
 
     this->executeOrder(); // executing the Order after checking to see if it is valid
 }
@@ -168,15 +168,14 @@ bool Advance::validateOrder()
         }
     }
 
+// update to try to remove the neutral player and also the playerlist
     for (Player *p : getPlayerList())
     {
 
         for (Territory *t : p->getTerritories())
         {
-
             if (t == target)
                 return validAdj && !checkNegotiatePairs(player, p) && source->getNumArmies() >= armies;
-
         } // the above validates that if the two players (or one) owning both Territories are in a truce for the round
         // and checks if the amount of troops being sent is lower than the amount of troops present in the source Territory
     }
@@ -259,7 +258,7 @@ void Advance::executeOrder()
                 delete deck;
                 deck = NULL;
             }
-
+            target->setPlayer(player);         // adds ownership of new player to target territory
             player->addTerritory(target);      // adds Territory to the attacking player
             target->setNumArmies(attackerNum); // sets number of army units on the target Territory to the remaining number of attackers
         }
@@ -284,14 +283,12 @@ void Advance::executeOrder()
 
 void Advance::execute()
 {
-
     if (!this->validateOrder())
     {
-
-        cout << "Advance Order is not valid for player " << player->getPlayerName() << endl; // invalid Order message
+        cout << "\nAdvance Order is not valid for player " << player->getPlayerName() << endl; // invalid Order message
         return;
     }
-    cout << "Advance Order is valid -> " << player->getPlayerName() << " is advancing " << armies << " units from Territory " << source->getName() << " to Territory " << target->getName() << endl;
+    cout << "\nAdvance Order is valid -> " << player->getPlayerName() << " is advancing " << armies << " units from Territory " << source->getName() << " to Territory " << target->getName() << endl;
 
     this->executeOrder(); // executes Order
 }
@@ -389,11 +386,11 @@ void Bomb::execute()
 
     if (!this->validateOrder())
     {
-        cout << "Bomb Order is not valid for player " << player->getPlayerName() << endl; // invalid order message
+        cout << "\nBomb Order is not valid for player " << player->getPlayerName() << endl; // invalid order message
         return;
     }
 
-    cout << "Bomb Order is valid -> " << player->getPlayerName() << " is bombing Territory " << target->getName() << endl;
+    cout << "\nBomb Order is valid -> " << player->getPlayerName() << " is bombing Territory " << target->getName() << endl;
 
     this->executeOrder();
 }
@@ -482,11 +479,11 @@ void Blockade::execute()
 
     if (!this->validateOrder())
     {
-        cout << "Blockade Order is not valid for player " << player->getPlayerName() << endl; // invalid order message
+        cout << "\nBlockade Order is not valid for player " << player->getPlayerName() << endl; // invalid order message
         return;
     }
 
-    cout << "Blockade Order is valid - > " << player->getPlayerName() << " is transferring the ownership of Territory " << target->getName() << " to the Neutral player, army units doubled to: " << target->getNumArmies() << endl;
+    cout << "\nBlockade Order is valid - > " << player->getPlayerName() << " is transferring the ownership of Territory " << target->getName() << " to the Neutral player, army units doubled to: " << target->getNumArmies() << endl;
     this->executeOrder();
 }
 
@@ -554,11 +551,11 @@ void Airlift::execute()
 
     if (!this->validateOrder())
     {
-        cout << "Airlift Order is not valid for player " << player->getPlayerName() << endl; // invalid order message
+        cout << "\nAirlift Order is not valid for player " << player->getPlayerName() << endl; // invalid order message
         return;
     }
 
-    cout << "Airlift Order is valid -> " << player->getPlayerName() << " is transferring " << armies << " from Territory " << source->getName() << " to Territory " << target->getName() << endl;
+    cout << "\nAirlift Order is valid -> " << player->getPlayerName() << " is transferring " << armies << " from Territory " << source->getName() << " to Territory " << target->getName() << endl;
 
     this->executeOrder();
 }
@@ -611,11 +608,11 @@ void Negotiate::execute()
 
     if (!this->validateOrder())
     {
-        cout << "Negotiate Order is not valid for player " << player->getPlayerName() << endl; // invalid Order message
+        cout << "\nNegotiate Order is not valid for player " << player->getPlayerName() << endl; // invalid Order message
         return;
     }
 
-    cout << "Negotiate Order is valid -> " << player->getPlayerName() << " and " << targetPlayer->getPlayerName() << " cannot attack eachother this round" << endl;
+    cout << "\nNegotiate Order is valid -> " << player->getPlayerName() << " and " << targetPlayer->getPlayerName() << " cannot attack eachother this round" << endl;
 
     this->executeOrder();
 }
@@ -683,7 +680,8 @@ vector<Order *> OrdersList::getOrders()
     return orders;
 }
 
-void OrdersList::clearOrders(){
+void OrdersList::clearOrders()
+{
     orders.clear();
 }
 
@@ -724,7 +722,8 @@ vector<Player *> getPlayerList()
     return playerList;
 }
 
-void clearPlayerList(){
+void clearPlayerList()
+{
     playerList.clear();
 }
 

@@ -14,7 +14,7 @@ const char *GameEngine::GameStateStrings[] = {
 // defining the GameEngine constructor, creating the state transition map which maps commands to the states they transition to
 GameEngine::GameEngine(Observer *o) : currentState(GameStateStrings[0])
 {
-   Attach(o);
+    Attach(o);
     observer = o;
     stateTransitionMap.insert(pair<std::string, const char *>("loadmap", GameStateStrings[1]));
     stateTransitionMap.insert(pair<std::string, const char *>("validatemap", GameStateStrings[2]));
@@ -45,7 +45,7 @@ const char *GameEngine::getCurrentState()
 // function to handle state transitions, it finds the command in the map and changes the state associated with it
 void GameEngine::stateTransition(Command *cmd)
 {
-  
+
     std::string command = cmd->getCommandStr();
 
     if (stateTransitionMap.find(command) != stateTransitionMap.end())
@@ -57,7 +57,6 @@ void GameEngine::stateTransition(Command *cmd)
     }
     Notify(this);
 }
-
 
 std::string GameEngine::stringToLog()
 {
@@ -132,7 +131,7 @@ void GameEngine::startupPhase()
     int nbPlayers = 0;
     std::string fileName;
     std::ifstream file;
-    vector<Player> players;
+    vector<Player *> players;
 
     if (inputMode == "1")
     {
@@ -169,9 +168,9 @@ void GameEngine::startupPhase()
         return;
     }
 
-	GameEngine engine = GameEngine(observer);
-    
-	std::cout << "\nStarting Game Engine\n\n";
+    GameEngine engine = GameEngine(observer);
+
+    std::cout << "\nStarting Game Engine\n\n";
 
     std::string input;
     std::string unknown = "";
@@ -251,7 +250,8 @@ void GameEngine::startupPhase()
                 {
                     if (argument != "")
                     {
-                        players.push_back(Player(observer, argument)); // Add player with the specified name
+                        Player *p = new Player(observer, argument);
+                        players.push_back(p); // Add player with the specified name
                         nbPlayers++;
                         std::cout << "Player " << argument << " added successfully!" << std::endl;
                         stateTransition(cmd);
@@ -283,7 +283,7 @@ void GameEngine::startupPhase()
                             {
                                 for (int k = 0; k < (nbTerritories / nbPlayers); k++)
                                 {
-                                    players[j].addTerritory(allTerritories[randomOrder[i]]);
+                                    players[j]->addTerritory(allTerritories[randomOrder[i]]);
                                 }
                             }
                         }
@@ -296,9 +296,11 @@ void GameEngine::startupPhase()
                         // let each player draw 2 initial cards from the deck using the deck’s draw() method
                         for (int i = 0; i < players.size(); i++)
                         {
-                            players[playersOrder[i]].addCard(deck.draw());
-                            players[playersOrder[i]].addCard(deck.draw());
+                            players[playersOrder[i]]->addCard(deck.draw());
+                            players[playersOrder[i]]->addCard(deck.draw());
                         }
+
+                        engine.mainGameLoop(players, mapP);
                     }
                     else
                     {
@@ -326,155 +328,155 @@ void GameEngine::startupPhase()
     }
 
     if (useFile)
-    {   
+    {
         std::string cmmd = "";
         CommandProcessor *commandP = new CommandProcessor(observer);
-     
-            Command *cmd = nullptr;
-            Command *fileC = nullptr;
 
-            while ((cmd = commandProcessor->getCommand(cmmd)) != nullptr)
+        Command *cmd = nullptr;
+        Command *fileC = nullptr;
+
+        while ((cmd = commandProcessor->getCommand(cmmd)) != nullptr)
+        {
+            std::cout << "\nCurrent State: " << getCurrentState() << "\n"
+                      << std::endl;
+            std::string commandStr = cmd->getCommandStr();
+            std::istringstream stream(commandStr);
+            std::string command;
+            std::string argument;
+
+            stream >> command;
+            std::getline(stream >> std::ws, argument);
+
+            fileC = commandP->getCommand(command);
+
+            if ((commandProcessor->validate(fileC, this->getCurrentState())) == true)
             {
-                std::cout << "\nCurrent State: " << getCurrentState() << "\n"
-                          << std::endl;
-                std::string commandStr = cmd->getCommandStr();
-                std::istringstream stream(commandStr);
-                std::string command;
-                std::string argument;
 
-                stream >> command;
-                std::getline(stream >> std::ws, argument);
-
-                fileC = commandP->getCommand(command);
-
-                if ((commandProcessor->validate(fileC, this->getCurrentState())) == true)
+                if (command == "loadmap")
                 {
 
-                    if (command == "loadmap")
+                    std::cout << "Loading map from: " << argument << std::endl;
+
+                    MapLoader *ml = new MapLoader(argument);
+                    // Map object of the map from the filename
+                    mapP = ml->getMap();
+                    if (mapP != nullptr)
                     {
-
-                        std::cout << "Loading map from: " << argument << std::endl;
-
-                        MapLoader *ml = new MapLoader(argument);
-                        // Map object of the map from the filename
-                        mapP = ml->getMap();
-                        if (mapP != nullptr)
-                        {
-                            std::cout << "Map loaded successfully!" << std::endl;
-                            stateTransition(fileC);
-                            continue;
-                        }
-                        else
-                        {
-                            std::cout << "Error: Map failed to load." << std::endl;
-                        }
-                        delete ml;
-                        ml = nullptr;
-                    }
-                    else if (command == "validatemap")
-                    {
-                        std::cout << *mapP << std::endl;
-
-                        bool isValidatedMap = Map::validate(mapP);
-                        if (isValidatedMap)
-                        {
-                            std::cout << "Map is validated!" << std::endl;
-                            stateTransition(fileC);
-                            continue;
-                        }
-                        else
-                        {
-                            std::cout << "Map is not validated!" << std::endl;
-                        }
-                    }
-                    else if (command == "addplayer")
-                    {
-                        if (argument != "")
-                        {
-                            players.push_back(Player(observer, argument)); // Add player with the specified name
-                            nbPlayers++;
-                            std::cout << "Player " << argument << " added successfully!" << std::endl;
-                            stateTransition(fileC);
-                            continue;
-                        }
-                        else
-                        {
-                            std::cout << "Error: addplayer command requires a <playername> argument." << std::endl;
-                        }
-                    }
-
-                    else if (command == "gamestart")
-                    {
-
-                        if (nbPlayers >= 2 && nbPlayers <= 6)
-                        {
-                            stateTransition(fileC);
-                            // Distrribute the territories to each player
-                            vector<Territory *> allTerritories = mapP->getTerritories();
-                            int nbTerritories = allTerritories.size();
-
-                            vector<int> randomOrder = getRandomizedNumbers(nbTerritories);
-
-                            // Assign an equal number of territories to each player
-                            for (int i = 0; i < nbTerritories; i++)
-                            {
-                                for (int j = 0; j < nbPlayers; j++)
-                                {
-                                    for (int k = 0; k < (nbTerritories / nbPlayers); k++)
-                                    {
-                                        players[j].addTerritory(allTerritories[randomOrder[i]]);
-                                    }
-                                }
-                            }
-
-                            // Determine randomly the order of play of the players in the game
-                            vector<int> playersOrder = getRandomizedNumbers(nbPlayers);
-
-                            Deck deck;
-
-                            // let each player draw 2 initial cards from the deck using the deck’s draw() method
-                            for (int i = 0; i < players.size(); i++)
-                            {
-                                players[playersOrder[i]].addCard(deck.draw());
-                                players[playersOrder[i]].addCard(deck.draw());
-                            }
-                        }
-                        else
-                        {
-                            std::cout << "Error: Number of players must be between 2 and 6." << std::endl;
-                            std::cout << "Exiting system ..." << std::endl;
-                            exit(0);
-                        }
-                    }
-                    else if (command == "replay")
-                    {
+                        std::cout << "Map loaded successfully!" << std::endl;
                         stateTransition(fileC);
                         continue;
                     }
-                    else if (command == "quit")
+                    else
                     {
+                        std::cout << "Error: Map failed to load." << std::endl;
+                    }
+                    delete ml;
+                    ml = nullptr;
+                }
+                else if (command == "validatemap")
+                {
+                    std::cout << *mapP << std::endl;
+
+                    bool isValidatedMap = Map::validate(mapP);
+                    if (isValidatedMap)
+                    {
+                        std::cout << "Map is validated!" << std::endl;
+                        stateTransition(fileC);
+                        continue;
+                    }
+                    else
+                    {
+                        std::cout << "Map is not validated!" << std::endl;
+                    }
+                }
+                else if (command == "addplayer")
+                {
+                    if (argument != "")
+                    {
+                        Player *pf = new Player(observer, argument);
+                        players.push_back(pf); // Add player with the specified name
+                        nbPlayers++;
+                        std::cout << "Player " << argument << " added successfully!" << std::endl;
+                        stateTransition(fileC);
+                        continue;
+                    }
+                    else
+                    {
+                        std::cout << "Error: addplayer command requires a <playername> argument." << std::endl;
+                    }
+                }
+
+                else if (command == "gamestart")
+                {
+
+                    if (nbPlayers >= 2 && nbPlayers <= 6)
+                    {
+                        stateTransition(fileC);
+                        // Distrribute the territories to each player
+                        vector<Territory *> allTerritories = mapP->getTerritories();
+                        int nbTerritories = allTerritories.size();
+
+                        vector<int> randomOrder = getRandomizedNumbers(nbTerritories);
+
+                        // Assign an equal number of territories to each player
+                        for (int i = 0; i < nbTerritories; i++)
+                        {
+                            for (int j = 0; j < nbPlayers; j++)
+                            {
+                                for (int k = 0; k < (nbTerritories / nbPlayers); k++)
+                                {
+                                    players[j]->addTerritory(allTerritories[randomOrder[i]]);
+                                }
+                            }
+                        }
+
+                        // Determine randomly the order of play of the players in the game
+                        vector<int> playersOrder = getRandomizedNumbers(nbPlayers);
+
+                        Deck deck;
+
+                        // let each player draw 2 initial cards from the deck using the deck’s draw() method
+                        for (int i = 0; i < players.size(); i++)
+                        {
+                            players[playersOrder[i]]->addCard(deck.draw());
+                            players[playersOrder[i]]->addCard(deck.draw());
+                        }
+                    }
+                    else
+                    {
+                        std::cout << "Error: Number of players must be between 2 and 6." << std::endl;
+                        std::cout << "Exiting system ..." << std::endl;
                         exit(0);
                     }
-                } else {
-                    std::cout << "Invalid command. Try again.\n"
-                              << std::endl;
                 }
-               
+                else if (command == "replay")
+                {
+                    stateTransition(fileC);
+                    continue;
+                }
+                else if (command == "quit")
+                {
+                    exit(0);
+                }
             }
-            std::cout << "\nNo more commands to process.\nCurrent State: " << getCurrentState() << "\n" << std::endl;
-            delete commandP;
-            commandP = nullptr;
-            exit(0);
+            else
+            {
+                std::cout << "Invalid command. Try again.\n"
+                          << std::endl;
+            }
+        }
+        std::cout << "\nNo more commands to process.\nCurrent State: " << getCurrentState() << "\n"
+                  << std::endl;
+        delete commandP;
+        commandP = nullptr;
+        exit(0);
     }
 
     delete commandProcessor;
     delete fileLineReader;
     commandProcessor = nullptr;
     fileLineReader = nullptr;
-
 }
-
-
 
 vector<int> GameEngine::getRandomizedNumbers(int n)
 {
@@ -495,6 +497,8 @@ vector<int> GameEngine::getRandomizedNumbers(int n)
 // added Main Game Loop part of the game
 void GameEngine::reinforcementPhase(vector<Player *> v, Map *map)
 {
+    cout << "\n~~~~~~REINFORCEMENT PHASE~~~~~~\n"
+         << endl;
     int armies = 0;
 
     for (int i = 0; i < v.size(); i++)
@@ -503,7 +507,14 @@ void GameEngine::reinforcementPhase(vector<Player *> v, Map *map)
         {
             continue;
         }
-        cout << v[i]->getPlayerName() << " has concurred " << v[i]->getTerritories().size() << " territories total !" << endl;
+        cout << v[i]->getPlayerName() << " has concurred " << v[i]->getTerritories().size() << " territories total !\n"
+             << endl;
+
+        for (Territory *t : v[i]->getTerritories())
+        {
+            cout << t->getName() << endl;
+        }
+        cout << "\n";
         if (v[i]->getTerritories().size() < 9)
         {
             armies = 3;
@@ -514,7 +525,7 @@ void GameEngine::reinforcementPhase(vector<Player *> v, Map *map)
             armies = v[i]->getTerritories().size() / 3;
         }
 
-        cout << v[i]->getPlayerName() << " originally has " << armies << " armies before any bonus" << endl;
+        cout << v[i]->getPlayerName() << " has " << armies << " armies before any bonus" << endl;
         for (Continent *c : map->getContinents())
         {
             int count = 0;
@@ -542,6 +553,9 @@ void GameEngine::reinforcementPhase(vector<Player *> v, Map *map)
 
 void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
 {
+    cout << "\n~~~~~~ISSUE ORDERING PHASE~~~~~~\n"
+         << endl;
+
     // vector to keep track of the count of each player for the Advance order
     // this is done so that the advance order is done a maximum of 3 times
     // each box from this vector is of each player and represents the number of times they advanced
@@ -651,7 +665,8 @@ void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
         // if all players are done, the loop is done !
         if (countDone == v.size())
         {
-            cout << "\nNo more orders to issue for all players !" << endl;
+            cout << "\nNo more orders to issue for all players !\n"
+                 << endl;
             moreOrder = false;
         }
     }
@@ -659,6 +674,8 @@ void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
 
 void GameEngine::executeOrdersPhase(vector<Player *> v)
 {
+    cout << "\n~~~~~~ISSUE EXECUTING PHASE~~~~~~\n"
+         << endl;
 
     // vector to keep track of the index of each player for their OrderList vector
     // this is done so that the orders from their OrderList can be kept track and used
@@ -714,7 +731,7 @@ void GameEngine::mainGameLoop(vector<Player *> v, Map *map)
     bool noWinner = true;
     do
     {
-        if (round == 3)
+        if (round == 10)
         {
             for (Territory *t : v[0]->getTerritories())
             {
@@ -722,18 +739,18 @@ void GameEngine::mainGameLoop(vector<Player *> v, Map *map)
             }
         }
         for (int i = 0; i < v.size(); i++)
-        {      
+        {
             if (v[i]->getTerritories().size() == 0 && v[i]->getPlayerName().compare("Neutral") != 0)
             {
-                cout << "removing " << v[i]->getPlayerName() << endl;
+                cout << v[i]->getPlayerName() << " has " << v[i]->getTerritories().size() << " territories !\nRemoving " << v[i]->getPlayerName() << " ..." << endl;
                 v.erase(v.begin() + i);
             }
         }
-  
+
         if (v.size() <= 2)
         {
             noWinner = false;
-            cout << "end of game" << endl;
+            cout << "One Player Left !\nEnd of game !" << endl;
             break;
         }
 
@@ -749,17 +766,18 @@ void GameEngine::mainGameLoop(vector<Player *> v, Map *map)
     } while (noWinner);
 
     string answer;
-    cout << "Winner ! Player: " << v[0]->getPlayerName() << endl;
+    cout << "Winner !!! Player: " << v[0]->getPlayerName() << endl;
     cout << "\nWould you like to play again ?\n<replay> if you want to replay !\n<quit> if you want to end the game..." << endl;
     cin >> answer;
 
-    if (answer.compare("quit")){
-        cout << "End of Game ! Goodbye !" << endl;
+    if (answer.compare("quit"))
+    {
+        cout << "Thanks for playing with us ! Goodbye !" << endl;
     }
 
-    if (answer.compare("replay")){
+    if (answer.compare("replay"))
+    {
     }
-    
 }
 
 // NOTES: first round of the game: ~DONE~

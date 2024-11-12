@@ -114,7 +114,7 @@ void testMainGameLoop(){
         else
         {
             p2->addTerritory(t);
-            // t->setPlayer(p2); // this is to test territories with no players for issueOrderPhase()
+            t->setPlayer(p2); // this is to test territories with no players for issueOrderPhase()
 
             // cout << "\n"
             //      << t->getName() << " was added for " << p2->getPlayerName() << endl;
@@ -176,6 +176,50 @@ void testMainGameLoop(){
          << endl;
 
     g->mainGameLoop(pList, ml->getMap());
+
+    // Clean up dynamically allocated memory
+
+// Delete Players
+delete p1;
+p1 = nullptr;
+
+delete p2;
+p2 = nullptr;
+
+delete neutral;
+neutral = nullptr;
+
+// Delete GameEngine
+delete g;
+g = nullptr;
+
+// Delete MapLoader
+delete ml;
+ml = nullptr;
+
+// Delete Cards
+delete bomb;
+bomb = nullptr;
+
+delete blockade;
+blockade = nullptr;
+
+delete airlift;
+airlift = nullptr;
+
+delete negotiate;
+negotiate = nullptr;
+
+// Clear the player list vector and delete each player pointer if they were dynamically allocated
+for (Player* player : pList) {
+    delete player;
+}
+pList.clear(); // Clear the vector to avoid dangling pointers
+
+// Delete the observer if no other object depends on it
+// delete o;
+// o = nullptr;
+
 
     // ~~~~~test for toDefend() and toAttack()
 
