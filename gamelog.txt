@@ -1,2 +1,25 @@
 Game Log
 ---------------------------------------------
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Bomb Order  had effect none
+Bomb Order  had effect none
+Blockade Order  had effect none
+Blockade Order  had effect none
+Airlift Order  had effect none
+Airlift Order  had effect none
+Negotiate Order  had effect none

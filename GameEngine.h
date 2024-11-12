@@ -55,7 +55,7 @@ public:
 
     // added Main Game Loop part of the game
     void reinforcementPhase(vector <Player*>, Map *map);
-    void issueOrdersPhase(vector <Player*>);
+    void issueOrdersPhase(vector <Player*>, int round);
     void executeOrdersPhase(vector <Player*>);
     void mainGameLoop(vector <Player*>, Map *map);
 

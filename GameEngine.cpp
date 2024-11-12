@@ -411,7 +411,7 @@ void GameEngine::reinforcementPhase(vector<Player *> v, Map *map)
     }
 }
 
-void GameEngine::issueOrdersPhase(vector<Player *> v)
+void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
 {
     // vector to keep track of the count of each player for the Advance order
     // this is done so that the advance order is done a maximum of 3 times
@@ -447,23 +447,21 @@ void GameEngine::issueOrdersPhase(vector<Player *> v)
             {
                 Deploy *d = new Deploy();
                 v[i]->issueOrder(d);
-                // cout << "remaining armies for " << v[i]->getPlayerName() << " " << v[i]->getReinforcementTemp() << endl;
                 continue;
             }
 
             // the player is allowed to advance order a maximum of 3 times, else move to the next
-            else if (countAdvanceTerritories[i] != 3)
+            else if (countAdvanceTerritories[i] != 3 && round != 1)
             {
                 Advance *a = new Advance();
                 v[i]->issueOrder(a);
 
                 countAdvanceTerritories[i]++;
-                // cout << "count for " << v[i]->getPlayerName() << " for advance " << countAdvanceTerritories[i] << endl;
                 continue;
             }
 
             // // if it arrives at the end of the player's cardsInHand array, skip this statement
-            else if (v[i]->getHand()->cardsInHand.size() != 0 && indexHandVector[i] != v[i]->getHand()->cardsInHand.size())
+            else if (v[i]->getHand()->cardsInHand.size() != 0 && indexHandVector[i] != v[i]->getHand()->cardsInHand.size() && round != 1)
             {
                 if (v[i]->getHand()->cardsInHand[indexHandVector[i]]->getCardType().compare("Bomb") == 0)
                 {
@@ -496,10 +494,10 @@ void GameEngine::issueOrdersPhase(vector<Player *> v)
             // when all of the previous possible orders are done, change the value to 1 for that player
             else if (outOfOrder[i] != 1)
             {
+                cout << "\n" << v[i]->getPlayerName() << " is out of orders !" << endl;
                 outOfOrder[i] = 1;
             }
         }
-
         // calculate the total number of players that are done
         // if the countDone is equal to the number of players, end the loop (no more orders) !
         for (int j : outOfOrder)
@@ -513,6 +511,7 @@ void GameEngine::issueOrdersPhase(vector<Player *> v)
         // if all players are done, the loop is done !
         if (countDone == v.size())
         {
+            cout << "\nNo more orders to issue for all players !" << endl;
             moreOrder = false;
         }
     }
@@ -564,19 +563,25 @@ void GameEngine::executeOrdersPhase(vector<Player *> v)
         // if all players are done, the loop is done !
         if (countDone == v.size())
         {
-            cout << "\ndone with all executions !" << endl;
+            cout << "\nDone with all executions !" << endl;
             moreOrder = false;
         }
     }
 }
 void GameEngine::mainGameLoop(vector<Player *> v, Map *map)
 {
+    int round = 1;
     bool noWinner = true;
     do
     {
-        reinforcementPhase(v, map);
-        issueOrdersPhase(v);
+        cout << "\nRound " << round << endl;
+        if (round != 1)
+        {
+            reinforcementPhase(v, map);
+        }
+        issueOrdersPhase(v, round);
         executeOrdersPhase(v);
+        round++;
 
         for (int i; i < v.size(); i++)
         {
@@ -598,11 +603,15 @@ void GameEngine::mainGameLoop(vector<Player *> v, Map *map)
     cin >> answer;
 }
 
+// NOTES: first round of the game: ~DONE~
+// reinforcement phase is skipped on the first round
+// the advance and card orders are skipped on the first round
+
 // list of what needs to be completed:
 // My part only:
 // - test reinforcementPhase() and add proper cout for testing ~DONE~
+// - test issueOrderPhase() and add proper cout for testing ALSO the toDefend() and toAttack() ~DONE~
 
-// - test issueOrderPhase() and add proper cout for testing ALSO the toDefend() and toAttack()
 // - test issueExecution() and fix the orders issues
 // - test out main game loop and make sure that the reinforcement phase is called only after the first loop
 // - create testMainGameLoop() in GameEngineDriver
@@ -611,6 +620,8 @@ void GameEngine::mainGameLoop(vector<Player *> v, Map *map)
 // - add shamma's command processor part to my part
 // - make sure the orders have all the proper values
 // - iloggable needs to work in my part
+// - make sure that at startup, and at orders the territories are updated on the player owners
+// - make sure that the orders keep track of the armies 
 
 int main()
 {
@@ -633,83 +644,127 @@ int main()
         if (t->getContinent()->getName().compare("Central America") == 0 || t->getContinent()->getName().compare("The Highlands") == 0)
         {
             p1->addTerritory(t);
-            cout << "\n"
-                 << t->getName() << " was added for " << p1->getPlayerName() << endl;
+            t->setPlayer(p1);
+            // cout << "\n"
+            //      << t->getName() << " was added for " << p1->getPlayerName() << endl;
         }
         else
         {
             p2->addTerritory(t);
-            cout << "\n"
-                 << t->getName() << " was added for " << p2->getPlayerName() << endl;
+            // t->setPlayer(p2); // this is to test territories with no players for issueOrderPhase()
+
+            // cout << "\n"
+            //      << t->getName() << " was added for " << p2->getPlayerName() << endl;
         }
     }
 
-    cout << "\nreinforcement pool at the start of the game for " << p1->getPlayerName() << " is: " << p1->getReinforcementPool() << endl;
-    cout << "\nreinforcement pool at the start of the game for " << p2->getPlayerName() << " is: " << p2->getReinforcementPool() << endl;
+    // cout << "\nreinforcement pool at the start of the game for " << p1->getPlayerName() << " is: " << p1->getReinforcementPool() << endl;
+    // cout << "\nreinforcement pool at the start of the game for " << p2->getPlayerName() << " is: " << p2->getReinforcementPool() << endl;
 
-    cout << "\n----------Reinforcement Phase Test----------\n\n"
-         << endl;
-    g->reinforcementPhase(pList, ml->getMap());
-    cout << "\n"
-         << p1->getPlayerName() << " has " << p1->getReinforcementPool() << " many armies to deploy for this round !" << endl;
-    cout << "\n"
-         << p2->getPlayerName() << " has " << p2->getReinforcementPool() << " many armies to deploy for this round !" << endl;
+    // cout << "\n----------Reinforcement Phase Test----------\n\n"
+    //      << endl;
+    // g->reinforcementPhase(pList, ml->getMap());
+    // cout << "\n"
+    //      << p1->getPlayerName() << " has " << p1->getReinforcementPool() << " many armies to deploy for this round !" << endl;
+    // cout << "\n"
+    //      << p2->getPlayerName() << " has " << p2->getReinforcementPool() << " many armies to deploy for this round !" << endl;
 
-    cout << "\n----------Issue Ordering Phase Test----------\n\n"
-         << endl;
-
-    cout << "Territories owned by " << p1->getPlayerName() << " before sorting based on priority are:\n"
+    cout << "\n----------Issue Ordering Phase Test----------"
          << endl;
 
+    // add cards for each player (usually done in startup)
+    Card *bomb = new Card(Card::BOMB);
+    Card *blockade = new Card(Card::BLOCKADE);
+    Card *airlift = new Card(Card::AIRLIFT);
+    Card *negotiate = new Card(Card::NEGOTIATE);
+
+    p1->addCard(bomb);
+    p2->addCard(bomb);
+    p1->addCard(blockade);
+    p2->addCard(blockade);
+    p1->addCard(airlift);
+    p2->addCard(airlift);
+    p1->addCard(negotiate);
+    p2->addCard(negotiate);
+
+
+    // checks for the first round is only deploy
+    cout<<"\nFirst round ! " << endl;
+    g->issueOrdersPhase(pList, 1);
+
+    // test for a bunch another round in the game with a bunch of random values of armies in the territories
     for (Territory *t : p1->getTerritories())
     {
-        cout << t->getName() << endl;
         t->setNumArmies(t->getName().length());
     }
-
-    p1->toDefend();
-
-    cout << "\nTerritories owned by " << p1->getPlayerName() << " after sorting based on priority are:\n"
-         << endl;
-
-    for (Territory *t : p1->getTerritories())
+    for (Territory *t : p2->getTerritories())
     {
-        cout << t->getName() << endl;
+        t->setNumArmies(t->getName().length());
     }
+    cout<<"\nSecond round ! " << endl;
+    g->reinforcementPhase(pList, ml->getMap());
+    g->issueOrdersPhase(pList, 2);
 
-    cout << "\nEnemy territories of " << p1->getPlayerName() << " before sorting based on priority are:\n"
-         << endl;
 
-    vector<Territory *> toAttackTest;
-    vector<Territory *> p1Territories = p1->getTerritories();
 
-    for (Territory *t : p1Territories)
-    {
-        for (Territory *tadj : t->getAdjTerritories())
-        {
 
-            if (std::find(toAttackTest.begin(), toAttackTest.end(), tadj) == toAttackTest.end() && std::find(p1Territories.begin(), p1Territories.end(), tadj) == p1Territories.end())
-            {
-                toAttackTest.push_back(tadj);
-                tadj->setNumArmies(tadj->getName().length());
-            }
-        }
-    }
 
-    for (Territory *t : toAttackTest)
-    {
-        cout << t->getName() << endl;
-    }
 
-    toAttackTest = p1->toAttack();
 
-    cout << "\nEnemy territories of " << p1->getPlayerName() << " after sorting based on priority are:\n"
-         << endl;
+    // ~~~~~test for toDefend() and toAttack()
 
-    for (Territory *t : toAttackTest)
-    {
-        cout << t->getName() << endl;
-    }
+    // cout << "Territories owned by " << p1->getPlayerName() << " before sorting based on priority are:\n"
+    //      << endl;
+
+    // for (Territory *t : p1->getTerritories())
+    // {
+    //     cout << t->getName() << endl;
+    //     t->setNumArmies(t->getName().length());
+    // }
+
+    // p1->toDefend();
+
+    // cout << "\nTerritories owned by " << p1->getPlayerName() << " after sorting based on priority are:\n"
+    //      << endl;
+
+    // for (Territory *t : p1->getTerritories())
+    // {
+    //     cout << t->getName() << endl;
+    // }
+
+    // cout << "\nEnemy territories of " << p1->getPlayerName() << " before sorting based on priority are:\n"
+    //      << endl;
+
+    // vector<Territory *> toAttackTest;
+    // vector<Territory *> p1Territories = p1->getTerritories();
+
+    // for (Territory *t : p1Territories)
+    // {
+    //     for (Territory *tadj : t->getAdjTerritories())
+    //     {
+
+    //         if (std::find(toAttackTest.begin(), toAttackTest.end(), tadj) == toAttackTest.end() && std::find(p1Territories.begin(), p1Territories.end(), tadj) == p1Territories.end())
+    //         {
+    //             toAttackTest.push_back(tadj);
+    //             tadj->setNumArmies(tadj->getName().length());
+    //         }
+    //     }
+    // }
+
+    // for (Territory *t : toAttackTest)
+    // {
+    //     cout << t->getName() << endl;
+    // }
+
+    // toAttackTest = p1->toAttack();
+
+    // cout << "\nEnemy territories of " << p1->getPlayerName() << " after sorting based on priority are:\n"
+    //      << endl;
+
+    // for (Territory *t : toAttackTest)
+    // {
+    //     cout << t->getName() << endl;
+    // }
 
     return 0;
 }
