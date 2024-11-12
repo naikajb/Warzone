@@ -55,7 +55,7 @@ public:
     static const char* GameStateStrings[];
 
     // added Main Game Loop part of the game
-    void reinforcementPhase(vector <Player*>, Map *map);
+    void reinforcementPhase(vector <Player*>, Map *map, int round);
     void issueOrdersPhase(vector <Player*>, int round);
     void executeOrdersPhase(vector <Player*>);
     void mainGameLoop(vector <Player*>, Map *map);

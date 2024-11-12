@@ -179,44 +179,44 @@ void testMainGameLoop(){
 
     // Clean up dynamically allocated memory
 
-// Delete Players
-delete p1;
-p1 = nullptr;
+// // Delete Players
+// delete p1;
+// p1 = nullptr;
 
-delete p2;
-p2 = nullptr;
+// delete p2;
+// p2 = nullptr;
 
-delete neutral;
-neutral = nullptr;
+// delete neutral;
+// neutral = nullptr;
 
-// Delete GameEngine
-delete g;
-g = nullptr;
+// // Delete GameEngine
+// delete g;
+// g = nullptr;
 
-// Delete MapLoader
-delete ml;
-ml = nullptr;
+// // Delete MapLoader
+// delete ml;
+// ml = nullptr;
 
-// Delete Cards
-delete bomb;
-bomb = nullptr;
+// // Delete Cards
+// delete bomb;
+// bomb = nullptr;
 
-delete blockade;
-blockade = nullptr;
+// delete blockade;
+// blockade = nullptr;
 
-delete airlift;
-airlift = nullptr;
+// delete airlift;
+// airlift = nullptr;
 
-delete negotiate;
-negotiate = nullptr;
+// delete negotiate;
+// negotiate = nullptr;
 
-// Clear the player list vector and delete each player pointer if they were dynamically allocated
-for (Player* player : pList) {
-    delete player;
-}
-pList.clear(); // Clear the vector to avoid dangling pointers
+// // Clear the player list vector and delete each player pointer if they were dynamically allocated
+// for (Player* player : pList) {
+//     delete player;
+// }
+// pList.clear(); // Clear the vector to avoid dangling pointers
 
-// Delete the observer if no other object depends on it
+// // Delete the observer if no other object depends on it
 // delete o;
 // o = nullptr;
 

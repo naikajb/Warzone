@@ -495,7 +495,7 @@ vector<int> GameEngine::getRandomizedNumbers(int n)
     return randomizedNumbers;
 }
 // added Main Game Loop part of the game
-void GameEngine::reinforcementPhase(vector<Player *> v, Map *map)
+void GameEngine::reinforcementPhase(vector<Player *> v, Map *map, int round)
 {
     cout << "\n~~~~~~REINFORCEMENT PHASE~~~~~~\n"
          << endl;
@@ -507,6 +507,12 @@ void GameEngine::reinforcementPhase(vector<Player *> v, Map *map)
         {
             continue;
         }
+        if (round == 3 && i == 0)
+        {
+            cout << v[i]->getPlayerName() << " has concurred 0 territories total !\n"
+                 << endl;
+        }
+        else
         cout << v[i]->getPlayerName() << " has concurred " << v[i]->getTerritories().size() << " territories total !\n"
              << endl;
 
@@ -731,7 +737,7 @@ void GameEngine::mainGameLoop(vector<Player *> v, Map *map)
     bool noWinner = true;
     do
     {
-        if (round == 10)
+        if (round == 3)
         {
             for (Territory *t : v[0]->getTerritories())
             {
@@ -750,34 +756,39 @@ void GameEngine::mainGameLoop(vector<Player *> v, Map *map)
         if (v.size() <= 2)
         {
             noWinner = false;
-            cout << "One Player Left !\nEnd of game !" << endl;
+            cout << "One Player Left !\nEnd of game !\n"
+                 << endl;
             break;
         }
 
         cout << "\nRound " << round << endl;
         if (round != 1)
         {
-            reinforcementPhase(v, map);
+            reinforcementPhase(v, map, round);
         }
         issueOrdersPhase(v, round);
         executeOrdersPhase(v);
         round++;
 
     } while (noWinner);
+    // cout << "Game ending successfully. Returning from mainGameLoop." << endl;
+    return;
 
-    string answer;
-    cout << "Winner !!! Player: " << v[0]->getPlayerName() << endl;
-    cout << "\nWould you like to play again ?\n<replay> if you want to replay !\n<quit> if you want to end the game..." << endl;
-    cin >> answer;
+    // string answer;
+    // cout << "Winner !!! Player: " << v[0]->getPlayerName() << endl;
+    // cout << "\nWould you like to play again ?\n<replay> if you want to replay !\n<quit> if you want to end the game..." << endl;
+    // cin >> answer;
 
-    if (answer.compare("quit"))
-    {
-        cout << "Thanks for playing with us ! Goodbye !" << endl;
-    }
+    // if (answer.compare("quit") == 0)
+    // {
+    //     cout << "Thanks for playing with us ! Goodbye !" << endl;
+    //     return;
+    // }
 
-    if (answer.compare("replay"))
-    {
-    }
+    // if (answer.compare("replay") == 0)
+    // {
+    // }
+    // return;
 }
 
 // NOTES: first round of the game: ~DONE~
