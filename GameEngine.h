@@ -11,10 +11,7 @@
 #include <cmath>
 #include <random>
 #include "LoggingObserver.h"
-#include "Player.h" //added
-#include "Map.h"
-#include "Orders.h"
-#include "Cards.h"
+
 #include "Map.h"
 #include "Player.h"
 #include "Cards.h"
@@ -24,6 +21,7 @@ using std::vector; // added
 using std::floor;
 
 void testStartupPhase();
+void testMainGameLoop();
 class GameEngine : public Subject, public ILoggable  {
 public:
     // declaring constructor
@@ -58,7 +56,7 @@ public:
 
     // added Main Game Loop part of the game
     void reinforcementPhase(vector <Player*>, Map *map);
-    void issueOrdersPhase(vector <Player*>);
+    void issueOrdersPhase(vector <Player*>, int round);
     void executeOrdersPhase(vector <Player*>);
     void mainGameLoop(vector <Player*>, Map *map);
 

@@ -1,2 +1,12 @@
 Game Log
 ---------------------------------------------
+Deploy order  had effect 10 units have been deployed to Canada by Trump
+Negotiate Order  had effect Truce has been negotiated between Trump and Harris
+GameEngine changed state to startState
+command validatemap has been executed. It had the effect: mapValidated
+GameEngine changed state to mapValidated
+command loadmap has been executed. It had the effect: mapLoadedState
+GameEngine changed state to mapLoadedState
+GameEngine changed state to mapLoadedState
+command gamestart has been executed. It had the effect: assignReinforcement
+GameEngine changed state to assignReinforcement

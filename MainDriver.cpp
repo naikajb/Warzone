@@ -1,10 +1,14 @@
-// #include <iostream>
+// // #include <iostream>
 
 // // Include headers for each part's test function
 #include "OrdersDriver.h"
 #include "LoggingObserver.h"
 #include "GameEngine.h"
 #include "CommandProcessor.h"
+
+#include "MapDriver.h"
+#include "GameEngine.h"
+// #include "GameEngineDriver.cpp"
 
 // #include "MapDriver.h"
 // #include "GameEngine.h"
@@ -25,7 +29,7 @@ int main(int argc, char **argv){
             std::cout << "Running tests..." << std::endl;
             int choice = 0;
 
-             // display the menu
+            //  display the menu
             do
             {
                 std::cout <<"Welcome Warzone Testing Menu:" << std::endl;
@@ -59,7 +63,7 @@ int main(int argc, char **argv){
                     // test the player component
                     std::cout << "\nTesting Part 3 - Game Play Implementation :\n--------------------------------------\n"
                               << std::endl;
-                    
+                    testMainGameLoop();
                     break;
                 case 4:
                     // test the orders list component
@@ -89,11 +93,11 @@ int main(int argc, char **argv){
              std::cout << "Invalid arguments. \nPlease run the program without any arguments to start the game or with '-test' to run the tests." << std::endl;
         }
 
-        return 0;
-    //if no arguments passed --> start the game
-    }else{
+//         return 0;
+//     //if no arguments passed --> start the game
+//     }else{
         
-        std::cout << "Starting the game..." << std::endl;
-        return 0;
+//         std::cout << "Starting the game..." << std::endl;
+//         return 0;
     }
 }
