@@ -1,13 +1,17 @@
 #include "CommandProcessor.h"
 
-CommandProcessor::CommandProcessor() {
+// Constructor
+CommandProcessor::CommandProcessor(Observer* o) {
+    Attach(o);
     createMap();
 }
 
+// Copy Constructor
 CommandProcessor::CommandProcessor(const CommandProcessor& commandProcessor) {
     std::cout << "Copy Constructor of CommandProcessor";
 }
 
+// Destructor
 CommandProcessor::~CommandProcessor() {
     for (Command* cmd : commands) {
         delete cmd;
@@ -15,31 +19,33 @@ CommandProcessor::~CommandProcessor() {
     }
     commands.clear();
     Detach(observer);
-
 }
 
-//REMEBER TO DELETE POINTER WHEN FUNCTION IS CALLED
+// Read the command from the input
 Command* CommandProcessor::readCommand(std::string& commandstr) {
     Command* command = new Command(commandstr);
-    //command->Attach(observer);
+    command->Attach(observer);
+    //std::cout << "Command is created: " << *command << std::endl;
     return command;
 }
 
+// Save the command to the stored vector
 void CommandProcessor::saveCommand(Command* cmd) {
     if (cmd != nullptr) {
         commands.push_back(cmd);
-       // Notify(this);
+        Notify(this);
     } else {
         std::cout << "Error: Command is null!" << std::endl;
     }
 }
-
+// Get the command from the input
 Command* CommandProcessor::getCommand(std::string& commandstr) {
     Command* cmd = readCommand(commandstr);
     saveCommand(cmd);
     return cmd;
 }
 
+// Create the map of commands and states
 void CommandProcessor::createMap() {
     commandStateMap.insert(std::make_pair("loadmap", "startState"));
     commandStateMap.insert(std::make_pair("loadmap", "mapLoadedState"));
@@ -49,17 +55,11 @@ void CommandProcessor::createMap() {
     commandStateMap.insert(std::make_pair("gamestart", "playersAdded"));
     commandStateMap.insert(std::make_pair("replay", "win"));
     commandStateMap.insert(std::make_pair("quit", "win"));
-    // commandStateMap.insert(pair<Command*, std::string>(new Command("assigncountries"), "playersAdded"));
-    // commandStateMap.insert(pair<Command*, std::string>(new Command("issueorder"), "assignReinforcement"));
-    // commandStateMap.insert(pair<Command*, std::string>(new Command("execorder"), "issueOrders"));
-    // commandStateMap.insert(pair<Command*, std::string>(new Command("endexecorders"), "executeOrders"));
-    // commandStateMap.insert(pair<Command*, std::string>(new Command("win"), "executeOrders"));
-    // commandStateMap.insert(pair<Command*, std::string>(new Command("play"), "win"));
-    // commandStateMap.insert(pair<Command*, std::string>(new Command("end"), "win"));
 }
 
+// Validate the command with the current state
 bool CommandProcessor::validate(Command* cmd, const char* state) {
-    std::cout << "Validating command: " << *cmd << " against state: " << state << std::endl;
+    // std::cout << "Validating command: " << *cmd << " against state: " << state << std::endl;
     
     std::string commandStr = cmd->getCommandStr();
     auto range = commandStateMap.equal_range(commandStr);
@@ -75,10 +75,14 @@ bool CommandProcessor::validate(Command* cmd, const char* state) {
     return false;
 }
 
+// Convert the command processor to a string
 std::string CommandProcessor::stringToLog() {
-    std::string log = "CommandProcessor: ";
+    std::string str =  "CommandProcessor is processing command " + commands.back()->getCommandStr()
+            + "\n\tpast commands: ";
     for (Command* cmd : commands) {
-        log += cmd->stringToLog() + "\n";
+        str += cmd->getCommandStr() + ", ";
     }
-    return log;
+    return str;
+            
+
 }

@@ -55,8 +55,8 @@ void Subject::Notify(ILoggable* loggableObject){
     if (observer != NULL){
         observer->update(loggableObject);
     }
-    else{
-        std::cout << "No observer attached" << std::endl;
-    }
+    // else{
+    //     std::cout << "No observer attached" << std::endl;
+    // }
 }
 
