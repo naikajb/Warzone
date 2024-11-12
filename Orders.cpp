@@ -723,6 +723,11 @@ vector<Player *> getPlayerList()
 { // tets method
     return playerList;
 }
+
+void clearPlayerList(){
+    playerList.clear();
+}
+
 std::string OrdersList::stringToLog()
 {
     std::string logString = "Current Orders List: \n";

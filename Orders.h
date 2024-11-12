@@ -210,4 +210,7 @@ static vector<Player*> playerList;
 vector<Player*> getPlayerList();
 void addToPlayerList(Player*);
 
+    void clearPlayerList();
+
+
 #endif // ORDERS_H

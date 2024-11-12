@@ -21,6 +21,7 @@ using std::vector; // added
 using std::floor;
 
 void testStartupPhase();
+void testMainGameLoop();
 class GameEngine : public Subject, public ILoggable  {
 public:
     // declaring constructor

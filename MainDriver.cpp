@@ -6,29 +6,30 @@
 #include "GameEngine.h"
 #include "CommandProcessor.h"
 
+#include "MapDriver.h"
+#include "GameEngine.h"
+// #include "GameEngineDriver.cpp"
+
 // #include "MapDriver.h"
 // #include "GameEngine.h"
+// #include "PlayerDriver.h"
+// #include "CardDriver.h"
+#include <cstring>
 
-// // #include "MapDriver.h"
-// // #include "GameEngine.h"
-// // #include "PlayerDriver.h"
-// // #include "CardDriver.h"
-// #include <cstring>
+int main(int argc, char **argv){
+//if there is more than one argument passed to the program print error message
+    if (argc > 2){
+       std::cout << "Invalid arguments. \nPlease run the program without any arguments to start the game or with '-test' to run the tests." << std::endl;
+       return 0;
+    }
+    //if one argument passed --> check that it is '-test' to run the tests otherwise print error message
+    else if (argc == 2){
+        if (strcmp(argv[1], "-test") == 0)
+        {
+            std::cout << "Running tests..." << std::endl;
+            int choice = 0;
 
-// int main(int argc, char **argv){
-// //if there is more than one argument passed to the program print error message
-//     if (argc > 2){
-//        std::cout << "Invalid arguments. \nPlease run the program without any arguments to start the game or with '-test' to run the tests." << std::endl;
-//        return 0;
-//     }
-//     //if one argument passed --> check that it is '-test' to run the tests otherwise print error message
-//     else if (argc == 2){
-//         if (strcmp(argv[1], "-test") == 0)
-//         {
-//             std::cout << "Running tests..." << std::endl;
-//             int choice = 0;
-
-             // display the menu
+            //  display the menu
             do
             {
                 std::cout <<"Welcome Warzone Testing Menu:" << std::endl;
@@ -62,7 +63,7 @@
                     // test the player component
                     std::cout << "\nTesting Part 3 - Game Play Implementation :\n--------------------------------------\n"
                               << std::endl;
-                    
+                    testMainGameLoop();
                     break;
                 case 4:
                     // test the orders list component
@@ -98,5 +99,5 @@
         
 //         std::cout << "Starting the game..." << std::endl;
 //         return 0;
-//     }
-// }
+    }
+}
