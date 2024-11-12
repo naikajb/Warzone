@@ -3,7 +3,7 @@
 
 
 // free function, it controls the command loop that interacts with the GameEngine through the CommandParser
-void testGameStates() { // to accept command-line command, argc is the number of arguments, argv is the array of arguments
+/*void testGameStates() { // to accept command-line command, argc is the number of arguments, argv is the array of arguments
 
     Observer* obs = new LogObserver();
     std::string inputMode;
@@ -74,7 +74,7 @@ void testGameStates() { // to accept command-line command, argc is the number of
     //     }
     //     parser.parseCommand(input);
  }
-};
+};*/
 
 void testStartupPhase() {
     Observer* o = new LogObserver();
