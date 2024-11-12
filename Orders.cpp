@@ -169,16 +169,16 @@ bool Advance::validateOrder()
     }
 
 // update to try to remove the neutral player and also the playerlist
-    for (Player *p : getPlayerList())
-    {
+    // for (Player *p : getPlayerList())
+    // {
 
-        for (Territory *t : p->getTerritories())
-        {
-            if (t == target)
-                return validAdj && !checkNegotiatePairs(player, p) && source->getNumArmies() >= armies;
-        } // the above validates that if the two players (or one) owning both Territories are in a truce for the round
+        // for (Territory *t : p->getTerritories())
+        // {
+            // if (t == target) // changed from looping through the territories to just getting the player from the target territory
+                return validAdj && !checkNegotiatePairs(player, target->getPlayer()) && source->getNumArmies() >= armies;
+        // } // the above validates that if the two players (or one) owning both Territories are in a truce for the round
         // and checks if the amount of troops being sent is lower than the amount of troops present in the source Territory
-    }
+    // }
 
     return false;
 }
@@ -223,26 +223,26 @@ void Advance::executeOrder()
 
             cout << "The defending army has lost the battle! Transferring ownership of Territory " << target->getName() << " to " << player->getPlayerName() << endl;
 
-            bool found = false;
+            // bool found = false;
 
-            for (Player *p : getPlayerList())
-            {
+            // for (Player *p : getPlayerList())
+            // {
 
-                for (Territory *t : p->getTerritories())
-                {
+                // for (Territory *t : p->getTerritories())
+                // {
 
-                    if (t == target)
-                    {
+                    // if (t == target)
+                    // {
 
-                        p->removeTerritory(t); // removes Territory from the defending player's Territory list
-                        found = true;
-                        break;
-                    }
-                }
+                        target->getPlayer()->removeTerritory(target); // removes Territory from the defending player's Territory list
+                        // found = true;
+                        // break;
+                    // }
+                // }
 
-                if (found)
-                    break;
-            }
+                // if (found)
+                    // break;
+            // }
 
             if (player->getCanDrawCard())
             { // checks to see if the player can draw a Card this round
@@ -355,17 +355,17 @@ bool Bomb::validateOrder()
         }
     }
 
-    for (Player *p : getPlayerList())
-    {
+    // for (Player *p : getPlayerList())
+    // {
 
-        for (Territory *t : p->getTerritories())
-        {
+        // for (Territory *t : p->getTerritories())
+        // {
 
-            if (t == target)
-                return validAdj && !checkNegotiatePairs(player, p);
+            // if (t == target)
+                return validAdj && !checkNegotiatePairs(player, target->getPlayer());
 
-        } // the above validates if the player issuing the order and the player owning the target territory are in a truce this round
-    }
+        // } // the above validates if the player issuing the order and the player owning the target territory are in a truce this round
+    // }
 
     return false;
 }
@@ -441,31 +441,31 @@ void Blockade::executeOrder()
 
     player->removeTerritory(target); // removes target Territory from the territory list of the player issuing the Order
 
-    bool neutralCreated = false;
+    // bool neutralCreated = false;
 
-    for (Player *p : getPlayerList())
-    {
+    // for (Player *p : getPlayerList())
+    // {
 
-        if ((p->getPlayerName().compare("Neutral")) == 0)
-        { // if the neutral player already exists
+    //     if ((p->getPlayerName().compare("Neutral")) == 0)
+    //     { // if the neutral player already exists
 
-            p->addTerritory(target); // adds Territory to the neutral player's list
-            neutralCreated = true;
-            break;
-        }
-        if (neutralCreated)
-            break;
-    }
+    //         p->addTerritory(target); // adds Territory to the neutral player's list
+    //         neutralCreated = true;
+    //         break;
+    //     }
+    //     if (neutralCreated)
+    //         break;
+    // }
 
-    if (!neutralCreated)
-    { // if the neutral player doesnt already exist
+    // if (!neutralCreated)
+    // { // if the neutral player doesnt already exist
 
-        Player *n = new Player(observer, "Neutral"); // creates Neutral player
+    //     Player *n = new Player(observer, "Neutral"); // creates Neutral player
 
-        addToPlayerList(n); // adds the neutral player to the list
+    //     addToPlayerList(n); // adds the neutral player to the list
 
-        n->addTerritory(target); // adds the territory to the neutral player's list
-    }
+    //     n->addTerritory(target); // adds the territory to the neutral player's list
+    // }
 
     target->setNumArmies(target->getNumArmies() * 2); // doubles the number of units on the target Territory
 

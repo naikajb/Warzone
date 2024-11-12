@@ -94,12 +94,12 @@ void testMainGameLoop(){
     cout << "\nplayer 1: " << p1->getPlayerName() << endl;
     cout << "\nplayer 2: " << p2->getPlayerName() << endl;
 
-    addToPlayerList(p1);
-    addToPlayerList(p2);
-    addToPlayerList(neutral);
+    // addToPlayerList(p1);
+    // addToPlayerList(p2);
+    // addToPlayerList(neutral);
     vector<Player *> pList = getPlayerList();
-    // pList.push_back(p1);
-    // pList.push_back(p2);
+    pList.push_back(p1);
+    pList.push_back(p2);
 
     // add a random loop to deisgnate territories to the players (this is usually done at startup)
     for (Territory *t : ml->getMap()->getTerritories())

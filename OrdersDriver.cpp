@@ -51,16 +51,22 @@
 void testOrderExecution()
 {
 
-    clearPlayerList();
+    // clearPlayerList();
     Observer *ob = new LogObserver();
 
     Player *p1 = new Player(ob, "Jake");
     Player *p2 = new Player(ob, "Joop");
     Player *p3 = new Player(ob, "Tanya");
 
-    addToPlayerList(p1);
-    addToPlayerList(p2);
-    addToPlayerList(p3);
+    // addToPlayerList(p1);
+    // addToPlayerList(p2);
+    // addToPlayerList(p3);
+
+    vector<Player *> playersList;
+    playersList.push_back(p1);
+    playersList.push_back(p2);
+    playersList.push_back(p3);
+   
 
     Territory *t1 = new Territory("1", new Continent("C", 0));
     Territory *t2 = new Territory("2", new Continent("C", 0));

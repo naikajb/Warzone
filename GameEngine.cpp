@@ -731,23 +731,23 @@ void GameEngine::mainGameLoop(vector<Player *> v, Map *map)
     bool noWinner = true;
     do
     {
-        if (round == 10)
-        {
-            for (Territory *t : v[0]->getTerritories())
-            {
-                v[0]->removeTerritory(t);
-            }
-        }
+        // if (round == 10)
+        // {
+        //     for (Territory *t : v[0]->getTerritories())
+        //     {
+        //         v[0]->removeTerritory(t);
+        //     }
+        // }
         for (int i = 0; i < v.size(); i++)
         {
-            if (v[i]->getTerritories().size() == 0 && v[i]->getPlayerName().compare("Neutral") != 0)
+            if (v[i]->getTerritories().size() == 0)
             {
                 cout << v[i]->getPlayerName() << " has " << v[i]->getTerritories().size() << " territories !\nRemoving " << v[i]->getPlayerName() << " ..." << endl;
                 v.erase(v.begin() + i);
             }
         }
 
-        if (v.size() <= 2)
+        if (v.size() == 1)
         {
             noWinner = false;
             cout << "One Player Left !\nEnd of game !" << endl;
@@ -770,13 +770,32 @@ void GameEngine::mainGameLoop(vector<Player *> v, Map *map)
     cout << "\nWould you like to play again ?\n<replay> if you want to replay !\n<quit> if you want to end the game..." << endl;
     cin >> answer;
 
-    if (answer.compare("quit"))
+    while (true)
     {
-        cout << "Thanks for playing with us ! Goodbye !" << endl;
-    }
+        if (answer.compare("quit") == 0)
+        {
+            cout << "Thanks for playing with us ! Goodbye !" << endl;
+            break;
+        }
 
-    if (answer.compare("replay"))
-    {
+        else if (answer.compare("replay") == 0)
+        {
+            cout << "Alright ! Another Game !" << endl;
+            // v.clear();
+            // Player *p1 = new Player(o, "Ihana");
+            // Player *p2 = new Player(o, "Shamma");
+            // v.push_back(p1);
+            // v.push_back(p2);
+
+            // mainGameLoop(v, map);
+            break;
+        }
+        else
+        {
+            cout << "Sorry ! I do not understand that command...\n<replay> if you want to replay !\n<quit> if you want to end the game..." << endl;
+            cin >> answer;
+            continue;
+        }
     }
 }
 
