@@ -268,7 +268,7 @@ void Player::issueOrder(Order *order)
     // if the order is of type negotiate
     if (Negotiate *n = dynamic_cast<Negotiate *>(order))
     {
-        if (selectedTerritoryToAttack->getPlayer() != nullptr)
+        if (selectedTerritoryToAttack->getPlayer() != nullptr && selectedTerritoryToAttack->getPlayer()->getPlayerName().compare("Neutral"))
         {
             cout << "\nNegotiate Order issued for : " << playerName << endl;
             // from a random selected territory to attack, negotiate with the player that owns it
@@ -285,8 +285,8 @@ void Player::issueOrder(Order *order)
         cout << "\nBlockade Order issued for : " << playerName << endl;
 
         // blockade random selected territory to attack
-        cout << playerName << " BLOCKADE ! territory: " << selectedTerritoryToAttack->getName() << endl;
-        Blockade *block = new Blockade(observer, this, selectedTerritoryToAttack);
+        cout << playerName << " BLOCKADE ! territory: " << selectedTerritoryToDefend->getName() << endl;
+        Blockade *block = new Blockade(observer, this, selectedTerritoryToDefend);
         orders->addOrder(block);
         return;
     }
@@ -344,6 +344,7 @@ void Player::issueOrder(Order *order)
 
             cout << playerName << " has chosen to DEFEND !" << endl;
 
+            int count = 0;
             // a while loop to ensure that the randomly generated territory from toDefend() is not the same as
             // the randomly generated territory to airlift to
             while (true)
@@ -382,7 +383,12 @@ void Player::issueOrder(Order *order)
                 //  continue the while loop and restart the randomizer for the airlift
                 else
                 {
+                    count++;
                     cout << selectedTerritoryToDefend->getName() << " is the same as the territory to defend: " << airlift->getName() << "\npick a new territory to defend!" << endl;
+                    if (count == 3)
+                    {
+                        return;
+                    }
                     continue;
                 }
             }

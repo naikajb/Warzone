@@ -374,6 +374,10 @@ void GameEngine::reinforcementPhase(vector<Player *> v, Map *map)
 
     for (int i = 0; i < v.size(); i++)
     {
+        if (v[i]->getPlayerName().compare("Neutral") == 0)
+        {
+            continue;
+        }
         cout << v[i]->getPlayerName() << " has concurred " << v[i]->getTerritories().size() << " territories total !" << endl;
         if (v[i]->getTerritories().size() < 9)
         {
@@ -431,6 +435,13 @@ void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
     // if every value in the vector is 1, then no more orders for the player
     vector<int> outOfOrder(v.size());
 
+    // empties list of orders at the start of every round
+    for (Player *p : v)
+    {
+        p->getOrderList()->clearOrders();
+        cout << "EMPTYYYYY :P SLAYYYYYY" << endl;
+    }
+
     // boolean moreOrder to continue this loop until there are no more orders
     bool moreOrder = true;
     while (moreOrder)
@@ -441,6 +452,10 @@ void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
         // go through the vector of players
         for (int i = 0; i < v.size(); i++)
         {
+            if (v[i]->getPlayerName().compare("Neutral") == 0)
+            {
+                continue;
+            }
             // if the player still has armies in reinforcement, deploy order
             // temp is used to avoid modifying the original reinforcement pool values until order execution
             if (v[i]->getReinforcementTemp() != 0)
@@ -494,7 +509,8 @@ void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
             // when all of the previous possible orders are done, change the value to 1 for that player
             else if (outOfOrder[i] != 1)
             {
-                cout << "\n" << v[i]->getPlayerName() << " is out of orders !" << endl;
+                cout << "\n"
+                     << v[i]->getPlayerName() << " is out of orders !" << endl;
                 outOfOrder[i] = 1;
             }
         }
@@ -574,6 +590,29 @@ void GameEngine::mainGameLoop(vector<Player *> v, Map *map)
     bool noWinner = true;
     do
     {
+        if (round == 5)
+        {
+            for (Territory *t : v[0]->getTerritories())
+            {
+                v[0]->removeTerritory(t);
+            }
+        }
+        for (int i = 0; i < v.size(); i++)
+        {      
+            if (v[i]->getTerritories().size() == 0 && v[i]->getPlayerName().compare("Neutral") != 0)
+            {
+                cout << "removing " << v[i]->getPlayerName() << endl;
+                v.erase(v.begin() + i);
+            }
+        }
+  
+        if (v.size() <= 2)
+        {
+            noWinner = false;
+            cout << "end of game" << endl;
+            break;
+        }
+
         cout << "\nRound " << round << endl;
         if (round != 1)
         {
@@ -583,24 +622,20 @@ void GameEngine::mainGameLoop(vector<Player *> v, Map *map)
         executeOrdersPhase(v);
         round++;
 
-        for (int i; i < v.size(); i++)
-        {
-            if (v[i]->getTerritories().size() == 0)
-            {
-                v.erase(v.begin() + i);
-            }
-        }
-
-        if (v.size() == 1)
-        {
-            noWinner = false;
-        }
     } while (noWinner);
 
     string answer;
     cout << "Winner ! Player: " << v[0]->getPlayerName() << endl;
     cout << "\nWould you like to play again ?\n<replay> if you want to replay !\n<quit> if you want to end the game..." << endl;
     cin >> answer;
+
+    if (answer.compare("quit")){
+        cout << "End of Game ! Goodbye !" << endl;
+    }
+
+    if (answer.compare("replay")){
+    }
+    
 }
 
 // NOTES: first round of the game: ~DONE~
@@ -613,7 +648,7 @@ void GameEngine::mainGameLoop(vector<Player *> v, Map *map)
 // - test issueOrderPhase() and add proper cout for testing ALSO the toDefend() and toAttack() ~DONE~
 
 // - test issueExecution() and fix the orders issues
-// - test out main game loop and make sure that the reinforcement phase is called only after the first loop
+// - test out main game loop
 // - create testMainGameLoop() in GameEngineDriver
 
 // Other parts:
@@ -621,7 +656,7 @@ void GameEngine::mainGameLoop(vector<Player *> v, Map *map)
 // - make sure the orders have all the proper values
 // - iloggable needs to work in my part
 // - make sure that at startup, and at orders the territories are updated on the player owners
-// - make sure that the orders keep track of the armies 
+// - make sure that the orders keep track of the armies
 
 int main()
 {
@@ -630,13 +665,17 @@ int main()
     Player *p1 = new Player(o, "Ihana");
     Player *p2 = new Player(o, "Shamma");
     GameEngine *g = new GameEngine(o);
+    Player *neutral = new Player(o, "Neutral");
 
     cout << "\nplayer 1: " << p1->getPlayerName() << endl;
     cout << "\nplayer 2: " << p2->getPlayerName() << endl;
 
-    vector<Player *> pList;
-    pList.push_back(p1);
-    pList.push_back(p2);
+    addToPlayerList(p1);
+    addToPlayerList(p2);
+    addToPlayerList(neutral);
+    vector<Player *> pList = getPlayerList();
+    // pList.push_back(p1);
+    // pList.push_back(p2);
 
     // add a random loop to deisgnate territories to the players (this is usually done at startup)
     for (Territory *t : ml->getMap()->getTerritories())
@@ -669,8 +708,8 @@ int main()
     // cout << "\n"
     //      << p2->getPlayerName() << " has " << p2->getReinforcementPool() << " many armies to deploy for this round !" << endl;
 
-    cout << "\n----------Issue Ordering Phase Test----------"
-         << endl;
+    // cout << "\n----------Issue Ordering Phase Test----------"
+    //      << endl;
 
     // add cards for each player (usually done in startup)
     Card *bomb = new Card(Card::BOMB);
@@ -687,29 +726,32 @@ int main()
     p1->addCard(negotiate);
     p2->addCard(negotiate);
 
-
     // checks for the first round is only deploy
-    cout<<"\nFirst round ! " << endl;
-    g->issueOrdersPhase(pList, 1);
+    // cout << "\nFirst round ! " << endl;
+    // g->issueOrdersPhase(pList, 1);
+    // g->executeOrdersPhase(pList);
 
-    // test for a bunch another round in the game with a bunch of random values of armies in the territories
-    for (Territory *t : p1->getTerritories())
-    {
-        t->setNumArmies(t->getName().length());
-    }
-    for (Territory *t : p2->getTerritories())
-    {
-        t->setNumArmies(t->getName().length());
-    }
-    cout<<"\nSecond round ! " << endl;
-    g->reinforcementPhase(pList, ml->getMap());
-    g->issueOrdersPhase(pList, 2);
+    // // test for a bunch another round in the game with a bunch of random values of armies in the territories
+    // for (Territory *t : p1->getTerritories())
+    // {
+    //     t->setNumArmies(t->getName().length());
+    // }
+    // for (Territory *t : p2->getTerritories())
+    // {
+    //     t->setNumArmies(t->getName().length());
+    // }
+    // cout << "\nSecond round ! " << endl;
+    // g->reinforcementPhase(pList, ml->getMap());
+    // g->issueOrdersPhase(pList, 2);
 
+    // cout << "\n----------Issue Executing Phase Test----------"
+    //      << endl;
+    // g->executeOrdersPhase(pList);
 
+    cout << "\n----------Main Game Loop Phase Test----------"
+         << endl;
 
-
-
-
+    g->mainGameLoop(pList, ml->getMap());
 
     // ~~~~~test for toDefend() and toAttack()
 
