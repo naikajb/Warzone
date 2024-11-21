@@ -13,6 +13,9 @@
 using std::sort;
 class OrdersList;
 class Order;
+class Territory;
+class PlayerStrategy;
+
 
 class Player{
 
@@ -25,7 +28,7 @@ class Player{
         int reinforcementPool; // nb of armies recieved added
         int reinforcementTemp;
         Observer* observer;
-        //PlayerStrategies* strategy;
+        PlayerStrategy* strategy;
 
     public: 
         Player(Observer*,string playerName); //constructor function

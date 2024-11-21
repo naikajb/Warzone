@@ -11,47 +11,58 @@
 
 using namespace std;
 class PlayerStrategy {
-    public:
-        virtual void issueOrder() = 0;
-        virtual void toAttack() = 0;
-        virtual void toDefend() = 0;
     private:
         Player* player;
+
+    public:
+        virtual void issueOrder() = 0;
+        virtual vector<Territory*> toAttack() = 0;
+        virtual vector<Territory*> toDefend() = 0;
+        void assignPlayer(Player*);
+        vector<Territory*> generalToDefend();
+        void becomeAggressive();
+        Player* getPlayer();
+        void setPlayer(Player*);
 };
 
 class HumanPlayerStrategy : public PlayerStrategy {
     public:
         void issueOrder();
-        void toAttack();
-        void toDefend();
+        vector<Territory*> toAttack();
+        vector<Territory*> toDefend();
 };
 
 class AggressivePlayerStrategy : public PlayerStrategy {
-    public:
+   public:
         void issueOrder();
-        void toAttack();
-        void toDefend();
+        vector<Territory*> toAttack();
+        vector<Territory*> toDefend();
 };
 
 class BenevolentPlayerStrategy : public PlayerStrategy {
     public:
         void issueOrder();
-        void toAttack();
-        void toDefend();
+        vector<Territory*> toAttack();
+        vector<Territory*> toDefend();
 };
 
 class NeutralPlayerStrategy : public PlayerStrategy {
     public:
         void issueOrder();
-        void toAttack();
-        void toDefend();
+        vector<Territory*> toAttack();
+        vector<Territory*> toDefend();
 };
 
 class CheaterPlayerStrategy : public PlayerStrategy {
     public:
         void issueOrder();
-        void toAttack();
-        void toDefend();
+        vector<Territory*> toAttack();
+        vector<Territory*> toDefend();
 };
+
+
+bool compareArmies(Territory*,Territory*);
+
+
 
 #endif
