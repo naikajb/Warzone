@@ -9,6 +9,7 @@
 #include "Cards.h"
 #include "Map.h"
 #include "LoggingObserver.h"
+#include "PlayerStrategies.h"
 using std::sort;
 class OrdersList;
 class Order;
@@ -24,6 +25,7 @@ class Player{
         int reinforcementPool; // nb of armies recieved added
         int reinforcementTemp;
         Observer* observer;
+        //PlayerStrategies* strategy;
 
     public: 
         Player(Observer*,string playerName); //constructor function

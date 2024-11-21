@@ -43,14 +43,16 @@ void BenevolentPlayerStrategy::toDefend() {
 
 void NeutralPlayerStrategy::issueOrder() {
     cout << "Neutral Player Strategy: issueOrder" << endl;
+
 }
 
 void NeutralPlayerStrategy::toAttack() {
-    cout << "Neutral Player Strategy: toAttack" << endl;
+    cout << "A Neutral Player does not attack!" << endl;
 }
 
 void NeutralPlayerStrategy::toDefend() {
     cout << "Neutral Player Strategy: toDefend" << endl;
+    
 }
 
 // CHEATER PLAYER STRATEGY
@@ -61,6 +63,7 @@ void CheaterPlayerStrategy::issueOrder() {
 
 void CheaterPlayerStrategy::toAttack() {
     cout << "Cheater Player Strategy: toAttack" << endl;
+    
 }
 
 void CheaterPlayerStrategy::toDefend() {
