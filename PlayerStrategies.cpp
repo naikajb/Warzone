@@ -7,9 +7,7 @@ Player* PlayerStrategy::getPlayer(){return player;}
 void PlayerStrategy::setPlayer(Player* p ){player = p;}
 
 
-
-
-void HumanPlayerStrategy::issueOrder() {
+void HumanPlayerStrategy::issueOrder(Order*) {
     cout << "Human Player Strategy: issueOrder" << endl;
 }
 
@@ -22,21 +20,60 @@ vector<Territory*> HumanPlayerStrategy::toDefend() {
 }
 
 // AGGRESSIVE PLAYER STRATEGY
-void AggressivePlayerStrategy::issueOrder() {
+void AggressivePlayerStrategy::issueOrder(Order*) {
     cout << "Aggressive Player Strategy: issueOrder" << endl;
 }
 
 vector<Territory*> AggressivePlayerStrategy::toAttack() {
     cout << "Aggressive Player Strategy: toAttack" << endl;
+
+
 }
 
 vector<Territory*> AggressivePlayerStrategy::toDefend() {
     cout << "Aggressive Player Strategy: toDefend" << endl;
 }
 
+
+
+
+
+
 // BENEVOLENT PLAYER STRATEGY
-void BenevolentPlayerStrategy::issueOrder() {
-    cout << "Benevolent Player Strategy: issueOrder" << endl;
+void BenevolentPlayerStrategy::issueOrder(Order* order) {
+    
+     std::random_device rd;
+    // generator seeded by rd for random numbers
+        std::mt19937 gen(rd());
+
+
+        Territory *selectedTerritoryToDefend = toDefend()[randomIndexDefend];
+
+    if (Deploy *d = dynamic_cast<Deploy *>(order))
+    {
+        cout << "\nDeploy Order issued for : " << this->getPlayer()->getPlayerName() << " with " << this->getPlayer()->getReinforcementTemp() << " armies in the reinforcement pool !" << endl;
+
+        // choose a random number of army units to deploy
+        // reinforcement temp is used to keep track of the reinforcement pool
+        // without actually modifying it until the order execution
+        int min = 0;
+        int max = this->getPlayer()->getReinforcementTemp();
+        std::uniform_int_distribution<> distRandArmiesDeploy(min, max);
+        int randomNumArmiesDeploy = distRandArmiesDeploy(gen);
+
+        // deploy random number of army units to a random territory to defend
+        Deploy *dep = new Deploy(this->getPlayer()->getObserver(), this, randomNumArmiesDeploy, selectedTerritoryToDefend);
+
+        reinforcementTemp -= randomNumArmiesDeploy;
+
+        cout << "Deploy to: " << selectedTerritoryToDefend->getName() << " with " << randomNumArmiesDeploy << " armies\n"
+             << reinforcementTemp << " armies left in reinforcement pool" << endl;
+        // add order to order list
+        orders->addOrder(dep);
+        return;
+    }
+
+
 }
 
 vector<Territory*> BenevolentPlayerStrategy::toAttack() {
@@ -55,9 +92,17 @@ vector<Territory*> BenevolentPlayerStrategy::toDefend() {
 
     }
 
-    return t_list;
+    int nb = t_list.size()*0.25;
 
-    
+    for(int i = 0; i < nb; i++){
+
+        t_list.at(i)->setNumArmies(t_list.at(i)->getNumArmies()+this->getPlayer()->getReinforcementPool()/nb);
+
+    }
+
+    this->getPlayer()->setReinforcementPool(0);
+
+    return t_list;
 
 }
 
@@ -71,7 +116,7 @@ bool compareArmies(Territory* a, Territory* b) {
 
 // NEUTRAL PLAYER STRATEGY
 
-void NeutralPlayerStrategy::issueOrder() {
+void NeutralPlayerStrategy::issueOrder(Order*) {
     cout << "Neutral Player doesn't issue orders." << endl;
 
 }
@@ -94,7 +139,7 @@ vector<Territory*> NeutralPlayerStrategy::toDefend() {
 
 // CHEATER PLAYER STRATEGY
 
-void CheaterPlayerStrategy::issueOrder() {
+void CheaterPlayerStrategy::issueOrder(Order*) {
     cout << "Cheater player doesn't issue orders." << endl;
 }
 
@@ -176,7 +221,14 @@ void PlayerStrategy::becomeAggressive(){
     AggressivePlayerStrategy* aps = new AggressivePlayerStrategy();
 
     aps->player = this->player;
-    /////////////////
+
+    for(Territory* t : aps->getPlayer()->getTerritories()){
+        t->setPlayer(aps->player);
+    }
+    
+    removePlayerFromList(this->player);
+
+    addToPlayerList(aps->player);
 
     // remove previous player
     // add this player to list

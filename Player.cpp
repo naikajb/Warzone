@@ -84,6 +84,8 @@ OrdersList *Player::getOrderList()
     return orders;
 }
 
+Observer* Player::getObserver(){return observer;}
+
 // adds order to the player's list of orders
 void Player::issueOrder(Order *order)
 {
@@ -535,6 +537,20 @@ ostream &operator<<(ostream &out, const Player &player)
         out << "\t" << territory->getName() << endl;
     }
     return out;
+}
+
+Player &Player::operator=(const Player &o)
+{
+    this->playerName = o.playerName;
+    this->territories = o.territories;
+    this->hand = o.hand;
+    this->orders = o.orders;
+    this->canDrawCard = o.canDrawCard;
+    this->reinforcementPool = o.reinforcementPool;
+    this->reinforcementTemp = o.reinforcementTemp;
+    this->observer = o.observer;
+
+    return *this;
 }
 
 std::string Player::getPlayerName()

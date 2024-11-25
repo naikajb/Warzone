@@ -727,6 +727,12 @@ void clearPlayerList()
     playerList.clear();
 }
 
+void removePlayerFromList(Player* p){
+
+    playerList.erase(std::remove(playerList.begin(), playerList.end(), p), playerList.end());
+
+}
+
 std::string OrdersList::stringToLog()
 {
     std::string logString = "Current Orders List: \n";

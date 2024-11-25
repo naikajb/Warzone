@@ -44,6 +44,9 @@ class Player{
         int getReinforcementPool();
         int getReinforcementTemp();
 
+        Observer* getObserver();
+
+
         std::vector<Territory*> toDefend();  //returns territories to be defended 
         std::vector<Territory*> toAttack();  //returns territories to be attacked
         
@@ -51,6 +54,7 @@ class Player{
         
         //stream insertion operator to print player's information
         friend std::ostream& operator<<(std::ostream& out, const Player& player);
+        Player &operator=(const Player&);
         
         void addCard(Card* card);  //adds card to player's hand
         void removeCard(Card* card);  //removes card from player's hand
