@@ -1,6 +1,8 @@
 Windows
 g++ -std=c++11 *.cpp
 ./a.exe
+OR 
+./a.exe -test
 
 Mac
 g++ -std=c++11 *.cpp
