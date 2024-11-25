@@ -8,6 +8,10 @@
 #include <sstream>  // import library to use string streams
 #include <fstream>  // import library to input and output stream class to operate on files
 #include "Player.h"
+#include "Orders.h"
+#include "Map.h"
+
+class Order;
 
 using namespace std;
 class PlayerStrategy {

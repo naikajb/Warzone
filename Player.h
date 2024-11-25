@@ -43,6 +43,8 @@ class Player{
         void setReinforcementPool(int);
         int getReinforcementPool();
         int getReinforcementTemp();
+        PlayerStrategy* getPlayerStrategy();
+        void setPlayerStrategy(PlayerStrategy*);
 
         Observer* getObserver();
 

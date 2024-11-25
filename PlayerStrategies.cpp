@@ -1,5 +1,4 @@
 #include "PlayerStrategies.h"
-#include "Map.h"
 
 // HUMAN PLAYER STRATEGY
 
@@ -20,18 +19,121 @@ vector<Territory*> HumanPlayerStrategy::toDefend() {
 }
 
 // AGGRESSIVE PLAYER STRATEGY
-void AggressivePlayerStrategy::issueOrder(Order*) {
-    cout << "Aggressive Player Strategy: issueOrder" << endl;
+void AggressivePlayerStrategy::issueOrder(Order* order) {
+
+    if (Deploy *d = dynamic_cast<Deploy *>(order))
+    {
+        vector<Territory*> t = toDefend();
+
+        cout << "\nDeploy Order issued for : " << this->getPlayer()->getPlayerName() << " with " << this->getPlayer()->getReinforcementTemp() << " armies in the reinforcement pool !" << endl;
+        //int min = 0;
+        int max = this->getPlayer()->getReinforcementTemp();
+
+        // deploy random number of army units to a random territory to defend
+
+        Deploy *dep = new Deploy(this->getPlayer()->getObserver(), this->getPlayer(), max, t.at(t.size()-1));
+
+        this->getPlayer()->getOrderList()->addOrder(dep);
+
+
+    }else if(Advance *d = dynamic_cast<Advance *>(order)){
+
+        vector<Territory*> list = toDefend();
+
+        Territory* strongest = list.at(list.size()-1);
+
+        bool allFriendly = true;
+
+        for(Territory* t : strongest->getAdjTerritories()){
+
+            if(t->getPlayer() != this->getPlayer()){
+
+                allFriendly = false;
+                break;
+            }
+        }
+
+        if(allFriendly){
+
+            Order* ad = new Advance(this->getPlayer()->getObserver(), this->getPlayer(), strongest->getNumArmies()/2,strongest, strongest->getAdjTerritories()[0]);
+
+            this->getPlayer()->getOrderList()->addOrder(ad);
+
+        }else{
+
+            for(Territory* t: strongest->getAdjTerritories()){
+
+                if(t->getPlayer() != this->getPlayer()){
+
+                    Order* ad = new Advance(this->getPlayer()->getObserver(), this->getPlayer(), strongest->getNumArmies()/1.5,strongest, t);
+                    this->getPlayer()->getOrderList()->addOrder(ad);
+
+                }
+
+            }
+
+        }
+
+    }else if(Blockade *d = dynamic_cast<Blockade *>(order)){
+
+        Territory* t = toDefend().at(0);
+
+        Blockade* b = new Blockade(this->getPlayer()->getObserver(), this->getPlayer(), t);
+
+        this->getPlayer()->getOrderList()->addOrder(b);
+
+    }else if(Airlift *d = dynamic_cast<Airlift *>(order)){
+
+        vector<Territory*> list = toDefend();
+
+        Airlift* airlift = new Airlift(this->getPlayer()->getObserver(), this->getPlayer(),list.at(list.size()-1)->getNumArmies()/4, list.at(list.size()-1), list.at(0));
+
+        this->getPlayer()->getOrderList()->addOrder(airlift);
+
+    }else if(Negotiate *d = dynamic_cast<Negotiate *>(order)){
+
+        for(Player* p : getPlayerList()){
+
+            if(p != this->getPlayer()){
+
+                Negotiate* n = new Negotiate(this->getPlayer()->getObserver(), this->getPlayer(),p);
+                this->getPlayer()->getOrderList()->addOrder(n);
+                break;
+            }
+        }
+
+    }else if(Bomb *d = dynamic_cast<Bomb *>(order)){
+
+        for(Territory* t : this->getPlayer()->getTerritories()){
+
+             for(Territory* t2 : t->getAdjTerritories()){
+
+                if(t2->getPlayer() != this->getPlayer()){
+
+                    Bomb* bomb = new Bomb(this->getPlayer()->getObserver(), this->getPlayer(), t2);
+
+                    this->getPlayer()->getOrderList()->addOrder(bomb);
+                }
+             }
+        }
+    }
+
 }
 
 vector<Territory*> AggressivePlayerStrategy::toAttack() {
     cout << "Aggressive Player Strategy: toAttack" << endl;
 
-
+    return this->getPlayer()->getTerritories();
 }
 
 vector<Territory*> AggressivePlayerStrategy::toDefend() {
-    cout << "Aggressive Player Strategy: toDefend" << endl;
+    
+    vector<Territory*> t_list = this->getPlayer()->getTerritories();
+
+    std::sort(t_list.begin(), t_list.end(), compareArmies);
+
+    return t_list;
+
 }
 
 
@@ -41,37 +143,92 @@ vector<Territory*> AggressivePlayerStrategy::toDefend() {
 
 // BENEVOLENT PLAYER STRATEGY
 void BenevolentPlayerStrategy::issueOrder(Order* order) {
-    
-     std::random_device rd;
-    // generator seeded by rd for random numbers
-        std::mt19937 gen(rd());
-
-
-        Territory *selectedTerritoryToDefend = toDefend()[randomIndexDefend];
 
     if (Deploy *d = dynamic_cast<Deploy *>(order))
     {
-        cout << "\nDeploy Order issued for : " << this->getPlayer()->getPlayerName() << " with " << this->getPlayer()->getReinforcementTemp() << " armies in the reinforcement pool !" << endl;
+        vector<Territory*> t = toDefend();
 
-        // choose a random number of army units to deploy
-        // reinforcement temp is used to keep track of the reinforcement pool
-        // without actually modifying it until the order execution
-        int min = 0;
+        cout << "\nDeploy Order issued for : " << this->getPlayer()->getPlayerName() << " with " << this->getPlayer()->getReinforcementTemp() << " armies in the reinforcement pool !" << endl;
+        //int min = 0;
         int max = this->getPlayer()->getReinforcementTemp();
-        std::uniform_int_distribution<> distRandArmiesDeploy(min, max);
-        int randomNumArmiesDeploy = distRandArmiesDeploy(gen);
 
         // deploy random number of army units to a random territory to defend
-        Deploy *dep = new Deploy(this->getPlayer()->getObserver(), this, randomNumArmiesDeploy, selectedTerritoryToDefend);
 
-        reinforcementTemp -= randomNumArmiesDeploy;
 
-        cout << "Deploy to: " << selectedTerritoryToDefend->getName() << " with " << randomNumArmiesDeploy << " armies\n"
-             << reinforcementTemp << " armies left in reinforcement pool" << endl;
+            Deploy *dep = new Deploy(this->getPlayer()->getObserver(), this->getPlayer(), max, t.at(0));
+            //this->getPlayer()->getOrderList()->addOrder(dep);
+
+            //this->getPlayer()->setReinforcementPool(this->getPlayer()->getReinforcementPool()-max/t.size());
+
+
+            /*cout << "Deploy to: " << t.at(i)->getName() << " with " << max/t.size() << " armies\n"
+             << this->getPlayer()->getReinforcementPool() << " armies left in reinforcement pool" << endl;*/
+
+            this->getPlayer()->getOrderList()->addOrder(dep);
+        
+
         // add order to order list
-        orders->addOrder(dep);
+        
+        return;
+
+    }else if(Advance *d = dynamic_cast<Advance *>(order)){
+
+        vector<Territory*> low = toDefend();
+
+        Territory* target = low.at(0);
+
+        vector<Territory*> adjT;
+
+        for(Territory* t : target->getAdjTerritories()){
+
+            if(t->getPlayer() == this->getPlayer()){
+
+                adjT.push_back(t);
+            }
+        }
+
+        std::sort(adjT.begin(), adjT.end(), compareArmies);
+
+        Territory* source = adjT.at(adjT.size()-1);
+
+        Advance* ad = new Advance(this->getPlayer()->getObserver(), this->getPlayer(), source->getNumArmies()/2,source, target);
+
+        this->getPlayer()->getOrderList()->addOrder(ad);
+
+    }else if(Blockade *d = dynamic_cast<Blockade *>(order)){
+
+        Territory* t = toDefend().at(0);
+
+        Blockade* b = new Blockade(this->getPlayer()->getObserver(), this->getPlayer(), t);
+
+        this->getPlayer()->getOrderList()->addOrder(b);
+
+    }else if(Airlift *d = dynamic_cast<Airlift *>(order)){
+
+        vector<Territory*> list = toDefend();
+
+        Airlift* airlift = new Airlift(this->getPlayer()->getObserver(), this->getPlayer(),list.at(list.size()-1)->getNumArmies()/4, list.at(list.size()-1), list.at(0));
+
+        this->getPlayer()->getOrderList()->addOrder(airlift);
+
+    }else if(Negotiate *d = dynamic_cast<Negotiate *>(order)){
+
+        for(Player* p : getPlayerList()){
+
+            if(p != this->getPlayer()){
+
+                Negotiate* n = new Negotiate(this->getPlayer()->getObserver(), this->getPlayer(),p);
+                this->getPlayer()->getOrderList()->addOrder(n);
+                break;
+            }
+        }
+
+    }else{
         return;
     }
+    
+
+
 
 
 }
@@ -86,23 +243,20 @@ vector<Territory*> BenevolentPlayerStrategy::toDefend() {
 
     std::sort(t_list.begin(), t_list.end(), compareArmies);
 
-    for(Territory* t: t_list){
+    int nb = t_list.size();
 
-        cout << t->getName() << endl;
+    if(t_list.size()<4) nb*0.25;
 
-    }
-
-    int nb = t_list.size()*0.25;
+    vector<Territory*> new_t;
 
     for(int i = 0; i < nb; i++){
 
-        t_list.at(i)->setNumArmies(t_list.at(i)->getNumArmies()+this->getPlayer()->getReinforcementPool()/nb);
+        new_t.push_back(t_list.at(i));
+        //t_list.at(i)->setNumArmies(t_list.at(i)->getNumArmies()+this->getPlayer()->getReinforcementPool()/nb);
 
     }
 
-    this->getPlayer()->setReinforcementPool(0);
-
-    return t_list;
+    return new_t;
 
 }
 

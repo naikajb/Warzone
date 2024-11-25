@@ -586,3 +586,8 @@ void Player::AttachObserver(Observer *observer)
 void Player::drewCard() { canDrawCard = false; }
 void Player::roundReset() { canDrawCard = true; }
 bool Player::getCanDrawCard() { return canDrawCard; }
+
+
+PlayerStrategy* Player::getPlayerStrategy(){return strategy;}
+void Player::setPlayerStrategy(PlayerStrategy*s){strategy = s;}
+

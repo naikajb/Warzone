@@ -797,7 +797,7 @@ void GameEngine::mainGameLoop(vector<Player *> v, Map *map)
 // - make sure that at startup, and at orders the territories are updated on the player owners
 // - make sure that the orders keep track of the armies
 
-int main()
+int mai()
 {
     MapLoader *ml = new MapLoader("MapTextFiles/South America.map");
     Observer *o = new LogObserver();
