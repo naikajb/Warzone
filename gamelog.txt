@@ -1,9 +1,405 @@
 Game Log
 ---------------------------------------------
-Deploy order  had effect 4 units have been deployed to 1 by Jake
-Advance Order  had effect 6 units have been advanced from 1 to 3 by Jake
-Advance Order  had effect 6 units have been advanced from 1 to 2 by Jake
-Airlift Order  had effect Armies have been airlifted from 1 to 6 by Jake
-Blockade Order  had effect Territory 6has been blockaded by Jake
-Negotiate Order  had effect Truce has been negotiated between Jake and Joop
-Negotiate Order  had effect Truce has been negotiated between Jake and Tanya
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect 25 units have been deployed to Venezuela by Ihana
+Deploy order  had effect 11 units have been deployed to Suriname by Shamma
+Deploy order  had effect 15 units have been deployed to Venezuela by Ihana
+Deploy order  had effect 22 units have been deployed to French Guiana by Shamma
+Deploy order  had effect 8 units have been deployed to Peru by Ihana
+Deploy order  had effect 4 units have been deployed to Argentina by Shamma
+Deploy order  had effect 1 units have been deployed to Nicaragua by Ihana
+Deploy order  had effect 10 units have been deployed to Argentina by Shamma
+Deploy order  had effect 0 units have been deployed to Venezuela by Ihana
+Deploy order  had effect 2 units have been deployed to Bolivia by Shamma
+Deploy order  had effect 0 units have been deployed to Peru by Ihana
+Deploy order  had effect 1 units have been deployed to Bolivia by Shamma
+Deploy order  had effect 1 units have been deployed to Nicaragua by Ihana
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Bomb Order  had effect none
+Bomb Order  had effect none
+Blockade Order  had effect none
+Blockade Order  had effect none
+Airlift Order  had effect none
+Airlift Order  had effect none
+Negotiate Order  had effect none
+Deploy order  had effect 3 units have been deployed to Ecuador by Ihana
+Deploy order  had effect 2 units have been deployed to Islas Juan by Shamma
+Deploy order  had effect 2 units have been deployed to Peru by Ihana
+Deploy order  had effect 6 units have been deployed to Uruguay by Shamma
+Deploy order  had effect 1 units have been deployed to Ecuador by Ihana
+Deploy order  had effect 2 units have been deployed to French Guiana by Shamma
+Advance Order  had effect 2 units have been advanced from Peru to Columbia by Ihana
+Advance Order  had effect 0 units have been advanced from Bolivia to Paraguay by Shamma
+Advance Order  had effect 4 units have been advanced from Peru to Panama by Ihana
+Bomb Order  had effect Territory Columbia has been bombed by Shamma
+Advance Order  had effect 1 units have been advanced from Peru to Chile by Ihana
+Blockade Order  had effect Territory Chilehas been blockaded by Shamma
+Blockade Order  had effect Territory Nicaraguahas been blockaded by Ihana
+Negotiate Order  had effect Truce has been negotiated between Shamma and Ihana
+Airlift Order  had effect Armies have been airlifted from Costa Rica to Ecuador by Ihana
+Deploy order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Bomb Order  had effect none
+Blockade Order  had effect none
+Advance Order  had effect none
+Bomb Order  had effect none
+Blockade Order  had effect none
+Airlift Order  had effect none
+Airlift Order  had effect none
+Negotiate Order  had effect none
+Deploy order  had effect 5 units have been deployed to Peru by Ihana
+Deploy order  had effect 5 units have been deployed to Paraguay by Shamma
+Advance Order  had effect 0 units have been advanced from Peru to Chile by Ihana
+Deploy order  had effect 0 units have been deployed to French Guiana by Shamma
+Advance Order  had effect 2 units have been advanced from Chile to Islas Juan by Ihana
+Deploy order  had effect 2 units have been deployed to Brazil by Shamma
+Advance Order  had effect 2 units have been advanced from Peru to Bolivia by Ihana
+Advance Order  had effect 1 units have been advanced from Bolivia to Peru by Shamma
+Bomb Order  had effect Territory Nicaragua has been bombed by Ihana
+Blockade Order  had effect Territory Peruhas been blockaded by Ihana
+Blockade Order  had effect Territory Surinamehas been blockaded by Shamma
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Bomb Order  had effect none
+Advance Order  had effect none
+Blockade Order  had effect none
+Advance Order  had effect none
+Airlift Order  had effect none
+Bomb Order  had effect none
+Blockade Order  had effect none
+Airlift Order  had effect none
+Deploy order  had effect 1 units have been deployed to Chile by Ihana
+Deploy order  had effect 0 units have been deployed to Bolivia by Shamma
+Deploy order  had effect 0 units have been deployed to Columbia by Ihana
+Deploy order  had effect 0 units have been deployed to Bolivia by Shamma
+Deploy order  had effect 1 units have been deployed to Columbia by Ihana
+Deploy order  had effect 1 units have been deployed to Brazil by Shamma
+Deploy order  had effect 1 units have been deployed to Chile by Ihana
+Deploy order  had effect 1 units have been deployed to Bolivia by Shamma
+Advance Order  had effect 26 units have been advanced from Venezuela to Columbia by Ihana
+Deploy order  had effect 0 units have been deployed to Paraguay by Shamma
+Advance Order  had effect 3 units have been advanced from Venezuela to Costa Rica by Ihana
+Deploy order  had effect 1 units have been deployed to Brazil by Shamma
+Bomb Order  had effect Territory Guyana has been bombed by Ihana
+Advance Order  had effect 2 units have been advanced from Brazil to Guyana by Shamma
+Blockade Order  had effect Territory Costa Ricahas been blockaded by Ihana
+Advance Order  had effect 3 units have been advanced from French Guiana to Bolivia by Shamma
+Airlift Order  had effect Armies have been airlifted from Panama to Venezuela by Ihana
+Advance Order  had effect 4 units have been advanced from French Guiana to Suriname by Shamma
+Blockade Order  had effect Territory Brazilhas been blockaded by Shamma
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Bomb Order  had effect none
+Bomb Order  had effect none
+Blockade Order  had effect none
+Blockade Order  had effect none
+Negotiate Order  had effect none
+Negotiate Order  had effect none
+Airlift Order  had effect none
+Deploy order  had effect 2 units have been deployed to Venezuela by Ihana
+Deploy order  had effect 2 units have been deployed to French Guiana by Shamma
+Deploy order  had effect 1 units have been deployed to Columbia by Ihana
+Deploy order  had effect 1 units have been deployed to French Guiana by Shamma
+Advance Order  had effect 0 units have been advanced from Chile to Venezuela by Ihana
+Advance Order  had effect 0 units have been advanced from Guyana to Venezuela by Shamma
+Advance Order  had effect 8 units have been advanced from Venezuela to Guyana by Ihana
+Advance Order  had effect 0 units have been advanced from Guyana to Bolivia by Shamma
+Advance Order  had effect 0 units have been advanced from Venezuela to Chile by Ihana
+Advance Order  had effect 3 units have been advanced from Bolivia to Paraguay by Shamma
+Bomb Order  had effect Territory Bolivia has been bombed by Ihana
+Blockade Order  had effect Territory Venezuelahas been blockaded by Ihana
+Blockade Order  had effect Territory French Guianahas been blockaded by Shamma
+Airlift Order  had effect Armies have been airlifted from Panama to Chile by Ihana
+Deploy order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Deploy order  had effect none
+Bomb Order  had effect none
+Deploy order  had effect none
+Blockade Order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Airlift Order  had effect none
+Advance Order  had effect none
+Bomb Order  had effect none
+Advance Order  had effect none
+Bomb Order  had effect none
+Blockade Order  had effect none
+Airlift Order  had effect none
+Negotiate Order  had effect none
+Deploy order  had effect 3 units have been deployed to Galapagos Island by Ihana
+Deploy order  had effect 2 units have been deployed to Bolivia by Shamma
+Advance Order  had effect 3 units have been advanced from Guyana to Brazil by Ihana
+Deploy order  had effect 0 units have been deployed to Paraguay by Shamma
+Advance Order  had effect 0 units have been advanced from Guyana to Panama by Ihana
+Deploy order  had effect 0 units have been deployed to Guyana by Shamma
+Advance Order  had effect 0 units have been advanced from Guyana to Chile by Ihana
+Deploy order  had effect 0 units have been deployed to Paraguay by Shamma
+Bomb Order  had effect Territory Brazil has been bombed by Ihana
+Deploy order  had effect 0 units have been deployed to Guyana by Shamma
+Blockade Order  had effect Territory Chilehas been blockaded by Ihana
+Deploy order  had effect 0 units have been deployed to Argentina by Shamma
+Airlift Order  had effect Armies have been airlifted from Guyana to Columbia by Ihana
+Deploy order  had effect 1 units have been deployed to Falkland Island by Shamma
+Advance Order  had effect 6 units have been advanced from Argentina to Chile by Shamma
+Advance Order  had effect 0 units have been advanced from Guyana to Bolivia by Shamma
+Blockade Order  had effect Territory Paraguayhas been blockaded by Shamma
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Bomb Order  had effect none
+Bomb Order  had effect none
+Blockade Order  had effect none
+Blockade Order  had effect none
+Airlift Order  had effect none
+Negotiate Order  had effect none
+Negotiate Order  had effect none
+Bomb Order  had effect none
+Deploy order  had effect 0 units have been deployed to Guyana by Ihana
+Deploy order  had effect 1 units have been deployed to Bolivia by Shamma
+Deploy order  had effect 0 units have been deployed to Guyana by Ihana
+Deploy order  had effect 0 units have been deployed to Falkland Island by Shamma
+Deploy order  had effect 0 units have been deployed to Guyana by Ihana
+Deploy order  had effect 2 units have been deployed to Guyana by Shamma
+Deploy order  had effect 3 units have been deployed to Guyana by Ihana
+Advance Order  had effect 2 units have been advanced from Bolivia to Chile by Shamma
+Advance Order  had effect 0 units have been advanced from Guyana to Brazil by Ihana
+Advance Order  had effect 5 units have been advanced from Argentina to Guyana by Shamma
+Advance Order  had effect 1 units have been advanced from Guyana to Venezuela by Ihana
+Advance Order  had effect 0 units have been advanced from Argentina to Guyana by Shamma
+Advance Order  had effect 0 units have been advanced from Columbia to Panama by Ihana
+Bomb Order  had effect Territory Venezuela has been bombed by Ihana
+Blockade Order  had effect Territory Guyanahas been blockaded by Shamma
+Blockade Order  had effect Territory Guyanahas been blockaded by Ihana
+Bomb Order  had effect Territory Venezuela has been bombed by Ihana
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Deploy order  had effect none
+Bomb Order  had effect none
+Deploy order  had effect none
+Blockade Order  had effect none
+Advance Order  had effect none
+Airlift Order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Bomb Order  had effect none
+Blockade Order  had effect none
+Airlift Order  had effect none
+Bomb Order  had effect none
+Deploy order  had effect 1 units have been deployed to Ecuador by Ihana
+Deploy order  had effect 3 units have been deployed to Uruguay by Shamma
+Deploy order  had effect 0 units have been deployed to Ecuador by Ihana
+Advance Order  had effect 1 units have been advanced from Bolivia to Peru by Shamma
+Deploy order  had effect 1 units have been deployed to Columbia by Ihana
+Advance Order  had effect 3 units have been advanced from Argentina to Bolivia by Shamma
+Deploy order  had effect 0 units have been deployed to Galapagos Island by Ihana
+Advance Order  had effect 0 units have been advanced from Islas Juan to Argentina by Shamma
+Deploy order  had effect 0 units have been deployed to Panama by Ihana
+Bomb Order  had effect Territory Brazil has been bombed by Shamma
+Deploy order  had effect 1 units have been deployed to Columbia by Ihana
+Blockade Order  had effect Territory Argentinahas been blockaded by Shamma
+Advance Order  had effect 19 units have been advanced from Columbia to Ecuador by Ihana
+Advance Order  had effect 8 units have been advanced from Columbia to Galapagos Island by Ihana
+Advance Order  had effect 4 units have been advanced from Columbia to Panama by Ihana
+Bomb Order  had effect Territory Venezuela has been bombed by Ihana
+Blockade Order  had effect Territory Panamahas been blockaded by Ihana
+Bomb Order  had effect Territory Venezuela has been bombed by Ihana
+Deploy order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Bomb Order  had effect none
+Advance Order  had effect none
+Blockade Order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Negotiate Order  had effect none
+Bomb Order  had effect none
+Airlift Order  had effect none
+Blockade Order  had effect none
+Bomb Order  had effect none
+Airlift Order  had effect none
+Negotiate Order  had effect none
+Deploy order  had effect 3 units have been deployed to Galapagos Island by Ihana
+Deploy order  had effect 0 units have been deployed to Falkland Island by Shamma
+Advance Order  had effect 2 units have been advanced from Columbia to Brazil by Ihana
+Deploy order  had effect 2 units have been deployed to Bolivia by Shamma
+Bomb Order  had effect Territory Peru has been bombed by Ihana
+Deploy order  had effect 0 units have been deployed to Falkland Island by Shamma
+Blockade Order  had effect Territory Ecuadorhas been blockaded by Ihana
+Deploy order  had effect 1 units have been deployed to Bolivia by Shamma
+Advance Order  had effect 0 units have been advanced from Islas Juan to Bolivia by Shamma
+Airlift Order  had effect Armies have been airlifted from Galapagos Island to Columbia by Ihana
+Advance Order  had effect 3 units have been advanced from Bolivia to Uruguay by Shamma
+Bomb Order  had effect Territory Venezuela has been bombed by Ihana
+Advance Order  had effect 3 units have been advanced from Uruguay to Brazil by Shamma
+Bomb Order  had effect Territory Argentina has been bombed by Shamma
+Blockade Order  had effect Territory Islas Juanhas been blockaded by Shamma
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Bomb Order  had effect none
+Blockade Order  had effect none
+Bomb Order  had effect none
+Airlift Order  had effect none
+Blockade Order  had effect none
+Negotiate Order  had effect none
+Airlift Order  had effect none
+Blockade Order  had effect none
+Airlift Order  had effect none
+Bomb Order  had effect none
+Airlift Order  had effect none
+Deploy order  had effect 1 units have been deployed to Brazil by Ihana
+Deploy order  had effect 3 units have been deployed to Brazil by Shamma
+Deploy order  had effect 0 units have been deployed to Brazil by Ihana
+Advance Order  had effect 2 units have been advanced from Bolivia to Brazil by Shamma
+Deploy order  had effect 2 units have been deployed to Brazil by Ihana
+Advance Order  had effect 2 units have been advanced from Brazil to Peru by Shamma
+Advance Order  had effect 7 units have been advanced from Columbia to Panama by Ihana
+Advance Order  had effect 1 units have been advanced from Bolivia to Brazil by Shamma
+Bomb Order  had effect Territory Bolivia has been bombed by Ihana
+Blockade Order  had effect Territory Galapagos Islandhas been blockaded by Ihana
+Blockade Order  had effect Territory Uruguayhas been blockaded by Shamma
+Airlift Order  had effect Armies have been airlifted from Brazil to Brazil by Ihana
+Bomb Order  had effect Territory Uruguay has been bombed by Ihana
+Blockade Order  had effect Territory Falkland Islandhas been blockaded by Shamma
+Airlift Order  had effect Armies have been airlifted from Brazil to Columbia by Ihana
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Bomb Order  had effect none
+Advance Order  had effect none
+Blockade Order  had effect none
+Bomb Order  had effect none
+Airlift Order  had effect none
+Blockade Order  had effect none
+Airlift Order  had effect none
+Bomb Order  had effect none
+Blockade Order  had effect none
+Airlift Order  had effect none
+Negotiate Order  had effect none
+Deploy order  had effect 1 units have been deployed to Brazil by Ihana
+Deploy order  had effect 0 units have been deployed to Bolivia by Shamma
+Deploy order  had effect 0 units have been deployed to Panama by Ihana
+Deploy order  had effect 2 units have been deployed to Brazil by Shamma
+Deploy order  had effect 2 units have been deployed to Columbia by Ihana
+Deploy order  had effect 0 units have been deployed to Brazil by Shamma
+Advance Order  had effect 8 units have been advanced from Brazil to Bolivia by Ihana
+Deploy order  had effect 1 units have been deployed to Brazil by Shamma
+Advance Order  had effect 2 units have been advanced from Columbia to Brazil by Ihana
+Advance Order  had effect 0 units have been advanced from Brazil to Venezuela by Shamma
+Bomb Order  had effect Territory Guyana has been bombed by Ihana
+Blockade Order  had effect Territory Panamahas been blockaded by Ihana
+Blockade Order  had effect Territory Boliviahas been blockaded by Shamma
+Airlift Order  had effect Armies have been airlifted from Columbia to Brazil by Ihana
+Bomb Order  had effect Territory Peru has been bombed by Ihana
+Blockade Order  had effect Territory Brazilhas been blockaded by Shamma
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Bomb Order  had effect none
+Blockade Order  had effect none
+Bomb Order  had effect none
+Airlift Order  had effect none
+Blockade Order  had effect none
+Negotiate Order  had effect none
+Negotiate Order  had effect none
+Bomb Order  had effect none
+Blockade Order  had effect none
+Airlift Order  had effect none
+Negotiate Order  had effect none
+Airlift Order  had effect none
+Deploy order  had effect 1 units have been deployed to Columbia by Ihana
+Deploy order  had effect 1 units have been deployed to Venezuela by Shamma
+Deploy order  had effect 2 units have been deployed to Bolivia by Ihana
+Deploy order  had effect 1 units have been deployed to Venezuela by Shamma
+Advance Order  had effect 10 units have been advanced from Brazil to Bolivia by Ihana
+Deploy order  had effect 1 units have been deployed to Venezuela by Shamma
+Advance Order  had effect 2 units have been advanced from Columbia to Ecuador by Ihana
+Advance Order  had effect 1 units have been advanced from Brazil to Suriname by Ihana
+Blockade Order  had effect Territory Venezuelahas been blockaded by Shamma
+Bomb Order  had effect Territory Panama has been bombed by Ihana
+Blockade Order  had effect Territory Brazilhas been blockaded by Ihana
