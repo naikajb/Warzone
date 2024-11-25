@@ -84,6 +84,8 @@ OrdersList *Player::getOrderList()
     return orders;
 }
 
+Observer* Player::getObserver(){return observer;}
+
 // adds order to the player's list of orders
 void Player::issueOrder(Order *order)
 {
@@ -412,7 +414,9 @@ vector<Territory *> Player::getTerritories() { return territories; }
 vector<Territory *> Player::toDefend()
 {
 
-    sort(territories.begin(), territories.end(), [this](Territory *t1, Territory *t2)
+    return strategy->toDefend();
+
+    /*sort(territories.begin(), territories.end(), [this](Territory *t1, Territory *t2)
          {
         // number of enemy armies for territory 1
         int numArmiesT1 = 0;
@@ -449,7 +453,7 @@ vector<Territory *> Player::toDefend()
             }
         // Sort in descending order based on the number of enemy armies
         return numArmiesT1 > numArmiesT2; });
-    return territories;
+    return territories;*/
 }
 
 // returns list of territories to attack based on priority
@@ -460,7 +464,10 @@ vector<Territory *> Player::toDefend()
 // 4. adjacent territores belongs to the player
 vector<Territory *> Player::toAttack()
 {
-    vector<Territory *> toAttack;
+    
+    return strategy->toAttack();
+    
+    /*vector<Territory *> toAttack;
 
     for (Territory *t : territories)
     {
@@ -517,7 +524,7 @@ vector<Territory *> Player::toAttack()
             // sort in descending
             return priorityT1 > priorityT2; });
 
-    return toAttack;
+    return toAttack;*/
 }
 
 // stream insertion operator to print player's information
@@ -530,6 +537,20 @@ ostream &operator<<(ostream &out, const Player &player)
         out << "\t" << territory->getName() << endl;
     }
     return out;
+}
+
+Player &Player::operator=(const Player &o)
+{
+    this->playerName = o.playerName;
+    this->territories = o.territories;
+    this->hand = o.hand;
+    this->orders = o.orders;
+    this->canDrawCard = o.canDrawCard;
+    this->reinforcementPool = o.reinforcementPool;
+    this->reinforcementTemp = o.reinforcementTemp;
+    this->observer = o.observer;
+
+    return *this;
 }
 
 std::string Player::getPlayerName()
