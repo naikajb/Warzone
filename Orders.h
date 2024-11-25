@@ -12,6 +12,7 @@
 #include <random>
 #include <utility>
 #include <type_traits>
+#include <algorithm>
 
 using std::pair;
 using std::vector;
@@ -207,6 +208,7 @@ static vector<Player *> playerList;
 
 vector<Player *> getPlayerList();
 void addToPlayerList(Player *);
+void removePlayerFromList(Player*);
 
 void clearPlayerList();
 
