@@ -258,7 +258,6 @@ void Advance::executeOrder()
 
                 delete deck;
                 deck = NULL;
-                cout << "test 2" << endl;
             }
             target->setPlayer(player);         // adds ownership of new player to target territory
             player->addTerritory(target);      // adds Territory to the attacking player

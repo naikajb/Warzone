@@ -575,6 +575,14 @@ void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
     {
         // might change so that it saves the drawn card from the advance
         p->getOrderList()->clearOrders();
+
+        cout << "\nthese are all of " << p->getPlayerName() << " cards in hand: " << endl;
+
+        for (Card *c : p->getHand()->getCardsHand())
+        {
+            cout << c->getCardType() << "\n"
+                 << endl;
+        }
     }
 
     // boolean moreOrder to continue this loop until there are no more orders
@@ -609,28 +617,33 @@ void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
             // // if it arrives at the end of the player's cardsInHand array, skip this statement
             else if (v[i]->getHand()->cardsInHand.size() != 0 && indexHandVector[i] != v[i]->getHand()->cardsInHand.size() && round != 1)
             {
+                // we need to remove the card in the player's hand when decide to play it for the round !!!
                 if (v[i]->getHand()->cardsInHand[indexHandVector[i]]->getCardType().compare("Bomb") == 0)
                 {
                     Bomb *b = new Bomb();
                     v[i]->issueOrder(b);
+                    v[i]->getHand()->cardsInHand.erase(v[i]->getHand()->cardsInHand.begin() + indexHandVector[i]);
                 }
 
                 if (v[i]->getHand()->cardsInHand[indexHandVector[i]]->getCardType().compare("Negotiate") == 0)
                 {
                     Negotiate *n = new Negotiate();
                     v[i]->issueOrder(n);
+                    v[i]->getHand()->cardsInHand.erase(v[i]->getHand()->cardsInHand.begin() + indexHandVector[i]);
                 }
 
                 if (v[i]->getHand()->cardsInHand[indexHandVector[i]]->getCardType().compare("Blockade") == 0)
                 {
                     Blockade *b = new Blockade();
                     v[i]->issueOrder(b);
+                    v[i]->getHand()->cardsInHand.erase(v[i]->getHand()->cardsInHand.begin() + indexHandVector[i]);
                 }
 
                 if (v[i]->getHand()->cardsInHand[indexHandVector[i]]->getCardType().compare("Airlift") == 0)
                 {
                     Airlift *a = new Airlift();
                     v[i]->issueOrder(a);
+                    v[i]->getHand()->cardsInHand.erase(v[i]->getHand()->cardsInHand.begin() + indexHandVector[i]);
                 }
 
                 indexHandVector[i]++;
@@ -661,6 +674,25 @@ void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
             cout << "\nNo more orders to issue for all players !\n"
                  << endl;
             moreOrder = false;
+        }
+    }
+
+    for (Player *p : v)
+    {
+        cout << "these are all of " << p->getPlayerName() << " orders: " << endl;
+
+        for (Order *o : p->getOrderList()->getOrders())
+        {
+            cout << o->stringToLog() << "\n"
+                 << endl;
+        }
+
+        cout << "\nthese are all of " << p->getPlayerName() << " cards in hand: " << endl;
+
+        for (Card *c : p->getHand()->getCardsHand())
+        {
+            cout << c->getCardType() << "\n"
+                 << endl;
         }
     }
 }
@@ -797,6 +829,11 @@ void GameEngine::mainGameLoop(vector<Player *> v, Map *map)
 // - make sure that at startup, and at orders the territories are updated on the player owners
 // - make sure that the orders keep track of the armies
 
+// try to add debug messages displaying the number of armies per territory throughout the game and
+// the reason why an order is rejected more specifically
+// fix the todefend code (maybe)
+// fix the orders list by emptying it out every round and adding a new card in the deck for every territory succesful advancement
+
 int main()
 {
     MapLoader *ml = new MapLoader("MapTextFiles/South America.map");
@@ -847,19 +884,19 @@ int main()
     //      << endl;
 
     // add cards for each player (usually done in startup)
-    Card *bomb = new Card(Card::BOMB);
-    Card *blockade = new Card(Card::BLOCKADE);
-    Card *airlift = new Card(Card::AIRLIFT);
-    Card *negotiate = new Card(Card::NEGOTIATE);
+    // Card *bomb = new Card(Card::BOMB);
+    // Card *blockade = new Card(Card::BLOCKADE);
+    // Card *airlift = new Card(Card::AIRLIFT);
+    // Card *negotiate = new Card(Card::NEGOTIATE);
 
-    p1->addCard(bomb);
-    p2->addCard(bomb);
-    p1->addCard(blockade);
-    p2->addCard(blockade);
-    p1->addCard(airlift);
-    p2->addCard(airlift);
-    p1->addCard(negotiate);
-    p2->addCard(negotiate);
+    // p1->addCard(bomb);
+    // p2->addCard(bomb);
+    // p1->addCard(blockade);
+    // p2->addCard(blockade);
+    // p1->addCard(airlift);
+    // p2->addCard(airlift);
+    // p1->addCard(negotiate);
+    // p2->addCard(negotiate);
 
     // checks for the first round is only deploy
     // cout << "\nFirst round ! " << endl;
