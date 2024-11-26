@@ -587,6 +587,15 @@ void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
         // go through the vector of players
         for (int i = 0; i < v.size(); i++)
         {
+
+            if(typeid(v[i]->getPlayerStrategy()).name() == "HumanPlayerStrategy"){
+
+                Deploy* d = new Deploy();
+                v[i]->issueOrder(d);
+                break;
+
+            }
+
             // if the player still has armies in reinforcement, deploy order
             // temp is used to avoid modifying the original reinforcement pool values until order execution
             if (v[i]->getReinforcementTemp() != 0)

@@ -6,6 +6,7 @@ void testPlayerStrategies(){
     CheaterPlayerStrategy* m = new CheaterPlayerStrategy();
     AggressivePlayerStrategy* t = new AggressivePlayerStrategy();
     NeutralPlayerStrategy* n = new NeutralPlayerStrategy();
+    HumanPlayerStrategy* h = new HumanPlayerStrategy();
 
     Observer* obs = new LogObserver();
 
@@ -13,7 +14,9 @@ void testPlayerStrategies(){
     m->setPlayer(new Player(obs,"M"));
     t->setPlayer(new Player(obs,"T"));
     n->setPlayer(new Player(obs,"N"));
+    h->setPlayer(new Player(obs,"H"));
 
+    h->getPlayer()->setPlayerStrategy(h);
 
     Territory* t1 = new Territory("1",new Continent("C",1));
     Territory* t2 = new Territory("2",new Continent("C",1));
@@ -29,20 +32,43 @@ void testPlayerStrategies(){
     addToPlayerList(m->getPlayer());
     addToPlayerList(t->getPlayer());
     addToPlayerList(n->getPlayer());
-    
-    j->getPlayer()->addTerritory(t1);
-    
-    m->getPlayer()->addTerritory(t2);
 
-    t->getPlayer()->addTerritory(t3);
+    t1->addAdjTerritories(t3);
+    t3->addAdjTerritories(t1);
+    t1->addAdjTerritories(t2);
+    t2->addAdjTerritories(t1);
+
+    t1->setPlayer(h->getPlayer());
+    t2->setPlayer(h->getPlayer());
+
+    t3->setPlayer(j->getPlayer());
+
+    t4->setPlayer(n->getPlayer());
+
+
+
+    
+    h->getPlayer()->addTerritory(t1);
+    
+    h->getPlayer()->addTerritory(t2);
+
+    j->getPlayer()->addTerritory(t3);
 
     n->getPlayer()->addTerritory(t4);
 
-    Blockade* ne = new Blockade();
+    h->getPlayer()->toDefend();
 
-    j->issueOrder(ne);
+    Order* o = new Deploy();
 
-    j->getPlayer()->getOrderList()->getOrders()[0]->execute();
+    h->issueOrder(o);
+
+    h->getPlayer()->getOrderList()->getOrders()[0]->execute();
+
+    //Order* ne = new Advance();
+
+    //t->issueOrder(ne);
+
+    //t->getPlayer()->getOrderList()->getOrders()[0]->execute();
 
     //cout << t1->getNumArmies() << endl;
 

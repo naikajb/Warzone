@@ -414,7 +414,7 @@ vector<Territory *> Player::getTerritories() { return territories; }
 vector<Territory *> Player::toDefend()
 {
 
-    return strategy->toDefend();
+    return this->getPlayerStrategy()->toDefend();
 
     /*sort(territories.begin(), territories.end(), [this](Territory *t1, Territory *t2)
          {

@@ -7,16 +7,311 @@ void PlayerStrategy::setPlayer(Player* p ){player = p;}
 
 
 void HumanPlayerStrategy::issueOrder(Order*) {
-    cout << "Human Player Strategy: issueOrder" << endl;
+
+    cout << "Which Order would you like to play?:\n1. Deploy\n2. Advance\n3. Airlift\n4. Bomb\n5. Blockade\n6. Negotiate" << endl;
+    cout << "Selected an Order:";
+
+    int selectedOrder;
+
+    cin >> selectedOrder;
+
+    vector<Territory*> possibleBomboclat;
+
+        if(selectedOrder == 1){
+
+            int armies;
+            int selectedT;
+
+            cout << "To which Territory would you like to Deploy the armies:" << endl;
+
+            int counter = 1;
+
+            for(Territory* t : this->getPlayer()->getTerritories()){
+
+                cout << counter << ". " << t->getName() << endl;
+                counter++;
+
+            }
+
+            cin >> selectedT;
+
+            Territory* t = this->getPlayer()->getTerritories()[selectedT-1];
+
+            cout << "How many armies would you like to deploy: " << endl;
+
+            cin >> armies;
+
+            Order* d = new Deploy(this->getPlayer()->getObserver(),this->getPlayer(),armies,t);
+
+            this->getPlayer()->getOrderList()->addOrder(d);
+
+        }else if(selectedOrder == 2){
+
+            int armies;
+            int selectedSource;
+            int selectedTarget;
+
+
+            cout << "From which Territory would you like to Advance the armies:" << endl;
+
+            int counter = 1;
+
+            for(Territory* t : this->getPlayer()->getTerritories()){
+
+                cout << counter << ". " << t->getName() << endl;
+                counter++;
+
+            }
+
+            counter = 1;
+            cin >> selectedSource;
+
+            cout << "To which Territory would you like to Advance the armies:" << endl;
+
+            for(Territory* t : this->getPlayer()->getTerritories()[selectedSource-1]->getAdjTerritories()){
+
+                cout << counter << ". " << t->getName() << endl;
+                counter++;
+
+            }
+
+            cin >> selectedTarget;
+
+            Territory* source = this->getPlayer()->getTerritories()[selectedSource-1];
+            Territory* target = this->getPlayer()->getTerritories()[selectedSource-1]->getAdjTerritories()[selectedTarget-1];
+
+            cout << "How many armies would you like to deploy: " << endl;
+
+            cin >> armies;
+
+            Order* a = new Advance(this->getPlayer()->getObserver(),this->getPlayer(),armies,source,target);
+
+            this->getPlayer()->getOrderList()->addOrder(a);
+
+
+        }else if(selectedOrder == 3){
+
+            int armies;
+            int selectedSource;
+            int selectedTarget;
+
+            cout << "From which Territory would you like to Airlift the armies:" << endl;
+
+            int counter = 1;
+
+            for(Territory* t : this->getPlayer()->getTerritories()){
+
+                cout << counter << ". " << t->getName() << endl;
+                counter++;
+
+            }
+
+            cin >> selectedSource;
+
+            counter = 1;
+
+            cout << "To which Territory would you like to Airlift the armies:" << endl;
+
+            for(Territory* t : this->getPlayer()->getTerritories()){
+
+                cout << counter << ". " << t->getName() << endl;
+                counter++;
+
+            }
+
+            cin >> selectedTarget;
+
+            cout << "How many armies would you like to deploy: " << endl;
+
+            cin >> armies;
+
+            Territory* source = this->getPlayer()->getTerritories()[selectedSource-1];
+
+            Territory* target = this->getPlayer()->getTerritories()[selectedTarget-1];
+
+            Order* a = new Airlift(this->getPlayer()->getObserver(),this->getPlayer(),armies,source,target);
+
+            this->getPlayer()->getOrderList()->addOrder(a);
+
+        }else if(selectedOrder == 4){
+
+            cout << "Which Territory would you like to Bomb?: " << endl;
+
+            int counter = 1;
+
+            int selectedTarget;
+
+            for(Territory* t : this->getPlayer()->getTerritories()){
+
+                for(Territory* t2 : t->getAdjTerritories()){
+
+                    if(t2->getPlayer()== this->getPlayer()){
+                        continue;
+                    }
+
+                    possibleBomboclat.push_back(t2);
+
+                    cout << counter << ". " << t2->getName() << endl;
+
+                    counter++;
+                }
+            }
+
+            cin >> selectedTarget;
+
+            Order* a = new Bomb(this->getPlayer()->getObserver(),this->getPlayer(),possibleBomboclat.at(selectedTarget-1));
+
+            this->getPlayer()->getOrderList()->addOrder(a);
+
+
+        }else if(selectedOrder == 5){
+
+            cout << "Which Territory would you like to Blockade?:" << endl;
+
+            int selectedTarget;
+
+            int counter = 1;
+
+            for(Territory* t : this->getPlayer()->getTerritories()){
+
+                cout << counter << ". " << t->getName() << endl;
+                counter++;
+
+            }
+
+            cin >> selectedTarget;
+
+            Order* a = new Blockade(this->getPlayer()->getObserver(),this->getPlayer(),this->getPlayer()->getTerritories()[selectedTarget-1]);
+
+            this->getPlayer()->getOrderList()->addOrder(a);
+
+        }else if(selectedOrder == 6){
+
+            cout << "Which Player would you like to Negotiate with?:" << endl;
+
+            int selectedTarget;
+
+            int counter = 1;
+
+            for(Player* p : getPlayerList()){
+
+                cout << counter << ". " << p->getPlayerName() << endl;
+                counter++;
+
+            }
+
+            Order* a = new Negotiate(this->getPlayer()->getObserver(),this->getPlayer(),getPlayerList()[selectedTarget-1]);
+
+            this->getPlayer()->getOrderList()->addOrder(a);
+
+        }
 }
 
 vector<Territory*> HumanPlayerStrategy::toAttack() {
-    cout << "Human Player Strategy: toAttack" << endl;
+
+     vector<Territory *> toAttack;
+
+    for (Territory *t : this->getPlayer()->getTerritories())
+    {
+        for (Territory *tadj : t->getAdjTerritories())
+        {
+            // check if tadj is not already in the toAttack vector AND the adjacent territory is not part of player's territories
+            if (std::find(toAttack.begin(), toAttack.end(), tadj) == toAttack.end() && std::find(this->getPlayer()->getTerritories().begin(), this->getPlayer()->getTerritories().end(), tadj) == this->getPlayer()->getTerritories().end())
+            {
+                toAttack.push_back(tadj);
+            }
+        }
+    }
+
+    // sorting toAttack() in descendent priority
+    sort(toAttack.begin(), toAttack.end(), [this](Territory *t1, Territory *t2)
+         {
+             int priorityT1 = 0;
+             int priorityT2 = 0;
+
+             for (Territory *t : this->getPlayer()->getTerritories())
+             {
+                // if t1 from toAttack is adjacent to the territory t
+                if (std::find(t->getAdjTerritories().begin(), t->getAdjTerritories().end(), t1) != t->getAdjTerritories().end())
+                 {
+                    // if t1 from toAttack has less armies than territory t
+                    if (t1->getNumArmies() < t->getNumArmies())
+                     {
+                        // increase priority of t1 by 2
+                        priorityT1 += 2;
+                     }
+                     else
+                     {
+                        // else increase priority of t1 by 1
+                        priorityT1 += 1;
+                     }
+                 }
+                // if t2 from toAttack is adjacednt to the territory t
+                if (std::find(t->getAdjTerritories().begin(), t->getAdjTerritories().end(), t2) != t->getAdjTerritories().end())
+                 {
+                    // if t2 from toAttack has less armies than territory t                    
+                    if (t2->getNumArmies() < t->getNumArmies())
+                     {
+                        // increase priority of t2 by 2
+                        priorityT2 += 2;
+                     }
+                     else
+                     {
+                        // else increase priority of t2 by 1
+                        priorityT2 += 1;
+                     }
+                 }
+             }
+
+            // sort in descending
+            return priorityT1 > priorityT2; });
+
+    return toAttack;
 }
 
 vector<Territory*> HumanPlayerStrategy::toDefend() {
-    cout << "Human Player Strategy: toDefend" << endl;
+    sort(this->getPlayer()->getTerritories().begin(), this->getPlayer()->getTerritories().end(), [this](Territory *t1, Territory *t2)
+         {
+        // number of enemy armies for territory 1
+        int numArmiesT1 = 0;
+        // number of enemy armies for territory 2
+        int numArmiesT2 = 0;
+
+        // if both territories have 0 enemy armies
+        // priority changes to number of enemy territories OR
+        // unowned territories surrounding Territory 1
+        int numEnemyAdjT1 = 0;
+        // number of enemy territories OR unowned territories
+        // surrounding Territory 2
+        int numEnemyAdjT2 = 0;
+
+        for (Territory* t : t1->getAdjTerritories()){
+            if (t->getPlayer() != this->getPlayer()){
+                numArmiesT1 += t->getNumArmies(); // add number of enemy armies
+                numEnemyAdjT1++; // add adjacent enemy territories
+            }
+        }
+
+        for (Territory* t : t2->getAdjTerritories()){
+            if (t->getPlayer() != this->getPlayer()){
+                numArmiesT2 += t->getNumArmies(); // add number of enemy armies
+                numEnemyAdjT2++; // add adjacent enemy territories
+            }
+        }    
+
+        if (numArmiesT1 == 0 && numArmiesT2 == 0)
+            {   
+                // Sort in descending order based on the number of adajcent enemy territories OR 
+                // adjacent unnowned territories 
+                return numEnemyAdjT1 > numEnemyAdjT2;
+            }
+        // Sort in descending order based on the number of enemy armies
+        return numArmiesT1 > numArmiesT2; });
+    return this->getPlayer()->getTerritories();
 }
+
+
+
 
 // AGGRESSIVE PLAYER STRATEGY
 void AggressivePlayerStrategy::issueOrder(Order* order) {
@@ -38,6 +333,8 @@ void AggressivePlayerStrategy::issueOrder(Order* order) {
 
     }else if(Advance *d = dynamic_cast<Advance *>(order)){
 
+        
+
         vector<Territory*> list = toDefend();
 
         Territory* strongest = list.at(list.size()-1);
@@ -53,6 +350,8 @@ void AggressivePlayerStrategy::issueOrder(Order* order) {
             }
         }
 
+        
+
         if(allFriendly){
 
             Order* ad = new Advance(this->getPlayer()->getObserver(), this->getPlayer(), strongest->getNumArmies()/2,strongest, strongest->getAdjTerritories()[0]);
@@ -67,11 +366,10 @@ void AggressivePlayerStrategy::issueOrder(Order* order) {
 
                     Order* ad = new Advance(this->getPlayer()->getObserver(), this->getPlayer(), strongest->getNumArmies()/1.5,strongest, t);
                     this->getPlayer()->getOrderList()->addOrder(ad);
+                    break;
 
                 }
-
             }
-
         }
 
     }else if(Blockade *d = dynamic_cast<Blockade *>(order)){
@@ -235,6 +533,8 @@ void BenevolentPlayerStrategy::issueOrder(Order* order) {
 
 vector<Territory*> BenevolentPlayerStrategy::toAttack() {
     cout << "Benevolent Player Strategy: toAttack" << endl;
+
+    return this->getPlayer()->getTerritories();
 }
 
 vector<Territory*> BenevolentPlayerStrategy::toDefend() {
@@ -386,14 +686,6 @@ void PlayerStrategy::becomeAggressive(){
 
     // remove previous player
     // add this player to list
-
-
-
-
-
-
-
-
 
 }
 
