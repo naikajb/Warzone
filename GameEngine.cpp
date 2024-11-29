@@ -804,16 +804,19 @@ int main()
     Player *p1 = new Player(o, "Ihana");
     Player *p2 = new Player(o, "Shamma");
     Player *p3 = new Player(o, "Tanya");
+    Player *p4 = new Player(o, "Naika");
     GameEngine *g = new GameEngine(o);
 
     cout << "\nplayer 1: " << p1->getPlayerName() << endl;
     cout << "\nplayer 2: " << p2->getPlayerName() << endl;
     cout << "\nplayer 3: " << p3->getPlayerName() << endl;
+    cout << "\nplayer 4: " << p4->getPlayerName() << endl;
 
     vector<Player *> pList = getPlayerList();
     pList.push_back(p1);
     pList.push_back(p2);
     pList.push_back(p3);
+    pList.push_back(p4);
 
     // add a random loop to deisgnate territories to the players (this is usually done at startup)
     for (Territory *t : ml->getMap()->getTerritories())
@@ -828,10 +831,14 @@ int main()
             p2->addTerritory(t);
             t->setPlayer(p2);
         }
-        else
+        else if (t->getContinent()->getName().compare("The Andes") == 0)
         {
             p3->addTerritory(t);
             t->setPlayer(p3);
+        }
+        else {
+            p4->addTerritory(t);
+            t->setPlayer(p4);
         }
     }
 

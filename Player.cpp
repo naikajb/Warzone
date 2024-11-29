@@ -526,6 +526,7 @@ vector<Territory *> Player::toAttack()
                 //         priorityT2 += 1;
                 //      }
                 //  }
+
              } 
             // sort in descending
             return priorityT1 > priorityT2; });
