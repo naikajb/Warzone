@@ -52,7 +52,8 @@ std::ostream &operator<<(std::ostream &outputStream, const Order &order)
 
 std::string Order::stringToLog()
 {
-    return orderDescription + " had effect " + orderEffect;
+    // return orderDescription + " had effect " + orderEffect;
+    return orderDescription + " was issued !";
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -92,8 +93,10 @@ bool Deploy::validateOrder()
 // Execute the deploy order and set its effect
 void Deploy::executeOrder()
 {
+    cout << target->getName() << " had " << target->getNumArmies() << " armies before the DEPLOY" << endl;
     target->setNumArmies(target->getNumArmies() + armies); // sending a number of troops to another Territory
     player->setReinforcementPool(player->getReinforcementPool() - armies);
+    cout << target->getName() << " now has " << target->getNumArmies() << " armies" << endl;
 
     executed = true;                                                                                                          // mark the order as executed
     orderEffect = to_string(armies) + " units have been deployed to " + target->getName() + " by " + player->getPlayerName(); // set the order effect
@@ -104,14 +107,14 @@ void Deploy::execute()
 {
     if (!this->validateOrder())
     {
-        cout << target->getName() << " is not deployed " << armies << " amount of armies when they have " << player->getReinforcementPool() << " and " << player->getReinforcementTemp() << endl;
-        cout << "\nDeploy Order is not valid for player " << player->getPlayerName() << endl; // invalid Order message
+        cout << "\n"
+             << target->getName() << " cannot deploy " << armies << " amount of armies when they have " << player->getReinforcementPool() << endl;
+        cout << "Deploy Order is not valid for player " << player->getPlayerName() << endl; // invalid Order message
 
         return;
     }
 
     cout << "\nDeploy Order is valid - > " << player->getPlayerName() << " is deploying " << armies << " units to Territory " << target->getName() << endl;
-    cout << target->getName() << " now has " << target->getNumArmies() << " armies" << endl;
 
     this->executeOrder(); // executing the Order after checking to see if it is valid
 }
@@ -154,26 +157,43 @@ bool Advance::validateOrder()
         if (source == t)
         {
             validOwnership = true; // source Territory is owned by player issuing the order
-            return validOwnership;
-            // break;
+            cout << "\nsource territory " << source->getName() << " is a valid source !" << endl;
+            // return validOwnership && !checkNegotiatePairs(player, target->getPlayer()) && source->getNumArmies() >= armies;
+            break;
         }
     }
-
+    if (validOwnership == false)
+    {
+        cout << "\nsource territory " << source->getName() << " is NOT a valid source !" << endl;
+    }
     for (Territory *t : source->getAdjTerritories())
     {
         if (target == t)
         {
             validAdj = true; // target Territory is adjacent to source Territory
+            cout << "target territory " << target->getName() << " is a valid target !" << endl;
 
             // validates that if the two players (or one) owning both Territories are in a truce for the round
             // and checks if the amount of troops being sent is lower than the amount of troops present in the source Territory
-            return validAdj && !checkNegotiatePairs(player, target->getPlayer()) && source->getNumArmies() >= armies;
-            // break;
+            // return validAdj && !checkNegotiatePairs(player, target->getPlayer()) && source->getNumArmies() >= armies;
+            break;
         }
     }
 
-    cout << player->getPlayerName() << " tried to advance to " << target->getName() << " which is not a territory they own nor an adjacent territory !" << endl;
-    return false;
+    if (validAdj == false)
+    {
+        cout << "target territory " << target->getName() << " is NOT a valid target !" << endl;
+    }
+
+    if (checkNegotiatePairs(player, target->getPlayer()) == 0 && target->getPlayer() != nullptr && target->getPlayer() != player)
+    {
+        cout << player->getPlayerName() << " and " << target->getPlayer()->getPlayerName() << " have NOT negotiated this round"  << endl;
+    }
+    else if (checkNegotiatePairs(player, target->getPlayer()) != 0 && target->getPlayer() != nullptr && target->getPlayer() != player)
+    {
+        cout << player->getPlayerName() << " and " << target->getPlayer()->getPlayerName() << " have negotiated to NOT fight this round"  << endl;
+    }
+    return validAdj && validOwnership && !checkNegotiatePairs(player, target->getPlayer()) && source->getNumArmies() >= armies;
 
     // updated to remove the loop and just get the player from the target player
     // return validAdj && !checkNegotiatePairs(player, target->getPlayer()) && source->getNumArmies() >= armies;
@@ -184,7 +204,6 @@ bool Advance::validateOrder()
 // Execute the advance order and set its effect
 void Advance::executeOrder()
 {
-
     bool attack = true;
 
     for (Territory *t : player->getTerritories())
@@ -199,85 +218,104 @@ void Advance::executeOrder()
     if (attack)
     { // Attack simulation
 
-        cout << "Battle begins!" << endl;
-
-        source->setNumArmies(source->getNumArmies() - armies);
-
-        int attackerNum = armies;
-        int defenderNum = target->getNumArmies();
-
-        while (attackerNum != 0 && defenderNum != 0)
+        if (target->getPlayer() == nullptr && target->getNumArmies() == 0)
         {
-
-            if (getRandomNum() <= 60)
-                defenderNum--; // random chance of an attacking army unit killing a defender
-            if (getRandomNum() <= 70)
-                attackerNum--; // random chance of a defending army unit killing an attacker
-        }
-
-        if (defenderNum == 0)
-        { // if the defending army has no troops remaining on its Territory -> defenders lose
-
-            cout << "The defending army has lost the battle! Transferring ownership of Territory " << target->getName() << " to " << player->getPlayerName() << endl;
-
-            bool found = false;
-
-            for (Player *p : getPlayerList())
-            {
-
-                for (Territory *t : p->getTerritories())
-                {
-
-                    if (t == target)
-                    {
-
-                        p->removeTerritory(t); // removes Territory from the defending player's Territory list
-                        found = true;
-                        break;
-                    }
-                }
-
-                if (found)
-                    break;
-            }
-
-
-            if (player->getCanDrawCard())
-            { // checks to see if the player can draw a Card this round
-
-                Deck *deck = new Deck();
-
-                Card *c = deck->draw(); // player draws a Card from the Deck
-
-                cout << player->getPlayerName() << " has drawn a " << c->getCardType() << " card for conquering a Territory!" << endl;
-
-                // added the card into its list
-                player->addCard(c);
-
-                player->drewCard(); // player cannot draw another card this round
-
-                delete deck;
-                deck = NULL;
-                cout << "test 2" << endl;
-            }
-            target->setPlayer(player);         // adds ownership of new player to target territory
-            player->addTerritory(target);      // adds Territory to the attacking player
-            target->setNumArmies(attackerNum); // sets number of army units on the target Territory to the remaining number of attackers
+            cout << "No Battle, territory " << target->getName() << " does not belong to any player and does not have any armies !" << endl;
+            target->setPlayer(player);
+            player->addTerritory(target);
+            cout << "Transferring ownership of Territory " << target->getName() << " to " << target->getPlayer()->getPlayerName() << endl;
         }
         else
-        { // defending army has won
+        {
+            cout << "Battle begins!" << endl;
 
-            cout << "The defending army has won the battle!" << endl;
-            // added
-            target->setNumArmies(defenderNum);
+            source->setNumArmies(source->getNumArmies() - armies);
+
+            int attackerNum = armies;
+            int defenderNum = target->getNumArmies();
+
+            while (attackerNum != 0 && defenderNum != 0)
+            {
+
+                if (getRandomNum() <= 60)
+                {
+                    defenderNum--; // random chance of an attacking army unit killing a defender
+                    cout << "Defending territory " << target->getName() << " lost an army unit and now has " << defenderNum << endl;
+                }
+                if (defenderNum == 0)
+                {
+                    break;
+                }
+                if (getRandomNum() <= 70)
+                {
+                    attackerNum--; // random chance of a defending army unit killing an attacker
+                    cout << "Attacking territory " << source->getName() << " lost an army unit and now has " << attackerNum << endl;
+                }
+                if (attackerNum == 0)
+                {
+                    break;
+                }
+            }
+
+            if (defenderNum == 0)
+            { // if the defending army has no troops remaining on its Territory -> defenders lose
+
+                if (target->getPlayer() != nullptr)
+                {
+                    cout << "The defending army has lost the battle! Transferring ownership of Territory " << target->getName() << " from " << target->getPlayer()->getPlayerName();
+
+                    Player *p = target->getPlayer();
+                    p->removeTerritory(target);
+                    target->setPlayer(player);         // adds ownership of new player to target territory
+                    player->addTerritory(target);      // adds Territory to the attacking player
+                    target->setNumArmies(attackerNum); // sets number of army units on the target Territory to the remaining number of attackers
+
+                    cout << " to " << target->getPlayer()->getPlayerName() << endl;
+                }
+                else
+                {
+                    target->setPlayer(player);         // adds ownership of new player to target territory
+                    player->addTerritory(target);      // adds Territory to the attacking player
+                    target->setNumArmies(attackerNum); // sets number of army units on the target Territory to the remaining number of attackers
+                    cout << "The defending army has lost the battle! " << target->getName() << " does not belong to any player ! Transferring ownership of Territory to " << target->getPlayer()->getPlayerName() << endl;
+                }
+
+                if (player->getCanDrawCard())
+                { // checks to see if the player can draw a Card this round
+
+                    Deck *deck = new Deck();
+
+                    Card *c = deck->draw(); // player draws a Card from the Deck
+
+                    cout << player->getPlayerName() << " has drawn a " << c->getCardType() << " card for conquering a Territory!" << endl;
+
+                    // added the card into its list
+                    player->addCard(c);
+
+                    player->drewCard(); // player cannot draw another card this round
+
+                    delete deck;
+                    deck = NULL;
+                }
+            }
+            else
+            { // defending army has won
+
+                cout << "The defending army has won the battle!" << endl;
+                cout << "The defending territory " << target->getName() << " had " << target->getNumArmies() << " before the BATTLE" << endl;
+                target->setNumArmies(defenderNum); // sets number of defending armies left after the battle
+                cout << "The defending territory " << target->getName() << " has " << target->getNumArmies() << " after the BATTLE" << endl;
+            }
         }
     }
     else
     { // no battle has occurred, transferring units to target territory
 
         cout << "No battle, both Territories belong to " << player->getPlayerName() << endl;
+        cout << "Before ADVANCE: Source Territory " << source->getName() << " had " << source->getNumArmies() << "\nTarget Territory " << target->getName() << " had " << target->getNumArmies() << endl;
         source->setNumArmies(source->getNumArmies() - armies);
         target->setNumArmies(target->getNumArmies() + armies);
+        cout << "After ADVANCE: Source Territory " << source->getName() << " has " << source->getNumArmies() << "\nTarget Territory " << target->getName() << " has " << target->getNumArmies() << endl;
     }
 
     executed = true;
@@ -289,10 +327,12 @@ void Advance::execute()
 {
     if (!this->validateOrder())
     {
-        cout << "\nAdvance Order is not valid for player " << player->getPlayerName() << endl; // invalid Order message
+        cout << "Advance Order is not valid for player " << player->getPlayerName() << endl; // invalid Order message
+        cout << player->getPlayerName() << " tried to advance " << source->getName() << " to " << target->getName() << " with " << armies << " armies when it has " << source->getNumArmies() << " either insufficient armies, target territory not adjacent or Negotiation Order has been filed !" << endl;
+
         return;
     }
-    cout << "\nAdvance Order is valid -> " << player->getPlayerName() << " is advancing " << armies << " units from Territory " << source->getName() << " to Territory " << target->getName() << endl;
+    cout << "Advance Order is valid -> " << player->getPlayerName() << " is advancing " << armies << " units from Territory " << source->getName() << " to Territory " << target->getName() << endl;
 
     this->executeOrder(); // executes Order
 }
@@ -339,7 +379,6 @@ bool Bomb::validateOrder()
     {
         if (target == t)
         {
-            cout << player->getPlayerName() << " can't bomb its own territory " << target->getName() << " !" << endl;
             return false; // checks to see if the target Territory is owned by the player issuing the Order
         }
     }
@@ -348,40 +387,29 @@ bool Bomb::validateOrder()
 
     for (Territory *t : target->getAdjTerritories())
     {
-
         for (Territory *t2 : player->getTerritories())
-        { //
-          // validates that the target Territory is adjacent to at least
-            if (t == t2)
-            {                    // one Territory owned by the player issuing the Order
-                validAdj = true; //
+        {
+            if (t == t2) // validates that the target Territory is adjacent to at least
+            {
+                validAdj = true; // one Territory owned by the player issuing the Order
                 break;
             }
-            if (validAdj)
-                break;
         }
+        if (validAdj)
+            break;
     }
 
-    // for (Player *p : getPlayerList())
-    // {
-
-    //     for (Territory *t : p->getTerritories())
-    //     {
-
-    //         if (t == target)
     return validAdj && !checkNegotiatePairs(player, target->getPlayer());
-
-    // } // the above validates if the player issuing the order and the player owning the target territory are in a truce this round
-    //     }
-
-    //     return false;
 }
 
 // Execute the bomb order and set its effect
 void Bomb::executeOrder()
 {
+    cout << target->getName() << " had " << target->getNumArmies() << "armies before BOMB" << endl;
 
     target->setNumArmies(target->getNumArmies() / 2); // killing half the army units on the target territory
+
+    cout << target->getName() << " now has " << target->getNumArmies() << "armies before BOMB" << endl;
 
     executed = true;
     orderEffect = "Territory " + target->getName() + " has been bombed by " + player->getPlayerName();
@@ -394,10 +422,14 @@ void Bomb::execute()
     if (!this->validateOrder())
     {
         cout << "\nBomb Order is not valid for player " << player->getPlayerName() << endl; // invalid order message
+        cout << player->getPlayerName() << " can't bomb its own territory" << target->getName() << " nor can they attack if Negotiation Order has been filed !" << endl;
         return;
     }
 
-    cout << "\nBomb Order is valid -> " << player->getPlayerName() << " is bombing Territory " << target->getName() << endl;
+    if (target->getPlayer() != nullptr)
+        cout << "\nBomb Order is valid -> " << player->getPlayerName() << " is bombing Territory " << target->getName() << " which belongs to " << target->getPlayer()->getPlayerName() << endl;
+    else
+        cout << "\nBomb Order is valid -> " << player->getPlayerName() << " is bombing Territory " << target->getName() << " which belongs to Neutral Player !" << endl;
 
     this->executeOrder();
 }
@@ -434,46 +466,21 @@ bool Blockade::validateOrder()
 
     for (Territory *t : player->getTerritories())
     {
-
         if (t == target)
             return true; // validates to see if the target Territory is owned by the player issuing the Order
     }
-    cout << player->getPlayerName() << " doesn't own territory " << target->getName() << endl;
     return false;
 }
 
 // Execute the bloackade order and set its effect
 void Blockade::executeOrder()
 {
-    player->removeTerritory(target); // removes target Territory from the territory list of the player issuing the Order
-
-    // bool neutralCreated = false;
-
-    // for (Player *p : getPlayerList())
-    // {
-
-    //     if ((p->getPlayerName().compare("Neutral")) == 0)
-    //     { // if the neutral player already exists
-
-    //         p->addTerritory(target); // adds Territory to the neutral player's list
-    //         neutralCreated = true;
-    //         break;
-    //     }
-    //     if (neutralCreated)
-    //         break;
-    // }
-
-    // if (!neutralCreated)
-    // { // if the neutral player doesnt already exist
-
-    //     Player *n = new Player(observer, "Neutral"); // creates Neutral player
-
-    //     addToPlayerList(n); // adds the neutral player to the list
-
-    //     n->addTerritory(target); // adds the territory to the neutral player's list
-    // }
-
     target->setNumArmies(target->getNumArmies() * 2); // doubles the number of units on the target Territory
+
+    cout << "\nBlockade Order is valid - > " << player->getPlayerName() << " is transferring the ownership of Territory " << target->getName() << " to the Neutral player, army units doubled to: " << target->getNumArmies() << endl;
+
+    player->removeTerritory(target); // removes target Territory from the territory list of the player issuing the Order
+    target->setPlayer(nullptr);
 
     executed = true;
     orderEffect = "Territory " + target->getName() + "has been blockaded by " + player->getPlayerName();
@@ -486,10 +493,11 @@ void Blockade::execute()
     if (!this->validateOrder())
     {
         cout << "\nBlockade Order is not valid for player " << player->getPlayerName() << endl; // invalid order message
+        cout << player->getPlayerName() << " doesn't own territory " << target->getName() << endl;
+
         return;
     }
 
-    cout << "\nBlockade Order is valid - > " << player->getPlayerName() << " is transferring the ownership of Territory " << target->getName() << " to the Neutral player, army units doubled to: " << target->getNumArmies() << endl;
     this->executeOrder();
 }
 
@@ -558,6 +566,7 @@ void Airlift::execute()
     if (!this->validateOrder())
     {
         cout << "\nAirlift Order is not valid for player " << player->getPlayerName() << endl; // invalid order message
+        cout << "Either the source and/or the target does not belong to the player !" << endl;
         return;
     }
 
@@ -696,6 +705,8 @@ bool checkNegotiatePairs(Player *p1, Player *p2)
 
     for (pair<Player *, Player *> p : negotiatePairs)
     { // using ADT pair
+        if (p1 == nullptr || p2 == nullptr)
+            return false;
 
         if ((p.first == p1 && p.second == p2) || p.first == p2 && p.second == p1)
             return true;

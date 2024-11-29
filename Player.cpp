@@ -87,7 +87,6 @@ OrdersList *Player::getOrderList()
 // adds order to the player's list of orders
 void Player::issueOrder(Order *order)
 {
-
     // the randomizer picks a random territory to defend and to attack everytime
     // the issueOrder is called
 
@@ -97,6 +96,8 @@ void Player::issueOrder(Order *order)
     std::mt19937 gen(rd());
 
     // randomizer using a probability for toDefend
+    auto defendableTerritories = toDefend();
+    auto attackableTerritories = toAttack();
 
     // a vector of the same size as toDefend vector, where the first element has the highest weight
     // and the last element the lowest weight
@@ -104,18 +105,19 @@ void Player::issueOrder(Order *order)
     // this is so that the toDefend vector has a higher probability to have the higher priority
     // territories to be chosen
     vector<double> probabilityToDefend;
-    for (int i = 0; i < toDefend().size(); i++)
+    for (int i = 0; i < defendableTerritories.size(); i++)
     {
-        probabilityToDefend.push_back(toDefend().size() - i);
+        probabilityToDefend.push_back(defendableTerritories.size() - i);
     }
 
     // use a discrete distribution called distToDefend using the weight values of the probabilityToDefend
     // this means that when drawing a random number, indexes with higher weight will have a bigger probability
     // to be chosen (the weight with higher values is placed in the same index as the toDefend vector)
     std::discrete_distribution<> distToDefend(probabilityToDefend.begin(), probabilityToDefend.end());
+
     int randomIndexDefend = distToDefend(gen); // get a random index
 
-    Territory *selectedTerritoryToDefend = toDefend()[randomIndexDefend]; // choose a territory to defend with random index
+    Territory *selectedTerritoryToDefend = defendableTerritories[randomIndexDefend]; // choose a territory to defend with random index
 
     // randomizer using a probability for toAttack
 
@@ -124,19 +126,21 @@ void Player::issueOrder(Order *order)
     // the higher the value, the higher the probability
     // this is so that the toAttack vector has a higher probability to have the higher priority
     // territories to be chosen
+
     vector<double> probabilityToAttack;
-    for (int i = 0; i < toAttack().size(); i++)
+    for (int i = 0; i < attackableTerritories.size(); i++)
     {
-        probabilityToAttack.push_back(toAttack().size() - i);
+        probabilityToAttack.push_back(attackableTerritories.size() - i);
     }
 
     // use a discrete distribution called distToAttack using the weight values of the probabilityToAttack
     // this means that when drawing a random number, indexes with higher weight will have a bigger probability
     // to be chosen (the weight with higher values is placed in the same index as the toAttack vector)
     std::discrete_distribution<> distToAttack(probabilityToAttack.begin(), probabilityToAttack.end());
+
     int randomIndexAttack = distToAttack(gen); // get a random index
 
-    Territory *selectedTerritoryToAttack = toAttack()[randomIndexAttack]; // choose a territory to attack with random index
+    Territory *selectedTerritoryToAttack = attackableTerritories[randomIndexAttack]; // choose a territory to attack with random index
 
     // if the order is of type deploy
     if (Deploy *d = dynamic_cast<Deploy *>(order))
@@ -146,7 +150,7 @@ void Player::issueOrder(Order *order)
         // choose a random number of army units to deploy
         // reinforcement temp is used to keep track of the reinforcement pool
         // without actually modifying it until the order execution
-        int min = 0;
+        int min = 1;
         int max = reinforcementTemp;
         std::uniform_int_distribution<> distRandArmiesDeploy(min, max);
         int randomNumArmiesDeploy = distRandArmiesDeploy(gen);
@@ -166,9 +170,6 @@ void Player::issueOrder(Order *order)
     // if the order is of type advance
     if (Advance *a = dynamic_cast<Advance *>(order))
     {
-
-        cout << "\nAdvance Order issued for : " << playerName << endl;
-
         // decide randomly if player wants to attack or defend
         int defend = 0;
         int attack = 1;
@@ -178,7 +179,6 @@ void Player::issueOrder(Order *order)
         // attack
         if (answer == 1)
         {
-            cout << playerName << " has chosen to ATTACK !" << endl;
             // cout << randomIndexAttack << " is the index of vector and attack territory is: " << selectedTerritoryToAttack->getName() << endl;
             // go through all the territories the player has
             for (Territory *t : territories)
@@ -190,10 +190,14 @@ void Player::issueOrder(Order *order)
                     // AND it has more than 1 army unit
                     if (selectedTerritoryToAttack->getName().compare(tadj->getName()) == 0 && t->getNumArmiesTemp() >= 1)
                     {
+                        cout << "\nAdvance Order issued for : " << playerName << endl;
+
+                        cout << playerName << " has chosen to ATTACK !" << endl;
+
                         // choose a random number of armies to send from the player's territory to the selected territory to attack
                         // numArmiesTemp is to be able to modify and keep track of the number of armies in a territory
                         // without actually modifying the number of armies the territory has until order execution
-                        int min = 0;
+                        int min = 1;
                         int max = t->getNumArmiesTemp();
                         std::uniform_int_distribution<> distAttackAdvance(min, max);
                         int numArmiesAttack = distAttackAdvance(gen);
@@ -203,7 +207,9 @@ void Player::issueOrder(Order *order)
                         // add order to orderlist
                         orders->addOrder(adv);
                         cout << "Advance " << numArmiesAttack << " of armies from " << t->getName() << " to " << selectedTerritoryToAttack->getName() << endl;
+
                         cout << t->getName() << " had " << t->getNumArmiesTemp() << " before the attack and now has " << t->getNumArmiesTemp() - numArmiesAttack << " after the attack" << endl;
+
                         // keep track of the number of armies the territory can actually advance with
                         t->setNumArmiesTemp(t->getNumArmiesTemp() - numArmiesAttack);
 
@@ -216,7 +222,6 @@ void Player::issueOrder(Order *order)
         // defend
         else
         {
-            cout << playerName << " has chosen to DEFEND !" << endl;
             // cout << randomIndexDefend << " is the index of vector and defend territory is: " << selectedTerritoryToDefend->getName() << endl;
             // go through all the territories the player has
             for (Territory *t : territories)
@@ -227,12 +232,16 @@ void Player::issueOrder(Order *order)
                     // if the territory is adjacent to the one selected to defend
                     // AND it has more than 1 army unit
                     // AND it is not the same territory
-                    if (selectedTerritoryToDefend->getName().compare(tadj->getName()) && t->getNumArmiesTemp() >= 1 && t->getName().compare(selectedTerritoryToDefend->getName()) != 0)
+                    if (selectedTerritoryToDefend->getName().compare(tadj->getName()) == 0 && t->getNumArmiesTemp() >= 1 && t->getName().compare(selectedTerritoryToDefend->getName()) != 0)
                     {
+                        cout << "\nAdvance Order issued for : " << playerName << endl;
+
+                        cout << playerName << " has chosen to DEFEND !" << endl;
+
                         // choose a random number of armies to send from the player's territory to the selected territory to derend
                         // numArmiesTemp is to be able to modify and keep track of the number of armies in a territory
                         // without actually modifying the number of armies the territory has until order execution
-                        int min = 0;
+                        int min = 1;
                         int max = t->getNumArmiesTemp();
                         std::uniform_int_distribution<> distDefendAdvance(min, max);
                         int numArmiesDefend = distDefendAdvance(gen);
@@ -251,6 +260,7 @@ void Player::issueOrder(Order *order)
                 }
             }
         }
+        return;
     }
 
     // if the order is of type bomb
@@ -262,21 +272,22 @@ void Player::issueOrder(Order *order)
         cout << playerName << " BOMBS ! territory: " << selectedTerritoryToAttack->getName() << endl;
         Bomb *bomb = new Bomb(observer, this, selectedTerritoryToAttack);
         orders->addOrder(bomb);
+
         return;
     }
 
     // if the order is of type negotiate
     if (Negotiate *n = dynamic_cast<Negotiate *>(order))
     {
-        if (selectedTerritoryToAttack->getPlayer() != nullptr && selectedTerritoryToAttack->getPlayer()->getPlayerName().compare("Neutral"))
+        if (selectedTerritoryToAttack->getPlayer() != nullptr)
         {
             cout << "\nNegotiate Order issued for : " << playerName << endl;
             // from a random selected territory to attack, negotiate with the player that owns it
             cout << playerName << " NEGOTIATES ! with " << selectedTerritoryToAttack->getPlayer()->getPlayerName() << endl;
             Negotiate *negotiate = new Negotiate(observer, this, selectedTerritoryToAttack->getPlayer());
             orders->addOrder(negotiate);
-            return;
         }
+        return;
     }
 
     // if the order is of type blockade
@@ -351,13 +362,13 @@ void Player::issueOrder(Order *order)
             {
                 // the maximum represents a randomly selected territory to defend based on the player's territories to defend
                 int min1 = 0;
-                int max1 = toDefend().size() - 1;
+                int max1 = defendableTerritories.size() - 1;
                 std::uniform_int_distribution<> distRandomTerritory(min1, max1);
                 int randomTerritory = distRandomTerritory(gen); // from the vector of all of its owned territories, take a random one
 
                 // territory to airlift to,
                 // take a random territory from the toDefend() vector
-                Territory *airlift = toDefend()[randomTerritory];
+                Territory *airlift = defendableTerritories[randomTerritory];
 
                 // if the randomly generated territory from toDefend() is not the same as the randomly generated territory to airlift to,
                 // continue the code
@@ -474,14 +485,16 @@ vector<Territory *> Player::toAttack()
         }
     }
 
+    // Proceed with sorting
+
     // sorting toAttack() in descendent priority
     sort(toAttack.begin(), toAttack.end(), [this](Territory *t1, Territory *t2)
          {
              int priorityT1 = 0;
              int priorityT2 = 0;
-
              for (Territory *t : territories)
              {
+           
                 // if t1 from toAttack is adjacent to the territory t
                 if (std::find(t->getAdjTerritories().begin(), t->getAdjTerritories().end(), t1) != t->getAdjTerritories().end())
                  {
@@ -497,23 +510,23 @@ vector<Territory *> Player::toAttack()
                         priorityT1 += 1;
                      }
                  }
-                // if t2 from toAttack is adjacednt to the territory t
-                if (std::find(t->getAdjTerritories().begin(), t->getAdjTerritories().end(), t2) != t->getAdjTerritories().end())
-                 {
-                    // if t2 from toAttack has less armies than territory t                    
-                    if (t2->getNumArmies() < t->getNumArmies())
-                     {
-                        // increase priority of t2 by 2
-                        priorityT2 += 2;
-                     }
-                     else
-                     {
-                        // else increase priority of t2 by 1
-                        priorityT2 += 1;
-                     }
-                 }
-             }
 
+                // if t2 from toAttack is adjacednt to the territory t
+                // if (std::find(t->getAdjTerritories().begin(), t->getAdjTerritories().end(), t2) != t->getAdjTerritories().end())
+                //  {
+                //     // if t2 from toAttack has less armies than territory t                    
+                //     if (t2->getNumArmies() < t->getNumArmies())
+                //      {
+                //         // increase priority of t2 by 2
+                //         priorityT2 += 2;
+                //      }
+                //      else
+                //      {
+                //         // else increase priority of t2 by 1
+                //         priorityT2 += 1;
+                //      }
+                //  }
+             } 
             // sort in descending
             return priorityT1 > priorityT2; });
 

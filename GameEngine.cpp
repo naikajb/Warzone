@@ -508,7 +508,7 @@ void GameEngine::reinforcementPhase(vector<Player *> v, Map *map, int round)
 
         for (Territory *t : v[i]->getTerritories())
         {
-            cout << t->getName() << endl;
+            cout << t->getName() << " -> with armies " << t->getNumArmies() << endl;
         }
         cout << "\n";
         if (v[i]->getTerritories().size() < 9)
@@ -556,7 +556,6 @@ void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
     // this is done so that the advance order is done a maximum of 3 times
     // each box from this vector is of each player and represents the number of times they advanced
     vector<int> countAdvanceTerritories(v.size());
-
     // vector to keep track of the index of each player for their Hand vector
     // this is done so that the other order types from their hand can be
     // kept track and used
@@ -575,7 +574,9 @@ void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
     {
         // might change so that it saves the drawn card from the advance
         p->getOrderList()->clearOrders();
+       
     }
+ resetNegotiatePairs();
 
     // boolean moreOrder to continue this loop until there are no more orders
     bool moreOrder = true;
@@ -592,7 +593,7 @@ void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
             if (v[i]->getReinforcementTemp() != 0)
             {
                 Deploy *d = new Deploy();
-                v[i]->issueOrder(d);
+                v[i]->issueOrder(d); 
                 continue;
             }
 
@@ -600,8 +601,7 @@ void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
             else if (countAdvanceTerritories[i] != 3 && round != 1)
             {
                 Advance *a = new Advance();
-                v[i]->issueOrder(a);
-
+                v[i]->issueOrder(a); 
                 countAdvanceTerritories[i]++;
                 continue;
             }
@@ -632,11 +632,11 @@ void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
                     Airlift *a = new Airlift();
                     v[i]->issueOrder(a);
                 }
-
+                // remove the card from the hand if the order is issued !
+                v[i]->getHand()->cardsInHand.erase(v[i]->getHand()->cardsInHand.begin() + indexHandVector[i]);
                 indexHandVector[i]++;
                 continue;
             }
-
             // when all of the previous possible orders are done, change the value to 1 for that player
             else if (outOfOrder[i] != 1)
             {
@@ -645,6 +645,7 @@ void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
                 outOfOrder[i] = 1;
             }
         }
+
         // calculate the total number of players that are done
         // if the countDone is equal to the number of players, end the loop (no more orders) !
         for (int j : outOfOrder)
@@ -654,13 +655,13 @@ void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
                 countDone++;
             }
         }
-
         // if all players are done, the loop is done !
         if (countDone == v.size())
         {
             cout << "\nNo more orders to issue for all players !\n"
                  << endl;
             moreOrder = false;
+            break;
         }
     }
 }
@@ -815,22 +816,19 @@ int main()
     // add a random loop to deisgnate territories to the players (this is usually done at startup)
     for (Territory *t : ml->getMap()->getTerritories())
     {
-        if (t->getContinent()->getName().compare("Central America") == 0 || t->getContinent()->getName().compare("The Highlands") == 0)
+        if (t->getContinent()->getName().compare("Central America") == 0 )
         {
             p1->addTerritory(t);
             t->setPlayer(p1);
-            // cout << "\n"
-            //      << t->getName() << " was added for " << p1->getPlayerName() << endl;
         }
-        else
+        else if (t->getContinent()->getName().compare("The Highlands") == 0)
         {
             p2->addTerritory(t);
-            // t->setPlayer(p2); // this is to test territories with no players for issueOrderPhase()
-
-            // cout << "\n"
-            //      << t->getName() << " was added for " << p2->getPlayerName() << endl;
+            t->setPlayer(p2); 
         }
     }
+
+
 
     // cout << "\nreinforcement pool at the start of the game for " << p1->getPlayerName() << " is: " << p1->getReinforcementPool() << endl;
     // cout << "\nreinforcement pool at the start of the game for " << p2->getPlayerName() << " is: " << p2->getReinforcementPool() << endl;
@@ -847,19 +845,19 @@ int main()
     //      << endl;
 
     // add cards for each player (usually done in startup)
-    Card *bomb = new Card(Card::BOMB);
-    Card *blockade = new Card(Card::BLOCKADE);
-    Card *airlift = new Card(Card::AIRLIFT);
-    Card *negotiate = new Card(Card::NEGOTIATE);
+    // Card *bomb = new Card(Card::BOMB);
+    // Card *blockade = new Card(Card::BLOCKADE);
+    // Card *airlift = new Card(Card::AIRLIFT);
+    // Card *negotiate = new Card(Card::NEGOTIATE);
 
-    p1->addCard(bomb);
-    p2->addCard(bomb);
-    p1->addCard(blockade);
-    p2->addCard(blockade);
-    p1->addCard(airlift);
-    p2->addCard(airlift);
-    p1->addCard(negotiate);
-    p2->addCard(negotiate);
+    // p1->addCard(bomb);
+    // p2->addCard(bomb);
+    // p1->addCard(blockade);
+    // p2->addCard(blockade);
+    // p1->addCard(airlift);
+    // p2->addCard(airlift);
+    // p1->addCard(negotiate);
+    // p2->addCard(negotiate);
 
     // checks for the first round is only deploy
     // cout << "\nFirst round ! " << endl;
