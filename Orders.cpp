@@ -489,8 +489,8 @@ void Blockade::execute()
         return;
     }
 
-    cout << "\nBlockade Order is valid - > " << player->getPlayerName() << " is transferring the ownership of Territory " << target->getName() << " to the Neutral player, army units doubled to: " << target->getNumArmies() << endl;
     this->executeOrder();
+    cout << "\nBlockade Order is valid - > " << player->getPlayerName() << " is transferring the ownership of Territory " << target->getName() << " to the Neutral player, army units doubled to: " << target->getNumArmies() << endl;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
