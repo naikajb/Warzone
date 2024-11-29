@@ -574,9 +574,8 @@ void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
     {
         // might change so that it saves the drawn card from the advance
         p->getOrderList()->clearOrders();
-       
     }
- resetNegotiatePairs();
+    resetNegotiatePairs();
 
     // boolean moreOrder to continue this loop until there are no more orders
     bool moreOrder = true;
@@ -593,7 +592,7 @@ void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
             if (v[i]->getReinforcementTemp() != 0)
             {
                 Deploy *d = new Deploy();
-                v[i]->issueOrder(d); 
+                v[i]->issueOrder(d);
                 continue;
             }
 
@@ -601,7 +600,7 @@ void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
             else if (countAdvanceTerritories[i] != 3 && round != 1)
             {
                 Advance *a = new Advance();
-                v[i]->issueOrder(a); 
+                v[i]->issueOrder(a);
                 countAdvanceTerritories[i]++;
                 continue;
             }
@@ -737,7 +736,7 @@ void GameEngine::mainGameLoop(vector<Player *> v, Map *map)
         if (v.size() <= 1)
         {
             noWinner = false;
-            cout << "One Player Left !\nEnd of game !\n"
+            cout << "One Player Left !\nEnd of game !\nCongratulations " << v[0]->getPlayerName() << " !!!!"
                  << endl;
             break;
         }
@@ -804,19 +803,22 @@ int main()
     Observer *o = new LogObserver();
     Player *p1 = new Player(o, "Ihana");
     Player *p2 = new Player(o, "Shamma");
+    Player *p3 = new Player(o, "Tanya");
     GameEngine *g = new GameEngine(o);
 
     cout << "\nplayer 1: " << p1->getPlayerName() << endl;
     cout << "\nplayer 2: " << p2->getPlayerName() << endl;
+    cout << "\nplayer 3: " << p3->getPlayerName() << endl;
 
     vector<Player *> pList = getPlayerList();
     pList.push_back(p1);
     pList.push_back(p2);
+    pList.push_back(p3);
 
     // add a random loop to deisgnate territories to the players (this is usually done at startup)
     for (Territory *t : ml->getMap()->getTerritories())
     {
-        if (t->getContinent()->getName().compare("Central America") == 0 )
+        if (t->getContinent()->getName().compare("Central America") == 0)
         {
             p1->addTerritory(t);
             t->setPlayer(p1);
@@ -824,11 +826,14 @@ int main()
         else if (t->getContinent()->getName().compare("The Highlands") == 0)
         {
             p2->addTerritory(t);
-            t->setPlayer(p2); 
+            t->setPlayer(p2);
+        }
+        else
+        {
+            p3->addTerritory(t);
+            t->setPlayer(p3);
         }
     }
-
-
 
     // cout << "\nreinforcement pool at the start of the game for " << p1->getPlayerName() << " is: " << p1->getReinforcementPool() << endl;
     // cout << "\nreinforcement pool at the start of the game for " << p2->getPlayerName() << " is: " << p2->getReinforcementPool() << endl;

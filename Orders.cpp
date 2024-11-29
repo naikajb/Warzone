@@ -405,11 +405,11 @@ bool Bomb::validateOrder()
 // Execute the bomb order and set its effect
 void Bomb::executeOrder()
 {
-    cout << target->getName() << " had " << target->getNumArmies() << "armies before BOMB" << endl;
+    cout << target->getName() << " had " << target->getNumArmies() << " armies before BOMB" << endl;
 
     target->setNumArmies(target->getNumArmies() / 2); // killing half the army units on the target territory
 
-    cout << target->getName() << " now has " << target->getNumArmies() << "armies before BOMB" << endl;
+    cout << target->getName() << " now has " << target->getNumArmies() << " armies before BOMB" << endl;
 
     executed = true;
     orderEffect = "Territory " + target->getName() + " has been bombed by " + player->getPlayerName();
