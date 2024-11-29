@@ -9,9 +9,13 @@
 #include "Cards.h"
 #include "Map.h"
 #include "LoggingObserver.h"
+#include "PlayerStrategies.h"
 using std::sort;
 class OrdersList;
 class Order;
+class Territory;
+class PlayerStrategy;
+
 
 class Player{
 
@@ -24,6 +28,7 @@ class Player{
         int reinforcementPool; // nb of armies recieved added
         int reinforcementTemp;
         Observer* observer;
+        PlayerStrategy* strategy;
 
     public: 
         Player(Observer*,string playerName); //constructor function
@@ -39,6 +44,9 @@ class Player{
         int getReinforcementPool();
         int getReinforcementTemp();
 
+        Observer* getObserver();
+
+
         std::vector<Territory*> toDefend();  //returns territories to be defended 
         std::vector<Territory*> toAttack();  //returns territories to be attacked
         
@@ -46,6 +54,7 @@ class Player{
         
         //stream insertion operator to print player's information
         friend std::ostream& operator<<(std::ostream& out, const Player& player);
+        Player &operator=(const Player&);
         
         void addCard(Card* card);  //adds card to player's hand
         void removeCard(Card* card);  //removes card from player's hand

@@ -1,5 +1,6 @@
 Game Log
 ---------------------------------------------
+<<<<<<< HEAD
 Deploy order  was issued !
 Deploy order  was issued !
 Deploy order  was issued !
@@ -14034,3 +14035,172 @@ Advance Order  was issued !
 Advance Order  was issued !
 Advance Order  was issued !
 Bomb Order  was issued !
+=======
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect 6 units have been deployed to Columbia by Ihana
+Deploy order  had effect 45 units have been deployed to Brazil by Shamma
+Deploy order  had effect 21 units have been deployed to Costa Rica by Ihana
+Deploy order  had effect 0 units have been deployed to French Guiana by Shamma
+Deploy order  had effect 13 units have been deployed to Peru by Ihana
+Deploy order  had effect 2 units have been deployed to Bolivia by Shamma
+Deploy order  had effect 6 units have been deployed to Columbia by Ihana
+Deploy order  had effect 3 units have been deployed to Chile by Shamma
+Deploy order  had effect 3 units have been deployed to Venezuela by Ihana
+Deploy order  had effect 1 units have been deployed to Columbia by Ihana
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Deploy order  had effect 4 units have been deployed to Columbia by Ihana
+Deploy order  had effect 0 units have been deployed to Bolivia by Shamma
+Deploy order  had effect 0 units have been deployed to Peru by Ihana
+Deploy order  had effect 4 units have been deployed to Paraguay by Shamma
+Deploy order  had effect 1 units have been deployed to Peru by Ihana
+Deploy order  had effect 0 units have been deployed to Bolivia by Shamma
+Deploy order  had effect 0 units have been deployed to Panama by Ihana
+Deploy order  had effect 5 units have been deployed to Chile by Shamma
+Deploy order  had effect 1 units have been deployed to Costa Rica by Ihana
+Deploy order  had effect 0 units have been deployed to Brazil by Shamma
+Advance Order  had effect 5 units have been advanced from Peru to Venezuela by Ihana
+Deploy order  had effect 1 units have been deployed to Brazil by Shamma
+Advance Order  had effect 7 units have been advanced from Peru to Nicaragua by Ihana
+Advance Order  had effect 26 units have been advanced from Brazil to Columbia by Shamma
+Advance Order  had effect 0 units have been advanced from Peru to Venezuela by Ihana
+Advance Order  had effect 6 units have been advanced from Brazil to Bolivia by Shamma
+Advance Order  had effect 3 units have been advanced from Brazil to Columbia by Shamma
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Airlift Order  had effect none
+Deploy order  had effect 2 units have been deployed to Columbia by Ihana
+Deploy order  had effect 2 units have been deployed to Columbia by Shamma
+Deploy order  had effect 0 units have been deployed to Columbia by Ihana
+Deploy order  had effect 1 units have been deployed to Bolivia by Shamma
+Deploy order  had effect 2 units have been deployed to Peru by Ihana
+Deploy order  had effect 0 units have been deployed to Paraguay by Shamma
+Deploy order  had effect 1 units have been deployed to Galapagos Island by Ihana
+Deploy order  had effect 1 units have been deployed to Argentina by Shamma
+Deploy order  had effect 1 units have been deployed to Ecuador by Ihana
+Deploy order  had effect 3 units have been deployed to Brazil by Shamma
+Advance Order  had effect 4 units have been advanced from Venezuela to Guyana by Ihana
+Deploy order  had effect 2 units have been deployed to Argentina by Shamma
+Advance Order  had effect 2 units have been advanced from Peru to Brazil by Ihana
+Deploy order  had effect 2 units have been deployed to Chile by Shamma
+Advance Order  had effect 4 units have been advanced from Venezuela to Guyana by Ihana
+Advance Order  had effect 1 units have been advanced from Bolivia to Peru by Shamma
+Advance Order  had effect 2 units have been advanced from Bolivia to Brazil by Shamma
+Advance Order  had effect 8 units have been advanced from Columbia to Panama by Shamma
+Airlift Order  had effect Armies have been airlifted from Argentina to Suriname by Shamma
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Deploy order  had effect none
+Bomb Order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Bomb Order  had effect none
+Deploy order  had effect 2 units have been deployed to Venezuela by Ihana
+Deploy order  had effect 1 units have been deployed to French Guiana by Shamma
+Deploy order  had effect 1 units have been deployed to Peru by Ihana
+Deploy order  had effect 5 units have been deployed to Uruguay by Shamma
+Deploy order  had effect 1 units have been deployed to Guyana by Ihana
+Deploy order  had effect 0 units have been deployed to French Guiana by Shamma
+Deploy order  had effect 2 units have been deployed to Panama by Ihana
+Deploy order  had effect 0 units have been deployed to Panama by Shamma
+Advance Order  had effect 1 units have been advanced from Peru to Brazil by Ihana
+Deploy order  had effect 4 units have been deployed to Bolivia by Shamma
+Advance Order  had effect 0 units have been advanced from Peru to Columbia by Ihana
+Deploy order  had effect 0 units have been deployed to Uruguay by Shamma
+Advance Order  had effect 1 units have been advanced from Peru to Chile by Ihana
+Deploy order  had effect 1 units have been deployed to Guyana by Shamma
+Bomb Order  had effect Territory Suriname has been bombed by Ihana
+Advance Order  had effect 7 units have been advanced from Brazil to Venezuela by Shamma
+Advance Order  had effect 4 units have been advanced from Paraguay to Bolivia by Shamma
+Advance Order  had effect 0 units have been advanced from Bolivia to Peru by Shamma
+Bomb Order  had effect Territory Peru has been bombed by Shamma
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Negotiate Order  had effect none
+Deploy order  had effect 4 units have been deployed to Guyana by Ihana
+Deploy order  had effect 5 units have been deployed to Bolivia by Shamma
+Deploy order  had effect 0 units have been deployed to Nicaragua by Ihana
+Deploy order  had effect 1 units have been deployed to Columbia by Shamma
+Deploy order  had effect 1 units have been deployed to Costa Rica by Ihana
+Deploy order  had effect 5 units have been deployed to Brazil by Shamma
+Deploy order  had effect 1 units have been deployed to Peru by Ihana
+Advance Order  had effect 4 units have been advanced from Brazil to Bolivia by Shamma
+Advance Order  had effect 0 units have been advanced from Columbia to Peru by Ihana
+Advance Order  had effect 0 units have been advanced from Brazil to Peru by Shamma
+Advance Order  had effect 3 units have been advanced from Columbia to Peru by Ihana
+Advance Order  had effect 1 units have been advanced from Brazil to Paraguay by Shamma
+Negotiate Order  had effect Truce has been negotiated between Shamma and Ihana
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+>>>>>>> a83bdb43745f1aa8c60cacdc3b71c7d9c2f02084

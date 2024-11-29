@@ -52,8 +52,8 @@ std::ostream &operator<<(std::ostream &outputStream, const Order &order)
 
 std::string Order::stringToLog()
 {
-    // return orderDescription + " had effect " + orderEffect;
-    return orderDescription + " was issued !";
+    return orderDescription + " had effect " + orderEffect;
+    // return orderDescription + " was issued !";
 }
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
@@ -115,6 +115,7 @@ void Deploy::execute()
     }
 
     cout << "\nDeploy Order is valid - > " << player->getPlayerName() << " is deploying " << armies << " units to Territory " << target->getName() << endl;
+    cout << target->getName() << " now has " << target->getNumArmies() << " armies" << endl;
 
     this->executeOrder(); // executing the Order after checking to see if it is valid
 }
@@ -294,12 +295,15 @@ void Advance::executeOrder()
 
                     player->drewCard(); // player cannot draw another card this round
 
-                    delete deck;
-                    deck = NULL;
-                }
+                delete deck;
+                deck = NULL;
             }
-            else
-            { // defending army has won
+            target->setPlayer(player);         // adds ownership of new player to target territory
+            player->addTerritory(target);      // adds Territory to the attacking player
+            target->setNumArmies(attackerNum); // sets number of army units on the target Territory to the remaining number of attackers
+        }
+        else
+        { // defending army has won
 
                 cout << "The defending army has won the battle!" << endl;
                 cout << "The defending territory " << target->getName() << " had " << target->getNumArmies() << " before the BATTLE" << endl;
@@ -742,6 +746,12 @@ vector<Player *> getPlayerList()
 void clearPlayerList()
 {
     playerList.clear();
+}
+
+void removePlayerFromList(Player* p){
+
+    playerList.erase(std::remove(playerList.begin(), playerList.end(), p), playerList.end());
+
 }
 
 std::string OrdersList::stringToLog()
