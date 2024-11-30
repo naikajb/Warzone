@@ -588,12 +588,20 @@ void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
         for (int i = 0; i < v.size(); i++)
         {
 
-            if(typeid(v[i]->getPlayerStrategy()).name() == "HumanPlayerStrategy"){
+            if(v[i]->getPlayerStrategy()->getPlayerType() == "Human"){
 
-                Deploy* d = new Deploy();
+                Order* d = new Deploy();
                 v[i]->issueOrder(d);
-                break;
+                continue;
 
+            }else if(v[i]->getPlayerStrategy()->getPlayerType() == "Cheater"){
+
+                Order* d = new Deploy();
+                v[i]->issueOrder(d);
+                continue;
+
+            }else if(v[i]->getPlayerStrategy()->getPlayerType() == "Neutral"){
+                continue;
             }
 
             // if the player still has armies in reinforcement, deploy order
@@ -763,6 +771,7 @@ void GameEngine::mainGameLoop(vector<Player *> v, Map *map)
         {
             p->roundReset();
         }
+        resetNegotiatePairs();
         round++;
 
     } while (noWinner);

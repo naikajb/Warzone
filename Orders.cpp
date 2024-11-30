@@ -110,10 +110,11 @@ void Deploy::execute()
         return;
     }
 
+    this->executeOrder(); // executing the Order after checking to see if it is valid
+
     cout << "\nDeploy Order is valid - > " << player->getPlayerName() << " is deploying " << armies << " units to Territory " << target->getName() << endl;
     cout << target->getName() << " now has " << target->getNumArmies() << " armies" << endl;
 
-    this->executeOrder(); // executing the Order after checking to see if it is valid
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -287,6 +288,12 @@ void Advance::executeOrder()
 
 void Advance::execute()
 {
+    if(player->getPlayerStrategy()->getPlayerType() == "Cheater" && armies == -99){
+
+        vector<Territory*> x = player->getPlayerStrategy()->toAttack();
+        return;
+    }
+
     if (!this->validateOrder())
     {
         cout << "\nAdvance Order is not valid for player " << player->getPlayerName() << endl; // invalid Order message
@@ -295,6 +302,7 @@ void Advance::execute()
     cout << "\nAdvance Order is valid -> " << player->getPlayerName() << " is advancing " << armies << " units from Territory " << source->getName() << " to Territory " << target->getName() << endl;
 
     this->executeOrder(); // executes Order
+    checkNeutralAttack(target);
 }
 
 int Advance::getRandomNum()
@@ -362,19 +370,8 @@ bool Bomb::validateOrder()
         }
     }
 
-    // for (Player *p : getPlayerList())
-    // {
-
-    //     for (Territory *t : p->getTerritories())
-    //     {
-
-    //         if (t == target)
     return validAdj && !checkNegotiatePairs(player, target->getPlayer());
 
-    // } // the above validates if the player issuing the order and the player owning the target territory are in a truce this round
-    //     }
-
-    //     return false;
 }
 
 // Execute the bomb order and set its effect
@@ -400,6 +397,7 @@ void Bomb::execute()
     cout << "\nBomb Order is valid -> " << player->getPlayerName() << " is bombing Territory " << target->getName() << endl;
 
     this->executeOrder();
+    checkNeutralAttack(target);
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -446,32 +444,6 @@ bool Blockade::validateOrder()
 void Blockade::executeOrder()
 {
     player->removeTerritory(target); // removes target Territory from the territory list of the player issuing the Order
-
-    // bool neutralCreated = false;
-
-    // for (Player *p : getPlayerList())
-    // {
-
-    //     if ((p->getPlayerName().compare("Neutral")) == 0)
-    //     { // if the neutral player already exists
-
-    //         p->addTerritory(target); // adds Territory to the neutral player's list
-    //         neutralCreated = true;
-    //         break;
-    //     }
-    //     if (neutralCreated)
-    //         break;
-    // }
-
-    // if (!neutralCreated)
-    // { // if the neutral player doesnt already exist
-
-    //     Player *n = new Player(observer, "Neutral"); // creates Neutral player
-
-    //     addToPlayerList(n); // adds the neutral player to the list
-
-    //     n->addTerritory(target); // adds the territory to the neutral player's list
-    // }
 
     target->setNumArmies(target->getNumArmies() * 2); // doubles the number of units on the target Territory
 

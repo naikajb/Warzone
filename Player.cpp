@@ -584,7 +584,16 @@ void Player::AttachObserver(Observer *observer)
 }
 
 void Player::drewCard() { canDrawCard = false; }
-void Player::roundReset() { canDrawCard = true; }
+void Player::roundReset() { 
+    canDrawCard = true; 
+    
+    if(this->getPlayerStrategy()->getPlayerType().compare("Cheater") == 0){
+
+        Cheater* c = dynamic_cast<Cheater*>(this->getPlayerStrategy());
+
+        c->resetCheaterConquer();
+    }
+}
 bool Player::getCanDrawCard() { return canDrawCard; }
 
 

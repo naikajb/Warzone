@@ -11,57 +11,78 @@
 #include "Orders.h"
 #include "Map.h"
 
+#include <typeinfo>
+
 class Order;
+class Territory;
+class Player;
 
 using namespace std;
 class PlayerStrategy {
     private:
         Player* player;
+        string ps;
 
     public:
+        virtual ~PlayerStrategy();
         virtual void issueOrder(Order*) = 0;
         virtual vector<Territory*> toAttack() = 0;
         virtual vector<Territory*> toDefend() = 0;
         void assignPlayer(Player*);
-        vector<Territory*> generalToDefend();
         void becomeAggressive();
         Player* getPlayer();
         void setPlayer(Player*);
+        bool contains(vector<Territory*>,Territory*);
+        virtual string getPlayerType();
 };
 
-class HumanPlayerStrategy : public PlayerStrategy {
+void checkNeutralAttack(Territory*);
+
+class Human : public PlayerStrategy {
     public:
         void issueOrder(Order*);
         vector<Territory*> toAttack();
         vector<Territory*> toDefend();
+        string getPlayerType();
 };
 
-class AggressivePlayerStrategy : public PlayerStrategy {
+class Aggressive : public PlayerStrategy {
    public:
         void issueOrder(Order*);
         vector<Territory*> toAttack();
         vector<Territory*> toDefend();
+        string getPlayerType();
 };
 
-class BenevolentPlayerStrategy : public PlayerStrategy {
+class Benevolent : public PlayerStrategy {
     public:
         void issueOrder(Order*);
         vector<Territory*> toAttack();
         vector<Territory*> toDefend();
+        string getPlayerType();
 };
 
-class NeutralPlayerStrategy : public PlayerStrategy {
+class Neutral : public PlayerStrategy {
     public:
         void issueOrder(Order*);
         vector<Territory*> toAttack();
         vector<Territory*> toDefend();
+        string getPlayerType();
 };
 
-class CheaterPlayerStrategy : public PlayerStrategy {
+class Cheater : public PlayerStrategy {
+    private:
+
+        bool canConquer = true;
+    
     public:
         void issueOrder(Order*);
         vector<Territory*> toAttack();
         vector<Territory*> toDefend();
+        string getPlayerType();
+        bool cheaterCanConquer();
+        void resetCheaterConquer();
+        void isConquering();
 };
 
 
