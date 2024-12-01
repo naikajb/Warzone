@@ -41,6 +41,7 @@ class Player{
 
         std::vector<Territory*> getTerritories(); // getter of a list of territories the player has
         void setReinforcementPool(int);
+        void setReinforcementTemp(int);
         int getReinforcementPool();
         int getReinforcementTemp();
         PlayerStrategy* getPlayerStrategy();

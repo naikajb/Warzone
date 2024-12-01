@@ -577,6 +577,8 @@ void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
     }
     resetNegotiatePairs();
 
+    // add a loop that checks for the neutral player, and remove all its orders and cards at the start of the game
+
     // boolean moreOrder to continue this loop until there are no more orders
     bool moreOrder = true;
     while (moreOrder)
@@ -588,21 +590,21 @@ void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
         for (int i = 0; i < v.size(); i++)
         {
 
-            if(v[i]->getPlayerStrategy()->getPlayerType() == "Human"){
+            // if(v[i]->getPlayerStrategy()->getPlayerType() == "Human"){
 
-                Order* d = new Deploy();
-                v[i]->issueOrder(d);
-                continue;
+            //     Order* d = new Deploy();
+            //     v[i]->issueOrder(d);
+            //     continue;
 
-            }else if(v[i]->getPlayerStrategy()->getPlayerType() == "Cheater"){
+            // }else if(v[i]->getPlayerStrategy()->getPlayerType() == "Cheater"){
 
-                Order* d = new Deploy();
-                v[i]->issueOrder(d);
-                continue;
+            //     Order* d = new Deploy();
+            //     v[i]->issueOrder(d);
+            //     continue;
 
-            }else if(v[i]->getPlayerStrategy()->getPlayerType() == "Neutral"){
-                continue;
-            }
+            // if(v[i]->getPlayerStrategy()->getPlayerType() == "Neutral"){
+            //     continue;
+            // }
 
             // if the player still has armies in reinforcement, deploy order
             // temp is used to avoid modifying the original reinforcement pool values until order execution
@@ -815,49 +817,67 @@ void GameEngine::mainGameLoop(vector<Player *> v, Map *map)
 // - make sure that at startup, and at orders the territories are updated on the player owners
 // - make sure that the orders keep track of the armies
 
-int mai()
+int main()
 {
     MapLoader *ml = new MapLoader("MapTextFiles/South America.map");
     Observer *o = new LogObserver();
     Player *p1 = new Player(o, "Ihana");
-    Player *p2 = new Player(o, "Shamma");
+    // Player *p2 = new Player(o, "Shamma");
     Player *p3 = new Player(o, "Tanya");
-    Player *p4 = new Player(o, "Naika");
+    // Player *p4 = new Player(o, "Naika");
     GameEngine *g = new GameEngine(o);
 
+    Benevolent* b = new Benevolent();
+    Cheater* c = new Cheater();
+    Aggressive* a = new Aggressive();
+    Neutral* n = new Neutral();
+    Human* h = new Human();
+
+    b->setPlayer(p1);
+    // c->setPlayer(p2);
+    a->setPlayer(p3);
+    // n->setPlayer(p4);
+
+    p1->setPlayerStrategy(b);
+    // p2->setPlayerStrategy(c);
+    p3->setPlayerStrategy(a);
+    // p4->setPlayerStrategy(n);
+
+
     cout << "\nplayer 1: " << p1->getPlayerName() << endl;
-    cout << "\nplayer 2: " << p2->getPlayerName() << endl;
+    // cout << "\nplayer 2: " << p2->getPlayerName() << endl;
     cout << "\nplayer 3: " << p3->getPlayerName() << endl;
-    cout << "\nplayer 4: " << p4->getPlayerName() << endl;
+    // cout << "\nplayer 4: " << p4->getPlayerName() << endl;
 
     vector<Player *> pList = getPlayerList();
     pList.push_back(p1);
-    pList.push_back(p2);
+    // pList.push_back(p2);
     pList.push_back(p3);
-    pList.push_back(p4);
+    // pList.push_back(p4);
 
     // add a random loop to deisgnate territories to the players (this is usually done at startup)
     for (Territory *t : ml->getMap()->getTerritories())
     {
-        if (t->getContinent()->getName().compare("Central America") == 0)
-        {
-            p1->addTerritory(t);
-            t->setPlayer(p1);
-        }
-        else if (t->getContinent()->getName().compare("The Highlands") == 0)
-        {
-            p2->addTerritory(t);
-            t->setPlayer(p2);
-        }
-        else if (t->getContinent()->getName().compare("The Andes") == 0)
+        if (t->getContinent()->getName().compare("Central America") == 0 || t->getContinent()->getName().compare("The Highlands") == 0)
         {
             p3->addTerritory(t);
             t->setPlayer(p3);
         }
-        else {
-            p4->addTerritory(t);
-            t->setPlayer(p4);
+        // else if (t->getContinent()->getName().compare("The Highlands") == 0)
+        // {
+        //     p2->addTerritory(t);
+        //     t->setPlayer(p2);
+        // }
+        // else if (t->getContinent()->getName().compare("The Andes") == 0)
+        else
+        {
+            p1->addTerritory(t);
+            t->setPlayer(p1);
         }
+        // else {
+        //     p4->addTerritory(t);
+        //     t->setPlayer(p4);
+        // }
     }
 
     // cout << "\nreinforcement pool at the start of the game for " << p1->getPlayerName() << " is: " << p1->getReinforcementPool() << endl;

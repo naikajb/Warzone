@@ -93,6 +93,8 @@ bool Deploy::validateOrder()
 // Execute the deploy order and set its effect
 void Deploy::executeOrder()
 {
+    cout << "\nDeploy Order is valid - > " << player->getPlayerName() << " is deploying " << armies << " units to Territory " << target->getName() << endl;
+
     cout << target->getName() << " had " << target->getNumArmies() << " armies before the DEPLOY" << endl;
     target->setNumArmies(target->getNumArmies() + armies); // sending a number of troops to another Territory
     player->setReinforcementPool(player->getReinforcementPool() - armies);
@@ -116,9 +118,8 @@ void Deploy::execute()
 
     this->executeOrder(); // executing the Order after checking to see if it is valid
 
-    cout << "\nDeploy Order is valid - > " << player->getPlayerName() << " is deploying " << armies << " units to Territory " << target->getName() << endl;
-    cout << target->getName() << " now has " << target->getNumArmies() << " armies" << endl;
-
+    // cout << "\nDeploy Order is valid - > " << player->getPlayerName() << " is deploying " << armies << " units to Territory " << target->getName() << endl;
+    // cout << target->getName() << " now has " << target->getNumArmies() << " armies" << endl;
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -189,11 +190,11 @@ bool Advance::validateOrder()
 
     if (checkNegotiatePairs(player, target->getPlayer()) == 0 && target->getPlayer() != nullptr && target->getPlayer() != player)
     {
-        cout << player->getPlayerName() << " and " << target->getPlayer()->getPlayerName() << " have NOT negotiated this round"  << endl;
+        cout << player->getPlayerName() << " and " << target->getPlayer()->getPlayerName() << " have NOT negotiated this round" << endl;
     }
     else if (checkNegotiatePairs(player, target->getPlayer()) != 0 && target->getPlayer() != nullptr && target->getPlayer() != player)
     {
-        cout << player->getPlayerName() << " and " << target->getPlayer()->getPlayerName() << " have negotiated to NOT fight this round"  << endl;
+        cout << player->getPlayerName() << " and " << target->getPlayer()->getPlayerName() << " have negotiated to NOT fight this round" << endl;
     }
     return validAdj && validOwnership && !checkNegotiatePairs(player, target->getPlayer()) && source->getNumArmies() >= armies;
 
@@ -296,15 +297,15 @@ void Advance::executeOrder()
 
                     player->drewCard(); // player cannot draw another card this round
 
-                delete deck;
-                deck = NULL;
+                    delete deck;
+                    deck = NULL;
+                }
+                // target->setPlayer(player);         // adds ownership of new player to target territory
+                // player->addTerritory(target);      // adds Territory to the attacking player
+                // target->setNumArmies(attackerNum); // sets number of army units on the target Territory to the remaining number of attackers
             }
-            target->setPlayer(player);         // adds ownership of new player to target territory
-            player->addTerritory(target);      // adds Territory to the attacking player
-            target->setNumArmies(attackerNum); // sets number of army units on the target Territory to the remaining number of attackers
-        }
-        else
-        { // defending army has won
+            else
+            { // defending army has won
 
                 cout << "The defending army has won the battle!" << endl;
                 cout << "The defending territory " << target->getName() << " had " << target->getNumArmies() << " before the BATTLE" << endl;
@@ -330,9 +331,11 @@ void Advance::executeOrder()
 
 void Advance::execute()
 {
-    if(player->getPlayerStrategy()->getPlayerType() == "Cheater" && armies == -99){
+    // NOTE CHECK THIS OUT
+    if (player->getPlayerStrategy()->getPlayerType() == "Cheater" && armies == -99)
+    {
 
-        vector<Territory*> x = player->getPlayerStrategy()->toAttack();
+        vector<Territory *> x = player->getPlayerStrategy()->toAttack();
         return;
     }
 
@@ -346,7 +349,7 @@ void Advance::execute()
     cout << "Advance Order is valid -> " << player->getPlayerName() << " is advancing " << armies << " units from Territory " << source->getName() << " to Territory " << target->getName() << endl;
 
     this->executeOrder(); // executes Order
-    checkNeutralAttack(target);
+    // checkNeutralAttack(target);
 }
 
 int Advance::getRandomNum()
@@ -412,7 +415,6 @@ bool Bomb::validateOrder()
     }
 
     return validAdj && !checkNegotiatePairs(player, target->getPlayer());
-
 }
 
 // Execute the bomb order and set its effect
@@ -445,7 +447,7 @@ void Bomb::execute()
         cout << "\nBomb Order is valid -> " << player->getPlayerName() << " is bombing Territory " << target->getName() << " which belongs to Neutral Player !" << endl;
 
     this->executeOrder();
-    checkNeutralAttack(target);
+    // checkNeutralAttack(target);
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -758,10 +760,10 @@ void clearPlayerList()
     playerList.clear();
 }
 
-void removePlayerFromList(Player* p){
+void removePlayerFromList(Player *p)
+{
 
     playerList.erase(std::remove(playerList.begin(), playerList.end(), p), playerList.end());
-
 }
 
 std::string OrdersList::stringToLog()

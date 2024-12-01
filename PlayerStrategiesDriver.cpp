@@ -106,7 +106,7 @@ void testPlayerStrategies(){
 
 } 
 
-int main(){
+int mai(){
 
     testPlayerStrategies();
 
