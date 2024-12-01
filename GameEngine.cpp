@@ -587,6 +587,23 @@ void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
         // go through the vector of players
         for (int i = 0; i < v.size(); i++)
         {
+
+            if(v[i]->getPlayerStrategy()->getPlayerType() == "Human"){
+
+                Order* d = new Deploy();
+                v[i]->issueOrder(d);
+                continue;
+
+            }else if(v[i]->getPlayerStrategy()->getPlayerType() == "Cheater"){
+
+                Order* d = new Deploy();
+                v[i]->issueOrder(d);
+                continue;
+
+            }else if(v[i]->getPlayerStrategy()->getPlayerType() == "Neutral"){
+                continue;
+            }
+
             // if the player still has armies in reinforcement, deploy order
             // temp is used to avoid modifying the original reinforcement pool values until order execution
             if (v[i]->getReinforcementTemp() != 0)
@@ -754,6 +771,7 @@ void GameEngine::mainGameLoop(vector<Player *> v, Map *map)
         {
             p->roundReset();
         }
+        resetNegotiatePairs();
         round++;
 
     } while (noWinner);
@@ -797,7 +815,7 @@ void GameEngine::mainGameLoop(vector<Player *> v, Map *map)
 // - make sure that at startup, and at orders the territories are updated on the player owners
 // - make sure that the orders keep track of the armies
 
-int main()
+int mai()
 {
     MapLoader *ml = new MapLoader("MapTextFiles/South America.map");
     Observer *o = new LogObserver();

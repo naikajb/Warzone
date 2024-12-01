@@ -10,6 +10,7 @@
 #include <map>
 #include <cmath>
 #include <random>
+#include <typeinfo>
 #include "LoggingObserver.h"
 
 #include "Map.h"

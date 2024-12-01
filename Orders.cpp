@@ -114,10 +114,11 @@ void Deploy::execute()
         return;
     }
 
+    this->executeOrder(); // executing the Order after checking to see if it is valid
+
     cout << "\nDeploy Order is valid - > " << player->getPlayerName() << " is deploying " << armies << " units to Territory " << target->getName() << endl;
     cout << target->getName() << " now has " << target->getNumArmies() << " armies" << endl;
 
-    this->executeOrder(); // executing the Order after checking to see if it is valid
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
@@ -329,6 +330,12 @@ void Advance::executeOrder()
 
 void Advance::execute()
 {
+    if(player->getPlayerStrategy()->getPlayerType() == "Cheater" && armies == -99){
+
+        vector<Territory*> x = player->getPlayerStrategy()->toAttack();
+        return;
+    }
+
     if (!this->validateOrder())
     {
         cout << "Advance Order is not valid for player " << player->getPlayerName() << endl; // invalid Order message
@@ -339,6 +346,7 @@ void Advance::execute()
     cout << "Advance Order is valid -> " << player->getPlayerName() << " is advancing " << armies << " units from Territory " << source->getName() << " to Territory " << target->getName() << endl;
 
     this->executeOrder(); // executes Order
+    checkNeutralAttack(target);
 }
 
 int Advance::getRandomNum()
@@ -404,6 +412,7 @@ bool Bomb::validateOrder()
     }
 
     return validAdj && !checkNegotiatePairs(player, target->getPlayer());
+
 }
 
 // Execute the bomb order and set its effect
@@ -436,6 +445,7 @@ void Bomb::execute()
         cout << "\nBomb Order is valid -> " << player->getPlayerName() << " is bombing Territory " << target->getName() << " which belongs to Neutral Player !" << endl;
 
     this->executeOrder();
+    checkNeutralAttack(target);
 }
 
 //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~

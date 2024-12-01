@@ -4,6 +4,7 @@
 #include "Player.h"
 #include "OrdersDriver.h"
 #include "LoggingObserver.h"
+#include "PlayerStrategies.h"
 
 #include <iostream>
 #include <vector>
