@@ -309,23 +309,6 @@ vector<Territory *> Human::toDefend()
 
 string Aggressive::getPlayerType() { return "Aggressive"; }
 
-// Territory *Aggressive::randomTerritoryToAttack()
-// {
-//     std::random_device rd;
-//     std::mt19937 gen(rd());
-
-//     auto attackableTerritories = toAttack();
-
-//     int min = 0;
-//     int max = attackableTerritories.size() - 1;
-
-//     std::uniform_int_distribution<> distRandomIndex(min, max);
-//     int randomIndex = distRandomIndex(gen);
-
-//     Territory *selectedTerritorytoAttack = attackableTerritories[randomIndex];
-//     return selectedTerritorytoAttack;
-// }
-
 Territory *Aggressive::randomTerritoryToDefend()
 {
     std::random_device rd;
@@ -341,12 +324,6 @@ Territory *Aggressive::randomTerritoryToDefend()
 
     std::discrete_distribution<> distToDefend(probabilityToDefend.begin(), probabilityToDefend.end());
     int randomIndexDefend = distToDefend(gen); // get a random index
-
-    // int min = 0;
-    // int max = defendableTerritories.size() - 1;
-
-    // std::uniform_int_distribution<> distRandomIndex(min, max);
-    // int randomIndex = distRandomIndex(gen);
 
     Territory *selectedTerritorytoDefend = defendableTerritories[randomIndexDefend];
     return selectedTerritorytoDefend;
@@ -375,8 +352,6 @@ void Aggressive::issueOrder(Order *order)
         cout << "Deploy to: " << t->getName() << " with " << randomNumArmiesDeploy << " armies\n"
              << this->getPlayer()->getReinforcementTemp() << " armies left in reinforcement pool" << endl;
         this->getPlayer()->getOrderList()->addOrder(dep);
-
-        // add order to order list
 
         return;
     }
@@ -424,9 +399,6 @@ void Aggressive::issueOrder(Order *order)
         }
 
         vector<Territory *> low = toDefend();
-        // Territory *target = randomTerritoryToDefend();
-
-        // Territory *target = low.at(0);
 
         for (Territory *T : low)
         {
@@ -512,65 +484,6 @@ void Aggressive::issueOrder(Order *order)
 
         cout << "\n"
              << this->getPlayerType() << " " << this->getPlayer()->getPlayerName() << " has no territory to defend nor attack !" << endl;
-// /////////////////////////////////////////////////////////////////////
-        // vector<Territory *> list = toDefend();
-
-        // // Territory *strongest = list.at(list.size() - 1);
-
-        // bool allFriendly = true;
-
-        // for (int i = 0; i < list.size(); i++)
-        // {
-        //     for (Territory *t : list.at(i)->getAdjTerritories())
-        //     {
-
-        //         if (t->getPlayer() != this->getPlayer())
-        //         {
-        //             cout << this->getPlayerType() << " " << this->getPlayer()->getPlayerName() << " has chosen to ATTACK !" << endl;
-        //             cout << list.at(i)->getName() << " sends " << list.at(i)->getNumArmies() << " armies to " << list.at(i)->getAdjTerritories()[0]->getName() << endl;
-        //             Order *ad = new Advance(this->getPlayer()->getObserver(), this->getPlayer(), list.at(i)->getNumArmies(), list.at(i), list.at(i)->getAdjTerritories()[0]);
-        //             this->getPlayer()->getOrderList()->addOrder(ad);
-        //             return;
-        //             // allFriendly = false;
-        //             // break;
-        //         }
-        //     }
-
-        //     // if (allFriendly == false)
-        //     // {
-
-        //     //     Order *ad = new Advance(this->getPlayer()->getObserver(), this->getPlayer(), list[i]->getNumArmies() / 2, list[i], list[i]->getAdjTerritories()[0]);
-
-        //     //     this->getPlayer()->getOrderList()->addOrder(ad);
-        //     //     return;
-        //     // }
-
-        //     // for (Territory *t : list[i]->getAdjTerritories())
-        //     // {
-
-        //     //     if (t->getPlayer() != this->getPlayer())
-        //     // {
-
-        //     if (i == 0)
-        //     {
-        //         if (list.at(list.size() - 1)->getAdjTerritories()[0]->getPlayer() != this->getPlayer())
-        //         {
-        //             cout << this->getPlayerType() << " " << this->getPlayer()->getPlayerName() << " has chosen to ATTACK !" << endl;
-        //         }
-        //         else
-        //         {
-        //             cout << this->getPlayerType() << " " << this->getPlayer()->getPlayerName() << " has chosen to DEFEND !" << endl;
-        //         }
-
-        //         cout << list.at(list.size() - 1)->getName() << " is issued to send " << list.at(list.size() - 1)->getNumArmies() / 2 << " armies to " << list.at(list.size() - 1)->getAdjTerritories()[0]->getName() << endl;
-        //         Order *ad = new Advance(this->getPlayer()->getObserver(), this->getPlayer(), list.at(list.size() - 1)->getNumArmies() / 2, list.at(list.size() - 1), list.at(list.size() - 1)->getAdjTerritories()[0]);
-        //         this->getPlayer()->getOrderList()->addOrder(ad);
-        //         return;
-        //     }
-
-        //     // }
-        //     // }
-        // }
     }
     else if (Blockade *d = dynamic_cast<Blockade *>(order))
     {
@@ -634,17 +547,6 @@ void Aggressive::issueOrder(Order *order)
         cout << "\n"
              << this->getPlayerType() << " " << this->getPlayer()->getPlayerName() << " does NOT want to negotiate !!" << endl;
         return;
-        // for (Player *p : getPlayerList())
-        // {
-
-        //     if (p != this->getPlayer())
-        //     {
-
-        //         Order *n = new Negotiate(this->getPlayer()->getObserver(), this->getPlayer(), p);
-        //         this->getPlayer()->getOrderList()->addOrder(n);
-        //         break;
-        //     }
-        // }
     }
     else if (Bomb *d = dynamic_cast<Bomb *>(order))
     {
@@ -728,12 +630,6 @@ Territory *Benevolent::randomTerritoryToDefend()
     std::discrete_distribution<> distToDefend(probabilityToDefend.begin(), probabilityToDefend.end());
     int randomIndexDefend = distToDefend(gen); // get a random index
 
-    // int min = 0;
-    // int max = defendableTerritories.size() - 1;
-
-    // std::uniform_int_distribution<> distRandomIndex(min, max);
-    // int randomIndex = distRandomIndex(gen);
-
     Territory *selectedTerritorytoDefend = defendableTerritories[randomIndexDefend];
     return selectedTerritorytoDefend;
 }
@@ -770,9 +666,6 @@ void Benevolent::issueOrder(Order *order)
     {
 
         vector<Territory *> low = toDefend();
-        // Territory *target = randomTerritoryToDefend();
-
-        // Territory *target = low.at(0);
 
         vector<Territory *> adjT;
         for (Territory *T : low)
@@ -816,29 +709,6 @@ void Benevolent::issueOrder(Order *order)
         }
         cout << "\n"
              << this->getPlayerType() << " " << this->getPlayer()->getPlayerName() << " has no territory to defend and refuses to attack !" << endl;
-
-        // for (Territory *t : target->getAdjTerritories())
-        // {
-
-        //     if (t->getPlayer() == this->getPlayer())
-        //     {
-
-        //         adjT.push_back(t);
-        //     }
-        // }
-        // if (adjT.size() == 0)
-        // {
-        //     cout << this->getPlayerType() << " " << this->getPlayer()->getPlayerName() << " has no adjacent territories to advance for defense ! " << endl;
-
-        //     return;
-        // }
-        // std::sort(adjT.begin(), adjT.end(), compareArmiesBenevolent);
-
-        // Territory *source = adjT.at(adjT.size() - 1);
-
-        // Advance *ad = new Advance(this->getPlayer()->getObserver(), this->getPlayer(), source->getNumArmies() / 2, source, target);
-
-        // this->getPlayer()->getOrderList()->addOrder(ad);
     }
     else if (Blockade *d = dynamic_cast<Blockade *>(order))
     {
@@ -896,19 +766,6 @@ void Benevolent::issueOrder(Order *order)
         }
         cout << "\n"
              << this->getPlayerType() << " " << this->getPlayer()->getPlayerName() << " has no adjacent territories to airlift to " << endl;
-
-        // vector<Territory *> list = toDefend();
-        // if (list.size() <= 1)
-        // {
-        //     cout << this->getPlayerType() << " " << this->getPlayer()->getPlayerName() << " does not have any adjacent territory to airlift to !" << endl;
-
-        //     return;
-        // }
-        // cout << this->getPlayerType() << " " << this->getPlayer()->getPlayerName() << " has chosen to AIRLIFT !" << endl;
-        // cout << list.at(list.size() - 1)->getName() << " is issued to airlift " << list.at(list.size() - 1)->getNumArmies() / 4 << " armies to " << list.at(0)->getName() << endl;
-        // Airlift *airlift = new Airlift(this->getPlayer()->getObserver(), this->getPlayer(), list.at(list.size() - 1)->getNumArmies() / 4, list.at(list.size() - 1), list.at(0));
-
-        // this->getPlayer()->getOrderList()->addOrder(airlift);
     }
     else if (Negotiate *d = dynamic_cast<Negotiate *>(order))
     {
@@ -926,14 +783,6 @@ void Benevolent::issueOrder(Order *order)
             }
         }
         cout << this->getPlayerType() << " " << this->getPlayer()->getPlayerName() << " has no one to negotiate with !!" << endl;
-
-        // for (Player *p : getPlayerList())
-        // {
-
-        //     if (p != this->getPlayer())
-        //     {
-        //     }
-        // }
     }
     else if (Bomb *b = dynamic_cast<Bomb *>(order))
     {
@@ -946,11 +795,6 @@ void Benevolent::issueOrder(Order *order)
 vector<Territory *> Benevolent::toAttack()
 {
 
-    // cout << "Benevolent Player " << this->getPlayer()->getPlayerName() << " doesn't Attack." << endl;
-
-    // vector<Territory *> x;
-
-    // return x;
     vector<Territory *> potentialAttack;
 
     bool alreadyContained = false;
@@ -1027,12 +871,14 @@ vector<Territory *> Neutral::toDefend()
 
 string Cheater::getPlayerType() { return "Cheater"; }
 
-void Cheater::issueOrder(Order *)
+void Cheater::issueOrder(Order *order)
 {
+    if (Advance *d = dynamic_cast<Advance *>(order))
+    {
+        Order *placeholder = new Advance(this->getPlayer()->getObserver(), this->getPlayer(), -99, this->getPlayer()->getTerritories()[0], this->getPlayer()->getTerritories()[0]);
 
-    Order *placeholder = new Advance(this->getPlayer()->getObserver(), this->getPlayer(), -99, this->getPlayer()->getTerritories()[0], this->getPlayer()->getTerritories()[0]);
-
-    this->getPlayer()->getOrderList()->addOrder(placeholder);
+        this->getPlayer()->getOrderList()->addOrder(placeholder);
+    }
 }
 
 vector<Territory *> Cheater::toAttack()
@@ -1062,24 +908,25 @@ vector<Territory *> Cheater::toAttack()
 
     if (this->cheaterCanConquer())
     {
-
+        cout << ""
+             << endl;
         for (Territory *t : potentialAttack)
         {
 
-            cout << "Cheater is conquering Territory " << t->getName() << endl;
+            cout << "Cheater " << this->getPlayer()->getPlayerName() << " is conquering Territory " << t->getName() << endl;
 
             t->getPlayer()->removeTerritory(t);
             t->setPlayer(this->getPlayer());
             this->getPlayer()->addTerritory(t);
         }
 
-        this->isConquering();
+        // this->isConquering();
     }
-    else
-    {
+    // else
+    // {
 
-        cout << "Cheater has already conquered this round!" << endl;
-    }
+    //     cout << "Cheater has already conquered this round!" << endl;
+    // }
 
     return potentialAttack;
 }
