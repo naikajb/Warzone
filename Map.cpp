@@ -387,6 +387,10 @@ Map *MapLoader::loadMap(string fileName) // loadMap() definition
         while (getline(file, line))
         {
 
+            if (line.empty()) {
+                continue;
+            }
+
             // if the first character has a bracket and 'C', then upcoming lines should be read as continents to store
             if (line[0] == '[' && line[1] == 'C')
             {
