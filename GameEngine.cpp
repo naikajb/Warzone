@@ -115,6 +115,127 @@ bool GameEngine::processFileCommand(std::string &command, CommandProcessor *comm
     exit(0);
 }
 
+// function that validates and extracts the tournament arguments
+bool GameEngine::parseTournamentArguments(const std::string &args, std::map<std::string, std::string> &result)
+{
+    std::istringstream iss(args);
+    std::string flag, value;
+
+    // supported flags for tournament command
+    std::set<std::string> validFlags = {"-M", "-P", "-G", "-D"};
+
+    while (iss >> flag)
+    {
+        if (validFlags.find(flag) == validFlags.end())
+        {
+            std::cout << "Invalid flag: " << flag << std::endl;
+            return false;
+        }
+
+        if (iss >> value)
+        {
+            result[flag] = value;
+        }
+        else
+        {
+            std::cout << "Missing value for flag: " << flag << std::endl;
+            return false;
+        }
+    }
+
+    // check if all required flags are present
+    for (const std::string &requiredFlag : validFlags)
+    {
+        if (result.find(requiredFlag) == result.end())
+        {
+            std::cout << "Missing required flag: " << requiredFlag << std::endl;
+            return false;
+        }
+    }
+
+    return true;
+}
+
+// function to handle the tournament phase with the given arguments
+void GameEngine::tournamentPhase()
+{
+    std::vector<std::string> mapFiles;
+    std::vector<std::string> playerStrategies;
+    int numberOfGames;
+    int maxTurns;
+
+    try {
+    // Split maps and strategies by comma
+    std::istringstream mapStream(tournamentArguments["-M"]);
+    std::istringstream playerStream(tournamentArguments["-P"]);
+    std::string map, strategy;
+
+    while (std::getline(mapStream, map, ','))
+    {
+        mapFiles.push_back(map);
+    }
+
+    while (std::getline(playerStream, strategy, ','))
+    {
+        playerStrategies.push_back(strategy);
+    }
+
+    // Convert number arguments
+    numberOfGames = std::stoi(tournamentArguments["-G"]);
+    maxTurns = std::stoi(tournamentArguments["-D"]);
+
+    //validate range of parameters
+    if (mapFiles.size() < 1 || mapFiles.size() > 5 || 
+        playerStrategies.size() < 2 || playerStrategies.size() > 4 || 
+        numberOfGames < 1 || numberOfGames > 5 || 
+        maxTurns < 10 || maxTurns > 50) {
+        throw std::invalid_argument("Invalid tournament parameters.");
+    }
+    
+    for (const std::string &map : mapFiles) {
+        std::string mapargument = "MapTextFiles/" + map;
+        std::cout << "Loading map from: " << mapargument << std::endl;
+        MapLoader *ml = new MapLoader(mapargument);
+        Map *mapP = ml->getMap();
+
+        if (mapP != nullptr) {
+            std::cout << "Map loaded successfully!" << std::endl;
+        }
+        else {
+            std::cerr << "Error: Failed to load map " << map << ". Skipping...\n";
+            continue;
+        }
+
+        std::vector<std::string> mapResults;
+
+        for (int game = 1; game <= numberOfGames; ++game) {
+            std::cout << "Starting game " << game << " on map " << map << std::endl;
+
+            std::vector<Player *> players;
+            for (const std::string &strategy : playerStrategies) {
+                Player *p = new Player(observer, strategy);
+                players.push_back(p);
+            }
+
+            setupPlayers(players);
+
+            mainGameLoop(players, mapP);
+
+            std::string result = "Game " + std::to_string(game) + " on map " + map + " finished.";
+            mapResults.push_back(result);
+        }
+
+
+    }
+
+    } catch (std::invalid_argument &e)
+    {
+        std::cerr << e.what() << std::endl;
+    }
+
+
+}
+
 // function to process console or file commands
 void GameEngine::startupPhase()
 {
@@ -172,7 +293,6 @@ void GameEngine::startupPhase()
         return;
     }
 
-    std::cout << "\nStarting Game Engine\n\n";
     GameEngine engine = GameEngine(observer);
 
     std::cout << "\nStarting Game Engine\n\n";
@@ -180,14 +300,16 @@ void GameEngine::startupPhase()
     std::string input;
     std::string unknown = "";
 
-    // if (useConsole)
-    // {
     while (useConsole)
     {
         auto it = this->getCurrentState();
         std::string currentStateStr(it);
+        Command *cmd;
+
+        // display the available commands for the current state
         commandProcessor->displayCommands(currentStateStr);
-        std::cout << "> ";
+        std::cout << "\n> ";
+
         std::getline(std::cin >> std::ws, input);
 
         // Split command and argument
@@ -196,9 +318,33 @@ void GameEngine::startupPhase()
         iss >> command;
         std::getline(iss >> std::ws, argument);
 
-        Command *cmd = commandProcessor->getCommand(command);
-        std::cout << "\nCurrent State: " << getCurrentState() << "\n"
-                  << std::endl;
+        // handle tournament arguments
+        if (command == "tournament")
+        {
+            // std::map<std::string, std::string> tournamentArguments;
+            if (!parseTournamentArguments(argument, tournamentArguments))
+            {
+                std::cout << "Invalid tournament arguments. Please try again." << std::endl;
+                continue;
+            }
+
+            tournamentPhase();
+
+            // Display the tournament arguments
+            cout << "Tournament mode: " << std::endl;
+            for (const auto &pair : tournamentArguments)
+            {
+                const auto &key = pair.first;
+                const auto &value = pair.second;
+                std::cout << key << " : " << value << std::endl;
+            }
+        }
+        else
+        {
+            cmd = commandProcessor->getCommand(command);
+            std::cout << "\nCurrent State: " << getCurrentState() << "\n"
+                      << std::endl;
+        }
 
         // bool isRightCommand = engine.processConsoleCommand(command, commandProcessor);
         // Command* cmd = commandProcessor->getCommand(command);
@@ -283,38 +429,38 @@ void GameEngine::startupPhase()
                     // int nbTerritories = allTerritories.size();
 
                     int playerIndex = 0;
-                            // Distrribute the territories to each player
-                            for (Territory *t : mapP->getTerritories())
-                            {
-                                if (t->getContinent()->getName().compare("Central America") == 0)
-                                {
-                                    players[playerIndex]->addTerritory(t);
-                                    t->setPlayer(players[playerIndex]);
-                                }
-                                else if (t->getContinent()->getName().compare("The Andes") == 0)
-                                {
-                                    players[playerIndex]->addTerritory(t);
-                                    t->setPlayer(players[playerIndex]);
-                                }
-                                else if (t->getContinent()->getName().compare("The Highlands") == 0)
-                                {
-                                    players[playerIndex]->addTerritory(t);
-                                    t->setPlayer(players[playerIndex]);
-                                }
-                                else
-                                {
-                                    players[playerIndex]->addTerritory(t);
-                                    t->setPlayer(players[playerIndex]);
-                                }
-                                // Move to the next player (round-robin)
-                                playerIndex = (playerIndex + 1) % nbPlayers;
-                            }
-                            
-                            for (Player *player : players)
-                            {
-                                std::cout << "Player: " << player->getPlayerName() << " has "
-                                          << player->getTerritories().size() << " territories." << std::endl;
-                            }
+                    // Distrribute the territories to each player
+                    for (Territory *t : mapP->getTerritories())
+                    {
+                        if (t->getContinent()->getName().compare("Central America") == 0)
+                        {
+                            players[playerIndex]->addTerritory(t);
+                            t->setPlayer(players[playerIndex]);
+                        }
+                        else if (t->getContinent()->getName().compare("The Andes") == 0)
+                        {
+                            players[playerIndex]->addTerritory(t);
+                            t->setPlayer(players[playerIndex]);
+                        }
+                        else if (t->getContinent()->getName().compare("The Highlands") == 0)
+                        {
+                            players[playerIndex]->addTerritory(t);
+                            t->setPlayer(players[playerIndex]);
+                        }
+                        else
+                        {
+                            players[playerIndex]->addTerritory(t);
+                            t->setPlayer(players[playerIndex]);
+                        }
+                        // Move to the next player (round-robin)
+                        playerIndex = (playerIndex + 1) % nbPlayers;
+                    }
+
+                    for (Player *player : players)
+                    {
+                        std::cout << "Player: " << player->getPlayerName() << " has "
+                                  << player->getTerritories().size() << " territories." << std::endl;
+                    }
 
                     // vector<int> randomOrder = getRandomizedNumbers(nbTerritories);
 
@@ -644,7 +790,8 @@ void GameEngine::reinforcementPhase(vector<Player *> v, Map *map, int round)
 
 void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
 {
-    cout << "\n~~~~~~ISSUE ORDERING PHASE~~~~~~\n" << endl;
+    cout << "\n~~~~~~ISSUE ORDERING PHASE~~~~~~\n"
+         << endl;
 
     // vector to keep track of the count of each player for the Advance order
     // this is done so that the advance order is done a maximum of 3 times
@@ -862,7 +1009,7 @@ void GameEngine::mainGameLoop(vector<Player *> v, Map *map)
     {
         for (int i = 0; i < v.size(); i++)
         {
-            
+
             if (v[i]->getTerritories().size() == 0)
             {
                 cout << v[i]->getPlayerName() << " has " << v[i]->getTerritories().size() << " territories !\nRemoving " << v[i]->getPlayerName() << " ..." << endl;
