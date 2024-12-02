@@ -10,9 +10,8 @@
 #include "Player.h"
 using namespace std;
 
-Player::Player(Observer* o, string playerName)
+Player::Player(Observer* o, const std::string& playerName) : name(playerName)
 {
-    this->playerName = playerName;
     orders = new OrdersList(o);
     canDrawCard = true;
     reinforcementPool = 50;
@@ -25,8 +24,10 @@ Player::Player(Observer* o, string playerName)
     observer = o;
 }
 
-Player ::Player(const Player &orig)
+Player::Player(const Player &orig)
 {
+    // copy name from original player to new player
+    name = orig.name;
 
     // copy every territory from the original player to the new player
     for (Territory *territories : orig.territories)
@@ -487,7 +488,7 @@ vector<Territory *> Player::toAttack()
 // stream insertion operator to print player's information
 ostream &operator<<(ostream &out, const Player &player)
 {
-    out << "Player name: " << player.playerName << endl;
+    out << "Player name: " << player.getPlayerName() << endl;
     out << "Territories owned: " << player.territories.size() << endl;
     for (Territory *territory : player.territories)
     {
@@ -496,9 +497,9 @@ ostream &operator<<(ostream &out, const Player &player)
     return out;
 }
 
-std::string Player::getPlayerName()
+std::string Player::getPlayerName() const
 {
-    return playerName;
+    return name;
 }
 
 // adds card to player's Hand

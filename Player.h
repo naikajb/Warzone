@@ -16,7 +16,7 @@ class Order;
 class Player{
 
     private: 
-        std::string playerName; // name of the player
+        std::string name; // name of the player
         std::vector<Territory*> territories; // collection of Territory objects
         Hand* hand; // hand of Card objects
         OrdersList* orders; // list of Order objects
@@ -26,7 +26,7 @@ class Player{
         Observer* observer;
 
     public: 
-        Player(Observer*,string playerName); //constructor function
+        Player(Observer*, const std::string& playerName); //constructor function
         Player(const Player& orig);
         ~Player(); // TODO: implement destructor function 
     
@@ -56,7 +56,7 @@ class Player{
         void printTerritories();  //prints player's territories
         // void printOrders();  //prints player's orders
 
-        std::string getPlayerName();  //returns player's name
+        std::string getPlayerName() const;  //returns player's name
 
         void AttachObserver(Observer* observer);  //attaches observer to player
 
