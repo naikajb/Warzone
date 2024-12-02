@@ -15,9 +15,7 @@ const char *GameEngine::GameStateStrings[] = {
 
 // defining the GameEngine constructor, creating the state transition map which maps commands to the states they transition to
 GameEngine::GameEngine(Observer *o) : currentState(GameStateStrings[0])
-GameEngine::GameEngine(Observer *o) : currentState(GameStateStrings[0])
 {
-    Attach(o);
     Attach(o);
     observer = o;
     stateTransitionMap.insert(pair<std::string, const char *>("loadmap", GameStateStrings[1]));
@@ -52,7 +50,6 @@ const char *GameEngine::getCurrentState()
 // function to handle state transitions, it finds the command in the map and changes the state associated with it
 void GameEngine::stateTransition(Command *cmd)
 {
-
 
     std::string command = cmd->getCommandStr();
 
@@ -143,7 +140,6 @@ void GameEngine::startupPhase()
     std::string fileName;
     std::ifstream file;
     vector<Player *> players;
-    vector<Player *> players;
 
     if (inputMode == "1")
     {
@@ -175,8 +171,6 @@ void GameEngine::startupPhase()
         std::cerr << "\nInvalid input mode. Exiting..." << std::endl;
         return;
     }
-
-    GameEngine engine = GameEngine(observer);
 
     std::cout << "\nStarting Game Engine\n\n";
     GameEngine engine = GameEngine(observer);
@@ -306,17 +300,16 @@ void GameEngine::startupPhase()
                     vector<int> playersOrder = getRandomizedNumbers(nbPlayers);
 
                     Deck deck;
-                    
+
                     setupPlayers(players);
 
                     // let each player draw 2 initial cards from the deck using the deck’s draw() method
                     for (int i = 0; i < players.size(); i++)
-                    {   
+                    {
                         players[playersOrder[i]]->addCard(deck.draw());
                         players[playersOrder[i]]->addCard(deck.draw());
                     }
 
-                    
                     engine.mainGameLoop(players, mapP);
                 }
                 else
@@ -346,24 +339,12 @@ void GameEngine::startupPhase()
 
     if (useFile)
     {
-    {
         std::string cmmd = "";
         CommandProcessor *commandP = new CommandProcessor(observer);
 
         Command *cmd = nullptr;
         Command *fileC = nullptr;
 
-        Command *cmd = nullptr;
-        Command *fileC = nullptr;
-
-        while ((cmd = commandProcessor->getCommand(cmmd)) != nullptr)
-        {
-            std::cout << "\nCurrent State: " << getCurrentState() << "\n"
-                      << std::endl;
-            std::string commandStr = cmd->getCommandStr();
-            std::istringstream stream(commandStr);
-            std::string command;
-            std::string argument;
         while ((cmd = commandProcessor->getCommand(cmmd)) != nullptr)
         {
             std::cout << "\nCurrent State: " << getCurrentState() << "\n"
@@ -375,23 +356,15 @@ void GameEngine::startupPhase()
 
             stream >> command;
             std::getline(stream >> std::ws, argument);
-            stream >> command;
-            std::getline(stream >> std::ws, argument);
 
             fileC = commandP->getCommand(command);
-            fileC = commandP->getCommand(command);
 
-            if ((commandProcessor->validate(fileC, this->getCurrentState())) == true)
-            {
             if ((commandProcessor->validate(fileC, this->getCurrentState())) == true)
             {
 
                 if (command == "loadmap")
                 {
-                if (command == "loadmap")
-                {
 
-                    std::cout << "Loading map from: " << argument << std::endl;
                     std::cout << "Loading map from: " << argument << std::endl;
 
                     MapLoader *ml = new MapLoader(argument);
@@ -429,50 +402,6 @@ void GameEngine::startupPhase()
                     delete ml;
                     ml = nullptr;
                 }
-                else if (command == "validatemap")
-                {
-                    std::cout << *mapP << std::endl;
-
-                    bool isValidatedMap = Map::validate(mapP);
-                    if (isValidatedMap)
-                    {
-                        std::cout << "Map is validated!" << std::endl;
-                        stateTransition(fileC);
-                        continue;
-                    }
-                    else
-                    {
-                        std::cout << "Map is not validated!" << std::endl;
-                    }
-                }
-                else if (command == "addplayer")
-                {
-                    if (argument != "")
-                    {
-                        Player *pf = new Player(observer, argument);
-                        players.push_back(pf); // Add player with the specified name
-                        nbPlayers++;
-                        std::cout << "Player " << argument << " added successfully!" << std::endl;
-                        stateTransition(fileC);
-                        continue;
-                    }
-                    else
-                    {
-                        std::cout << "Error: addplayer command requires a <playername> argument." << std::endl;
-                    }
-                }
-                    bool isValidatedMap = Map::validate(mapP);
-                    if (isValidatedMap)
-                    {
-                        std::cout << "Map is validated!" << std::endl;
-                        stateTransition(fileC);
-                        continue;
-                    }
-                    else
-                    {
-                        std::cout << "Map is not validated!" << std::endl;
-                    }
-                }
                 else if (command == "addplayer")
                 {
                     if (argument != "")
@@ -492,8 +421,6 @@ void GameEngine::startupPhase()
 
                 else if (command == "gamestart")
                 {
-                else if (command == "gamestart")
-                {
 
                     if (nbPlayers >= 2 && nbPlayers <= 6)
                     {
@@ -501,90 +428,76 @@ void GameEngine::startupPhase()
                         // Distrribute the territories to each player
                         vector<Territory *> allTerritories = mapP->getTerritories();
                         int nbTerritories = allTerritories.size();
-                    if (nbPlayers >= 2 && nbPlayers <= 6)
-                    {
-                        stateTransition(fileC);
-                        // Distrribute the territories to each player
-                        vector<Territory *> allTerritories = mapP->getTerritories();
-                        int nbTerritories = allTerritories.size();
-
-                        vector<int> randomOrder = getRandomizedNumbers(nbTerritories);
-                        vector<int> randomOrder = getRandomizedNumbers(nbTerritories);
-
-                        // Assign an equal number of territories to each player
-                        for (int i = 0; i < nbTerritories; i++)
+                        if (nbPlayers >= 2 && nbPlayers <= 6)
                         {
-                            for (int j = 0; j < nbPlayers; j++)
+                            stateTransition(fileC);
+                            // Distrribute the territories to each player
+                            vector<Territory *> allTerritories = mapP->getTerritories();
+                            int nbTerritories = allTerritories.size();
+
+                            vector<int> randomOrder = getRandomizedNumbers(nbTerritories);
+
+                            // Assign an equal number of territories to each player
+                            for (int i = 0; i < nbTerritories; i++)
                             {
-                                for (int k = 0; k < (nbTerritories / nbPlayers); k++)
+                                for (int j = 0; j < nbPlayers; j++)
                                 {
-                                    players[j]->addTerritory(allTerritories[randomOrder[i]]);
+                                    for (int k = 0; k < (nbTerritories / nbPlayers); k++)
+                                    {
+                                        players[j]->addTerritory(allTerritories[randomOrder[i]]);
+                                    }
                                 }
                             }
-                        }
-                        // Assign an equal number of territories to each player
-                        for (int i = 0; i < nbTerritories; i++)
-                        {
-                            for (int j = 0; j < nbPlayers; j++)
+
+                            // Determine randomly the order of play of the players in the game
+                            vector<int> playersOrder = getRandomizedNumbers(nbPlayers);
+
+                            Deck deck;
+
+                            // let each player draw 2 initial cards from the deck using the deck’s draw() method
+                            for (int i = 0; i < players.size(); i++)
                             {
-                                for (int k = 0; k < (nbTerritories / nbPlayers); k++)
-                                {
-                                    players[j]->addTerritory(allTerritories[randomOrder[i]]);
-                                }
+                                players[playersOrder[i]]->addCard(deck.draw());
+                                players[playersOrder[i]]->addCard(deck.draw());
                             }
+
+                            engine.mainGameLoop(players, mapP);
                         }
-
-                        // Determine randomly the order of play of the players in the game
-                        vector<int> playersOrder = getRandomizedNumbers(nbPlayers);
-                        // Determine randomly the order of play of the players in the game
-                        vector<int> playersOrder = getRandomizedNumbers(nbPlayers);
-
-                        Deck deck;
-                        Deck deck;
-
-                        // let each player draw 2 initial cards from the deck using the deck’s draw() method
-                        for (int i = 0; i < players.size(); i++)
+                        else
                         {
-                            players[playersOrder[i]]->addCard(deck.draw());
-                            players[playersOrder[i]]->addCard(deck.draw());
+                            std::cout << "Error: Number of players must be between 2 and 6." << std::endl;
+                            std::cout << "Exiting system ..." << std::endl;
+                            exit(0);
                         }
-
-                        engine.mainGameLoop(players, mapP);
                     }
-                    else
+                    else if (command == "replay")
                     {
-                        std::cout << "Error: Number of players must be between 2 and 6." << std::endl;
-                        std::cout << "Exiting system ..." << std::endl;
+                        stateTransition(fileC);
+                        continue;
+                    }
+                    else if (command == "quit")
+                    {
                         exit(0);
                     }
                 }
-                else if (command == "replay")
+                else
                 {
-                    stateTransition(fileC);
-                    continue;
-                }
-                else if (command == "quit")
-                {
-                    exit(0);
+                    std::cout << "Invalid command. Try again.\n"
+                              << std::endl;
                 }
             }
-            else
-            {
-                std::cout << "Invalid command. Try again.\n"
-                          << std::endl;
-            }
+            std::cout << "\nNo more commands to process.\nCurrent State: " << getCurrentState() << "\n"
+                      << std::endl;
+            delete commandP;
+            commandP = nullptr;
+            exit(0);
         }
-        std::cout << "\nNo more commands to process.\nCurrent State: " << getCurrentState() << "\n"
-                  << std::endl;
-        delete commandP;
-        commandP = nullptr;
-        exit(0);
-    }
 
-    delete commandProcessor;
-    delete fileLineReader;
-    commandProcessor = nullptr;
-    fileLineReader = nullptr;
+        delete commandProcessor;
+        delete fileLineReader;
+        commandProcessor = nullptr;
+        fileLineReader = nullptr;
+    }
 }
 
 vector<int> GameEngine::getRandomizedNumbers(int n)
@@ -604,10 +517,10 @@ vector<int> GameEngine::getRandomizedNumbers(int n)
     return randomizedNumbers;
 }
 
-void GameEngine::setupPlayers(std::vector<Player*>& players) {
+void GameEngine::setupPlayers(std::vector<Player *> &players)
+{
     Player::assignStrategies(players); // Call the static function
 }
-
 
 // added Main Game Loop part of the game
 void GameEngine::reinforcementPhase(vector<Player *> v, Map *map, int round)
@@ -694,7 +607,6 @@ void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
         // }
     }
     resetNegotiatePairs();
-    
 
     int cheaterCount = 0;
 
@@ -955,182 +867,183 @@ void GameEngine::mainGameLoop(vector<Player *> v, Map *map)
 // - make sure that at startup, and at orders the territories are updated on the player owners
 // - make sure that the orders keep track of the armies
 
-int main()
-{
-    MapLoader *ml = new MapLoader("MapTextFiles/South America.map");
-    Observer *o = new LogObserver();
-    // Player *p1 = new Player(o, "Ihana");
-    Player *p2 = new Player(o, "Shamma");
-    Player *p3 = new Player(o, "Tanya");
-    Player *p4 = new Player(o, "Naika");
-    Player *p5 = new Player(o, "MahJoup");
-    GameEngine *g = new GameEngine(o);
+// int main()
+// {
+//     MapLoader *ml = new MapLoader("MapTextFiles/South America.map");
+//     Observer *o = new LogObserver();
+//     // Player *p1 = new Player(o, "Ihana");
+//     Player *p2 = new Player(o, "Shamma");
+//     Player *p3 = new Player(o, "Tanya");
+//     Player *p4 = new Player(o, "Naika");
+//     Player *p5 = new Player(o, "MahJoup");
+//     GameEngine *g = new GameEngine(o);
 
-    Benevolent *b = new Benevolent();
-    Cheater *c = new Cheater();
-    Aggressive *a = new Aggressive();
-    Neutral *n = new Neutral();
-    Human *h = new Human();
+//     Benevolent *b = new Benevolent();
+//     Cheater *c = new Cheater();
+//     Aggressive *a = new Aggressive();
+//     Neutral *n = new Neutral();
+//     Human *h = new Human();
 
-    // b->setPlayer(p1);
-    c->setPlayer(p2);
-    a->setPlayer(p3);
-    n->setPlayer(p4);
-    h->setPlayer(p5);
+//     // b->setPlayer(p1);
+//     c->setPlayer(p2);
+//     a->setPlayer(p3);
+//     n->setPlayer(p4);
+//     h->setPlayer(p5);
 
-    // p1->setPlayerStrategy(b);
-    p2->setPlayerStrategy(c);
-    p3->setPlayerStrategy(a);
-    p4->setPlayerStrategy(n);
-    p5->setPlayerStrategy(h);
+//     // p1->setPlayerStrategy(b);
+//     p2->setPlayerStrategy(c);
+//     p3->setPlayerStrategy(a);
+//     p4->setPlayerStrategy(n);
+//     p5->setPlayerStrategy(h);
 
-    // cout << "\nplayer 1: " << p1->getPlayerName() << endl;
-    cout << "\nplayer 2: " << p2->getPlayerName() << endl;
-    cout << "\nplayer 3: " << p3->getPlayerName() << endl;
-    cout << "\nplayer 4: " << p4->getPlayerName() << endl;
-    cout << "\nPlayer 5: " << p5->getPlayerName() << endl;
+//     // cout << "\nplayer 1: " << p1->getPlayerName() << endl;
+//     cout << "\nplayer 2: " << p2->getPlayerName() << endl;
+//     cout << "\nplayer 3: " << p3->getPlayerName() << endl;
+//     cout << "\nplayer 4: " << p4->getPlayerName() << endl;
+//     cout << "\nPlayer 5: " << p5->getPlayerName() << endl;
 
-    vector<Player *> pList = getPlayerList();
-    // pList.push_back(p1);
-    pList.push_back(p2);
-    pList.push_back(p3);
-    pList.push_back(p4);
-    pList.push_back(p5);
+//     vector<Player *> pList = getPlayerList();
+//     // pList.push_back(p1);
+//     pList.push_back(p2);
+//     pList.push_back(p3);
+//     pList.push_back(p4);
+//     pList.push_back(p5);
 
-    // add a random loop to deisgnate territories to the players (this is usually done at startup)
-    for (Territory *t : ml->getMap()->getTerritories())
-    {
-        if (t->getContinent()->getName().compare("Central America") == 0)
-        {
-            p2->addTerritory(t);
-            t->setPlayer(p2);
-        }
-        else if (t->getContinent()->getName().compare("The Andes") == 0)
-        {
-            p5->addTerritory(t);
-            t->setPlayer(p5);
-        }
-        else if (t->getContinent()->getName().compare("The Highlands") == 0)
-        {
-            p3->addTerritory(t);
-            t->setPlayer(p3);
-        }
-        else {
-            p4->addTerritory(t);
-            t->setPlayer(p4);
-        }
-    }
+//     // add a random loop to deisgnate territories to the players (this is usually done at startup)
+//     for (Territory *t : ml->getMap()->getTerritories())
+//     {
+//         if (t->getContinent()->getName().compare("Central America") == 0)
+//         {
+//             p2->addTerritory(t);
+//             t->setPlayer(p2);
+//         }
+//         else if (t->getContinent()->getName().compare("The Andes") == 0)
+//         {
+//             p5->addTerritory(t);
+//             t->setPlayer(p5);
+//         }
+//         else if (t->getContinent()->getName().compare("The Highlands") == 0)
+//         {
+//             p3->addTerritory(t);
+//             t->setPlayer(p3);
+//         }
+//         else
+//         {
+//             p4->addTerritory(t);
+//             t->setPlayer(p4);
+//         }
+//     }
 
-    // cout << "\nreinforcement pool at the start of the game for " << p1->getPlayerName() << " is: " << p1->getReinforcementPool() << endl;
-    // cout << "\nreinforcement pool at the start of the game for " << p2->getPlayerName() << " is: " << p2->getReinforcementPool() << endl;
+// cout << "\nreinforcement pool at the start of the game for " << p1->getPlayerName() << " is: " << p1->getReinforcementPool() << endl;
+// cout << "\nreinforcement pool at the start of the game for " << p2->getPlayerName() << " is: " << p2->getReinforcementPool() << endl;
 
-    // cout << "\n----------Reinforcement Phase Test----------\n\n"
-    //      << endl;
-    // g->reinforcementPhase(pList, ml->getMap());
-    // cout << "\n"
-    //      << p1->getPlayerName() << " has " << p1->getReinforcementPool() << " many armies to deploy for this round !" << endl;
-    // cout << "\n"
-    //      << p2->getPlayerName() << " has " << p2->getReinforcementPool() << " many armies to deploy for this round !" << endl;
+// cout << "\n----------Reinforcement Phase Test----------\n\n"
+//      << endl;
+// g->reinforcementPhase(pList, ml->getMap());
+// cout << "\n"
+//      << p1->getPlayerName() << " has " << p1->getReinforcementPool() << " many armies to deploy for this round !" << endl;
+// cout << "\n"
+//      << p2->getPlayerName() << " has " << p2->getReinforcementPool() << " many armies to deploy for this round !" << endl;
 
-    // cout << "\n----------Issue Ordering Phase Test----------"
-    //      << endl;
+// cout << "\n----------Issue Ordering Phase Test----------"
+//      << endl;
 
-    // add cards for each player (usually done in startup)
-    // Card *bomb = new Card(Card::BOMB);
-    // Card *blockade = new Card(Card::BLOCKADE);
-    // Card *airlift = new Card(Card::AIRLIFT);
-    // Card *negotiate = new Card(Card::NEGOTIATE);
+// add cards for each player (usually done in startup)
+// Card *bomb = new Card(Card::BOMB);
+// Card *blockade = new Card(Card::BLOCKADE);
+// Card *airlift = new Card(Card::AIRLIFT);
+// Card *negotiate = new Card(Card::NEGOTIATE);
 
-    // p1->addCard(bomb);
-    // p2->addCard(bomb);
-    // p1->addCard(blockade);
-    // p2->addCard(blockade);
-    // p1->addCard(airlift);
-    // p2->addCard(airlift);
-    // p1->addCard(negotiate);
-    // p2->addCard(negotiate);
+// p1->addCard(bomb);
+// p2->addCard(bomb);
+// p1->addCard(blockade);
+// p2->addCard(blockade);
+// p1->addCard(airlift);
+// p2->addCard(airlift);
+// p1->addCard(negotiate);
+// p2->addCard(negotiate);
 
-    // checks for the first round is only deploy
-    // cout << "\nFirst round ! " << endl;
-    // g->issueOrdersPhase(pList, 1);
-    // g->executeOrdersPhase(pList);
+// checks for the first round is only deploy
+// cout << "\nFirst round ! " << endl;
+// g->issueOrdersPhase(pList, 1);
+// g->executeOrdersPhase(pList);
 
-    // // test for a bunch another round in the game with a bunch of random values of armies in the territories
-    // for (Territory *t : p1->getTerritories())
-    // {
-    //     t->setNumArmies(t->getName().length());
-    // }
-    // for (Territory *t : p2->getTerritories())
-    // {
-    //     t->setNumArmies(t->getName().length());
-    // }
-    // cout << "\nSecond round ! " << endl;
-    // g->reinforcementPhase(pList, ml->getMap());
-    // g->issueOrdersPhase(pList, 2);
+// // test for a bunch another round in the game with a bunch of random values of armies in the territories
+// for (Territory *t : p1->getTerritories())
+// {
+//     t->setNumArmies(t->getName().length());
+// }
+// for (Territory *t : p2->getTerritories())
+// {
+//     t->setNumArmies(t->getName().length());
+// }
+// cout << "\nSecond round ! " << endl;
+// g->reinforcementPhase(pList, ml->getMap());
+// g->issueOrdersPhase(pList, 2);
 
-    // cout << "\n----------Issue Executing Phase Test----------"
-    //      << endl;
-    // g->executeOrdersPhase(pList);
+// cout << "\n----------Issue Executing Phase Test----------"
+//      << endl;
+// g->executeOrdersPhase(pList);
 
-    cout << "\n----------Main Game Loop Phase Test----------"
-         << endl;
+// cout << "\n----------Main Game Loop Phase Test----------"
+//      << endl;
 
-    g->mainGameLoop(pList, ml->getMap());
+// g->mainGameLoop(pList, ml->getMap());
 
-    // ~~~~~test for toDefend() and toAttack()
+// ~~~~~test for toDefend() and toAttack()
 
-    // cout << "Territories owned by " << p1->getPlayerName() << " before sorting based on priority are:\n"
-    //      << endl;
+// cout << "Territories owned by " << p1->getPlayerName() << " before sorting based on priority are:\n"
+//      << endl;
 
-    // for (Territory *t : p1->getTerritories())
-    // {
-    //     cout << t->getName() << endl;
-    //     t->setNumArmies(t->getName().length());
-    // }
+// for (Territory *t : p1->getTerritories())
+// {
+//     cout << t->getName() << endl;
+//     t->setNumArmies(t->getName().length());
+// }
 
-    // p1->toDefend();
+// p1->toDefend();
 
-    // cout << "\nTerritories owned by " << p1->getPlayerName() << " after sorting based on priority are:\n"
-    //      << endl;
+// cout << "\nTerritories owned by " << p1->getPlayerName() << " after sorting based on priority are:\n"
+//      << endl;
 
-    // for (Territory *t : p1->getTerritories())
-    // {
-    //     cout << t->getName() << endl;
-    // }
+// for (Territory *t : p1->getTerritories())
+// {
+//     cout << t->getName() << endl;
+// }
 
-    // cout << "\nEnemy territories of " << p1->getPlayerName() << " before sorting based on priority are:\n"
-    //      << endl;
+// cout << "\nEnemy territories of " << p1->getPlayerName() << " before sorting based on priority are:\n"
+//      << endl;
 
-    // vector<Territory *> toAttackTest;
-    // vector<Territory *> p1Territories = p1->getTerritories();
+// vector<Territory *> toAttackTest;
+// vector<Territory *> p1Territories = p1->getTerritories();
 
-    // for (Territory *t : p1Territories)
-    // {
-    //     for (Territory *tadj : t->getAdjTerritories())
-    //     {
+// for (Territory *t : p1Territories)
+// {
+//     for (Territory *tadj : t->getAdjTerritories())
+//     {
 
-    //         if (std::find(toAttackTest.begin(), toAttackTest.end(), tadj) == toAttackTest.end() && std::find(p1Territories.begin(), p1Territories.end(), tadj) == p1Territories.end())
-    //         {
-    //             toAttackTest.push_back(tadj);
-    //             tadj->setNumArmies(tadj->getName().length());
-    //         }
-    //     }
-    // }
+//         if (std::find(toAttackTest.begin(), toAttackTest.end(), tadj) == toAttackTest.end() && std::find(p1Territories.begin(), p1Territories.end(), tadj) == p1Territories.end())
+//         {
+//             toAttackTest.push_back(tadj);
+//             tadj->setNumArmies(tadj->getName().length());
+//         }
+//     }
+// }
 
-    // for (Territory *t : toAttackTest)
-    // {
-    //     cout << t->getName() << endl;
-    // }
+// for (Territory *t : toAttackTest)
+// {
+//     cout << t->getName() << endl;
+// }
 
-    // toAttackTest = p1->toAttack();
+// toAttackTest = p1->toAttack();
 
-    // cout << "\nEnemy territories of " << p1->getPlayerName() << " after sorting based on priority are:\n"
-    //      << endl;
+// cout << "\nEnemy territories of " << p1->getPlayerName() << " after sorting based on priority are:\n"
+//      << endl;
 
-    // for (Territory *t : toAttackTest)
-    // {
-    //     cout << t->getName() << endl;
-    // }
+// for (Territory *t : toAttackTest)
+// {
+//     cout << t->getName() << endl;
+// }
 
-    return 0;
-}
+// return 0;
+// }

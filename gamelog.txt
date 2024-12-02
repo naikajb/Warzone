@@ -1,59 +1,22 @@
 Game Log
 ---------------------------------------------
-Deploy order  had effect none
-Deploy order  had effect none
-Deploy order  had effect none
-Deploy order  had effect none
-Deploy order  had effect none
-Deploy order  had effect none
-Deploy order  had effect none
-Deploy order  had effect 46 units have been deployed to Peru by Tanya
-Deploy order  had effect 23 units have been deployed to Bolivia by MahJoup
-Deploy order  had effect 1 units have been deployed to Ecuador by Tanya
-Deploy order  had effect 20 units have been deployed to Paraguay by MahJoup
-Deploy order  had effect 2 units have been deployed to Peru by Tanya
-Deploy order  had effect 7 units have been deployed to Argentina by MahJoup
-Deploy order  had effect 1 units have been deployed to Ecuador by Tanya
-Advance Order  had effect none
-Deploy order  had effect none
-Deploy order  had effect none
-Deploy order  had effect none
-Deploy order  had effect none
-Advance Order  had effect none
-Advance Order  had effect none
-Advance Order  had effect none
-Advance Order  had effect none
-Advance Order  had effect none
-Advance Order  had effect none
-Deploy order  had effect 3 units have been deployed to Venezuela by Tanya
-Deploy order  had effect 3 units have been deployed to Falkland Island by MahJoup
-Deploy order  had effect 2 units have been deployed to Venezuela by Tanya
-Deploy order  had effect 3 units have been deployed to Chile by MahJoup
-Advance Order  had effect 45 units have been advanced from Peru to Brazil by Tanya
-Advance Order  had effect 23 units have been advanced from Bolivia to Peru by MahJoup
-Advance Order  had effect 20 units have been advanced from Paraguay to Brazil by MahJoup
-Advance Order  had effect 1 units have been advanced from Ecuador to Peru by Tanya
-Advance Order  had effect 7 units have been advanced from Argentina to Uruguay by MahJoup
-Advance Order  had effect none
-Deploy order  had effect none
-Deploy order  had effect none
-Deploy order  had effect none
-Deploy order  had effect none
-Deploy order  had effect none
-Advance Order  had effect none
-Advance Order  had effect none
-Advance Order  had effect none
-Advance Order  had effect none
-Advance Order  had effect none
-Advance Order  had effect none
-Bomb Order  had effect none
-Blockade Order  had effect none
-Deploy order  had effect 2 units have been deployed to Galapagos Island by Tanya
-Deploy order  had effect 2 units have been deployed to Guyana by Naika
-Deploy order  had effect 6 units have been deployed to Bolivia by MahJoup
-Deploy order  had effect 1 units have been deployed to Suriname by Naika
-Advance Order  had effect 7 units have been advanced from Uruguay to Brazil by MahJoup
-Advance Order  had effect 3 units have been advanced from Falkland Island to Argentina by MahJoup
-Advance Order  had effect none
-Deploy order  had effect none
-Deploy order  had effect none
+CommandProcessor is processing command loadmap
+	past commands: loadmap, 
+command loadmap has been executed. It had the effect: mapLoadedState
+GameEngine changed state to mapLoadedState
+CommandProcessor is processing command validatemap
+	past commands: loadmap, validatemap, 
+command validatemap has been executed. It had the effect: mapValidated
+GameEngine changed state to mapValidated
+CommandProcessor is processing command addplayer
+	past commands: loadmap, validatemap, addplayer, 
+command addplayer has been executed. It had the effect: playersAdded
+GameEngine changed state to playersAdded
+CommandProcessor is processing command addplayer
+	past commands: loadmap, validatemap, addplayer, addplayer, 
+command addplayer has been executed. It had the effect: playersAdded
+GameEngine changed state to playersAdded
+CommandProcessor is processing command gamestart
+	past commands: loadmap, validatemap, addplayer, addplayer, gamestart, 
+command gamestart has been executed. It had the effect: assignReinforcement
+GameEngine changed state to assignReinforcement
