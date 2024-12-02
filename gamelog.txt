@@ -6,78 +6,15 @@ Deploy order  had effect none
 Deploy order  had effect none
 Deploy order  had effect none
 Deploy order  had effect none
-Deploy order  had effect 26 units have been deployed to Columbia by Tanya
-Deploy order  had effect 34 units have been deployed to Islas Juan by MahJoup
-Deploy order  had effect 8 units have been deployed to Columbia by Tanya
-Deploy order  had effect 16 units have been deployed to Falkland Island by MahJoup
-Deploy order  had effect 5 units have been deployed to Venezuela by Tanya
-Deploy order  had effect 11 units have been deployed to Columbia by Tanya
-Advance Order  had effect none
-Deploy order  had effect none
-Deploy order  had effect none
-Deploy order  had effect none
-Advance Order  had effect none
-Deploy order  had effect none
-Advance Order  had effect none
-Deploy order  had effect none
-Advance Order  had effect none
-Deploy order  had effect none
-Advance Order  had effect none
-Advance Order  had effect none
-Advance Order  had effect none
-Deploy order  had effect 6 units have been deployed to Paraguay by MahJoup
-Advance Order  had effect 12 units have been advanced from Islas Juan to Chile by MahJoup
+Deploy order  had effect 29 units have been deployed to Columbia by Tanya
+Deploy order  had effect 25 units have been deployed to Bolivia by MahJoup
+Deploy order  had effect 19 units have been deployed to Columbia by Tanya
+Deploy order  had effect 25 units have been deployed to Paraguay by MahJoup
 Deploy order  had effect 1 units have been deployed to Venezuela by Tanya
-Advance Order  had effect 16 units have been advanced from Falkland Island to Argentina by MahJoup
-Deploy order  had effect 1 units have been deployed to Venezuela by Tanya
-Advance Order  had effect 20 units have been advanced from Islas Juan to Chile by MahJoup
-Advance Order  had effect 4 units have been advanced from Venezuela to Guyana by Tanya
-Advance Order  had effect none
-Deploy order  had effect none
-Deploy order  had effect none
-Deploy order  had effect none
-Deploy order  had effect none
-Advance Order  had effect none
-Advance Order  had effect none
-Advance Order  had effect none
-Advance Order  had effect none
-Advance Order  had effect none
-Advance Order  had effect none
-Deploy order  had effect 2 units have been deployed to Guyana by Tanya
-Deploy order  had effect 3 units have been deployed to French Guiana by Naika
-Deploy order  had effect 6 units have been deployed to Bolivia by MahJoup
-Advance Order  had effect 32 units have been advanced from Chile to Peru by MahJoup
-Advance Order  had effect 4 units have been advanced from Guyana to Suriname by Tanya
-Advance Order  had effect 16 units have been advanced from Argentina to Paraguay by MahJoup
-Advance Order  had effect 6 units have been advanced from Paraguay to Argentina by MahJoup
-Advance Order  had effect none
-Deploy order  had effect none
-Deploy order  had effect none
-Deploy order  had effect none
-Deploy order  had effect none
-Deploy order  had effect none
+Deploy order  had effect 1 units have been deployed to Ecuador by Tanya
 Advance Order  had effect none
 Deploy order  had effect none
 Deploy order  had effect none
 Advance Order  had effect none
 Advance Order  had effect none
 Advance Order  had effect none
-Advance Order  had effect none
-Advance Order  had effect none
-Advance Order  had effect none
-Bomb Order  had effect none
-Deploy order  had effect 6 units have been deployed to Argentina by MahJoup
-Bomb Order  had effect Territory Peru has been bombed by Tanya
-Advance Order  had effect none
-Deploy order  had effect none
-Deploy order  had effect none
-Deploy order  had effect none
-Advance Order  had effect none
-Advance Order  had effect none
-Advance Order  had effect 2 units have been advanced from Islas Juan to Chile by MahJoup
-Advance Order  had effect none
-Deploy order  had effect none
-Advance Order  had effect none
-Bomb Order  had effect none
-Advance Order  had effect none
-Deploy order  had effect none
