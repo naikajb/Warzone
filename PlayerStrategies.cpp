@@ -897,7 +897,7 @@ Territory *Benevolent::randomTerritoryToDefend()
     std::random_device rd;
     std::mt19937 gen(rd());
 
-    auto defendableTerritories = toDefend();
+    auto defendableTerritories = toDefend(); //issue here
 
     vector<double> probabilityToDefend;
     for (int i = 0; i < defendableTerritories.size(); i++)
@@ -917,7 +917,7 @@ void Benevolent::issueOrder(Order *order)
 
     if (Deploy *d = dynamic_cast<Deploy *>(order))
     {
-        Territory *t = randomTerritoryToDefend();
+        Territory *t = randomTerritoryToDefend(); //here issue
 
         cout << "\nDeploy Order issued for : " << this->getPlayer()->getPlayerName() << " of type " << this->getPlayerType() << " with " << this->getPlayer()->getReinforcementTemp() << " armies in the reinforcement pool !" << endl;
         int min = 1;
@@ -1100,7 +1100,7 @@ vector<Territory *> Benevolent::toAttack()
 vector<Territory *> Benevolent::toDefend()
 {
 
-    vector<Territory *> t_list = this->getPlayer()->getTerritories();
+    vector<Territory *> t_list = this->getPlayer()->getTerritories(); //issue here
 
     std::sort(t_list.begin(), t_list.end(), compareArmiesBenevolent);
 

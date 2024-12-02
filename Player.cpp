@@ -579,6 +579,9 @@ Player::Player(Observer *o, string playerName)
     // this is so that the values of the reinforcement pool can be manipulated/modfied without the actual execution of it (issue order phase)
     reinforcementTemp = 50;
     observer = o;
+
+    // Initialize strategy to a default strategy
+    strategy = new Human();
 }
 
 Player::Player(const Player &orig)
@@ -649,7 +652,7 @@ Observer *Player::getObserver() { return observer; }
 // adds order to the player's list of orders
 void Player::issueOrder(Order *order)
 {
-    strategy->issueOrder(order);
+    strategy->issueOrder(order); //here issue
 
 }
 
@@ -659,7 +662,7 @@ void Player::addTerritory(Territory *territory)
     territories.push_back(territory);
 }
 
-vector<Territory *> Player::getTerritories() { return territories; }
+vector<Territory *> Player::getTerritories() { return territories; } // iossue here
 
 // returns list of territories to defend based on priority
 vector<Territory *> Player::toDefend()
@@ -673,7 +676,7 @@ vector<Territory *> Player::toDefend()
 // returns list of territories to attack based on priority
 vector<Territory *> Player::toAttack()
 {
-    if (strategy == nullptr) {
+    if (!strategy) {
         std::cerr << "Error: PlayerStrategy is null!" << std::endl;
         return {};
     }

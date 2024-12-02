@@ -278,23 +278,57 @@ void GameEngine::startupPhase()
 
                     stateTransition(cmd);
 
-                    // Distrribute the territories to each player
-                    vector<Territory *> allTerritories = mapP->getTerritories();
-                    int nbTerritories = allTerritories.size();
+                    // // Distrribute the territories to each player
+                    // vector<Territory *> allTerritories = mapP->getTerritories();
+                    // int nbTerritories = allTerritories.size();
 
-                    vector<int> randomOrder = getRandomizedNumbers(nbTerritories);
-
-                    // Assign an equal number of territories to each player
-                    for (int i = 0; i < nbTerritories; i++)
-                    {
-                        for (int j = 0; j < nbPlayers; j++)
-                        {
-                            for (int k = 0; k < (nbTerritories / nbPlayers); k++)
+                    int playerIndex = 0;
+                            // Distrribute the territories to each player
+                            for (Territory *t : mapP->getTerritories())
                             {
-                                players[j]->addTerritory(allTerritories[randomOrder[i]]);
+                                if (t->getContinent()->getName().compare("Central America") == 0)
+                                {
+                                    players[playerIndex]->addTerritory(t);
+                                    t->setPlayer(players[playerIndex]);
+                                }
+                                else if (t->getContinent()->getName().compare("The Andes") == 0)
+                                {
+                                    players[playerIndex]->addTerritory(t);
+                                    t->setPlayer(players[playerIndex]);
+                                }
+                                else if (t->getContinent()->getName().compare("The Highlands") == 0)
+                                {
+                                    players[playerIndex]->addTerritory(t);
+                                    t->setPlayer(players[playerIndex]);
+                                }
+                                else
+                                {
+                                    players[playerIndex]->addTerritory(t);
+                                    t->setPlayer(players[playerIndex]);
+                                }
+                                // Move to the next player (round-robin)
+                                playerIndex = (playerIndex + 1) % nbPlayers;
                             }
-                        }
-                    }
+                            
+                            for (Player *player : players)
+                            {
+                                std::cout << "Player: " << player->getPlayerName() << " has "
+                                          << player->getTerritories().size() << " territories." << std::endl;
+                            }
+
+                    // vector<int> randomOrder = getRandomizedNumbers(nbTerritories);
+
+                    // // Assign an equal number of territories to each player
+                    // for (int i = 0; i < nbTerritories; i++)
+                    // {
+                    //     for (int j = 0; j < nbPlayers; j++)
+                    //     {
+                    //         for (int k = 0; k < (nbTerritories / nbPlayers); k++)
+                    //         {
+                    //             players[j]->addTerritory(allTerritories[randomOrder[i]]);
+                    //         }
+                    //     }
+                    // }
 
                     // Determine randomly the order of play of the players in the game
                     vector<int> playersOrder = getRandomizedNumbers(nbPlayers);
@@ -310,7 +344,7 @@ void GameEngine::startupPhase()
                         players[playersOrder[i]]->addCard(deck.draw());
                     }
 
-                    engine.mainGameLoop(players, mapP);
+                    mainGameLoop(players, mapP);
                 }
                 else
                 {
@@ -431,23 +465,56 @@ void GameEngine::startupPhase()
                         if (nbPlayers >= 2 && nbPlayers <= 6)
                         {
                             stateTransition(fileC);
+                            MapLoader *ml = new MapLoader(argument);
+                            int playerIndex = 0;
                             // Distrribute the territories to each player
-                            vector<Territory *> allTerritories = mapP->getTerritories();
-                            int nbTerritories = allTerritories.size();
+                            for (Territory *t : ml->getMap()->getTerritories())
+                            {
+                                if (t->getContinent()->getName().compare("Central America") == 0)
+                                {
+                                    players[playerIndex]->addTerritory(t);
+                                    t->setPlayer(players[playerIndex]);
+                                }
+                                else if (t->getContinent()->getName().compare("The Andes") == 0)
+                                {
+                                    players[playerIndex]->addTerritory(t);
+                                    t->setPlayer(players[playerIndex]);
+                                }
+                                else if (t->getContinent()->getName().compare("The Highlands") == 0)
+                                {
+                                    players[playerIndex]->addTerritory(t);
+                                    t->setPlayer(players[playerIndex]);
+                                }
+                                else
+                                {
+                                    players[playerIndex]->addTerritory(t);
+                                    t->setPlayer(players[playerIndex]);
+                                }
+                                // Move to the next player (round-robin)
+                                playerIndex = (playerIndex + 1) % nbPlayers;
+                            }
 
-                            vector<int> randomOrder = getRandomizedNumbers(nbTerritories);
+                            for (Player *player : players)
+                            {
+                                std::cout << "Player: " << player->getPlayerName() << " has "
+                                          << player->getTerritories().size() << " territories." << std::endl;
+                            }
+                            // vector<Territory *> allTerritories = mapP->getTerritories();
+                            // int nbTerritories = allTerritories.size();
+
+                            // vector<int> randomOrder = getRandomizedNumbers(nbTerritories);
 
                             // Assign an equal number of territories to each player
-                            for (int i = 0; i < nbTerritories; i++)
-                            {
-                                for (int j = 0; j < nbPlayers; j++)
-                                {
-                                    for (int k = 0; k < (nbTerritories / nbPlayers); k++)
-                                    {
-                                        players[j]->addTerritory(allTerritories[randomOrder[i]]);
-                                    }
-                                }
-                            }
+                            // for (int i = 0; i < nbTerritories; i++)
+                            // {
+                            //     for (int j = 0; j < nbPlayers; j++)
+                            //     {
+                            //         for (int k = 0; k < (nbTerritories / nbPlayers); k++)
+                            //         {
+                            //             players[j]->addTerritory(allTerritories[randomOrder[i]]);
+                            //         }
+                            //     }
+                            // }
 
                             // Determine randomly the order of play of the players in the game
                             vector<int> playersOrder = getRandomizedNumbers(nbPlayers);
@@ -577,8 +644,7 @@ void GameEngine::reinforcementPhase(vector<Player *> v, Map *map, int round)
 
 void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
 {
-    cout << "\n~~~~~~ISSUE ORDERING PHASE~~~~~~\n"
-         << endl;
+    cout << "\n~~~~~~ISSUE ORDERING PHASE~~~~~~\n" << endl;
 
     // vector to keep track of the count of each player for the Advance order
     // this is done so that the advance order is done a maximum of 3 times
@@ -600,6 +666,7 @@ void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
     // empties list of orders at the start of every round
     for (Player *p : v)
     {
+        cout << p->getPlayerStrategy() << endl;
         // might change so that it saves the drawn card from the advance
         p->getOrderList()->clearOrders();
         // if (p->getPlayerStrategy()->getPlayerType() == "Cheater"){
@@ -660,7 +727,7 @@ void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
             if (v[i]->getReinforcementTemp() != 0 && v[i]->getPlayerStrategy()->getPlayerType() != "Cheater" && v[i]->getPlayerStrategy()->getPlayerType() != "Neutral")
             {
                 Deploy *d = new Deploy();
-                v[i]->issueOrder(d);
+                v[i]->issueOrder(d); // issue starts here
                 continue;
             }
 
@@ -795,6 +862,7 @@ void GameEngine::mainGameLoop(vector<Player *> v, Map *map)
     {
         for (int i = 0; i < v.size(); i++)
         {
+            
             if (v[i]->getTerritories().size() == 0)
             {
                 cout << v[i]->getPlayerName() << " has " << v[i]->getTerritories().size() << " territories !\nRemoving " << v[i]->getPlayerName() << " ..." << endl;
