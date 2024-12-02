@@ -1,4 +1,5 @@
 #include "GameEngine.h"
+#include "Player.h"
 // g++ *.cpp -o program.exe
 
 // creating a list of game states
@@ -91,7 +92,7 @@ void GameEngine::startupPhase()
     int nbPlayers = 0;
     std::string fileName;
     std::ifstream file;
-    vector<Player> players;
+    vector<Player *> players;
 
     if (inputMode == "1")
     {
@@ -124,7 +125,7 @@ void GameEngine::startupPhase()
         return;
     }
 
-    // GameEngine engine = GameEngine(observer);
+    GameEngine engine = GameEngine(observer);
 
     std::cout << "\nStarting Game Engine\n\n";
 
@@ -209,9 +210,10 @@ void GameEngine::startupPhase()
             {
                 if (argument != "")
                 {
-                    players.push_back(Player(observer, argument)); // Add player with the specified name
+                    Player *p = new Player(observer, argument);
+                    players.push_back(p); // Add player with the specified name
                     nbPlayers++;
-                    std::cout << "Player " << players.back().getPlayerName() << " added successfully!" << std::endl;
+                    std::cout << "Player " << argument << " added successfully!" << std::endl;
                     stateTransition(cmd);
                     continue;
                 }
@@ -241,7 +243,7 @@ void GameEngine::startupPhase()
                         {
                             for (int k = 0; k < (nbTerritories / nbPlayers); k++)
                             {
-                                players[j].addTerritory(allTerritories[randomOrder[i]]);
+                                players[j]->addTerritory(allTerritories[randomOrder[i]]);
                             }
                         }
                     }
@@ -250,21 +252,18 @@ void GameEngine::startupPhase()
                     vector<int> playersOrder = getRandomizedNumbers(nbPlayers);
 
                     Deck deck;
+                    
+                    setupPlayers(players);
 
                     // let each player draw 2 initial cards from the deck using the deck’s draw() method
                     for (int i = 0; i < players.size(); i++)
-                    {
-                        players[playersOrder[i]].addCard(deck.draw());
-                        players[playersOrder[i]].addCard(deck.draw());
+                    {   
+                        players[playersOrder[i]]->addCard(deck.draw());
+                        players[playersOrder[i]]->addCard(deck.draw());
                     }
 
-
-                    vector<Player *> playerPointers;
-                    for (auto &player : players)
-                    {
-                        playerPointers.push_back(&player);
-                    }
-                    mainGameLoop(playerPointers, mapP);
+                    
+                    engine.mainGameLoop(players, mapP);
                 }
                 else
                 {
@@ -357,7 +356,8 @@ void GameEngine::startupPhase()
                 {
                     if (argument != "")
                     {
-                        players.push_back(Player(observer, argument)); // Add player with the specified name
+                        Player *pf = new Player(observer, argument);
+                        players.push_back(pf); // Add player with the specified name
                         nbPlayers++;
                         std::cout << "Player " << argument << " added successfully!" << std::endl;
                         stateTransition(fileC);
@@ -388,7 +388,7 @@ void GameEngine::startupPhase()
                             {
                                 for (int k = 0; k < (nbTerritories / nbPlayers); k++)
                                 {
-                                    players[j].addTerritory(allTerritories[randomOrder[i]]);
+                                    players[j]->addTerritory(allTerritories[randomOrder[i]]);
                                 }
                             }
                         }
@@ -401,16 +401,11 @@ void GameEngine::startupPhase()
                         // let each player draw 2 initial cards from the deck using the deck’s draw() method
                         for (int i = 0; i < players.size(); i++)
                         {
-                            players[playersOrder[i]].addCard(deck.draw());
-                            players[playersOrder[i]].addCard(deck.draw());
+                            players[playersOrder[i]]->addCard(deck.draw());
+                            players[playersOrder[i]]->addCard(deck.draw());
                         }
 
-                        vector<Player *> playerPointers;
-                        for (auto &player : players)
-                        {
-                            playerPointers.push_back(&player);
-                        }
-                        mainGameLoop(playerPointers, mapP);
+                        engine.mainGameLoop(players, mapP);
                     }
                     else
                     {
@@ -448,6 +443,8 @@ void GameEngine::startupPhase()
     fileLineReader = nullptr;
 }
 
+
+
 vector<int> GameEngine::getRandomizedNumbers(int n)
 {
     // Step 1: Create a vector with numbers from 0 to n-1
@@ -464,12 +461,115 @@ vector<int> GameEngine::getRandomizedNumbers(int n)
 
     return randomizedNumbers;
 }
+
+void GameEngine::setupPlayers(std::vector<Player*>& players) {
+    Player::assignStrategies(players); // Call the static function
+}
+
+
 // added Main Game Loop part of the game
-void GameEngine::reinforcementPhase(vector<Player *> v, Map *map)
+void GameEngine::reinforcementPhase(vector<Player *> v, Map *map, int round)
 {
+    cout << "\n~~~~~~REINFORCEMENT PHASE~~~~~~\n"
+         << endl;
     int armies = 0;
+
     for (int i = 0; i < v.size(); i++)
     {
+        //         if (v[i]->getTerritories().size() < 9)
+        //         {
+        //             armies = 3;
+        //             v[i]->setReinforcementPool(armies);
+        //         }
+        //         else
+        //         {
+        //             armies = v[i]->getTerritories().size() / 3;
+        //         }
+
+        //         cout << v[i]->getPlayerName() << " originally has " << armies << " armies" << endl;
+        //         for (Continent *c : map->getContinents())
+        //         {
+        //             int count = 0;
+        //             for (int n = 0; n < v[i]->getTerritories().size(); n++)
+        //             {
+        //                 for (Territory *t : c->getTerritories())
+        //                 {
+        //                     if (t->getName().compare(v[i]->getTerritories()[n]->getName()) == 0)
+        //                     {
+        //                         count++;
+        //                     }
+        //                 }
+        //             }
+        //             if (count == c->getTerritories().size())
+        //             {
+        //                 armies += static_cast<int>(std::floor(c->getBonus()));
+        //                 cout << v[i]->getPlayerName() << " has concurred continent: " << c->getName() << "\nbonus added for that continent: " << c->getBonus() << endl;
+        //                 cout << v[i]->getPlayerName() << " now has " << armies << " armies after bonus of " << c->getBonus() << "\n"
+        //                      << endl;
+        //             }
+        //         }
+        //         v[i]->setReinforcementPool(armies);
+        //     }
+        // }
+        //     cout << v[i]->getPlayerName() << " has concurred " << v[i]->getTerritories().size() << " territories total !\n"
+        //          << endl;
+
+        //     for (Territory *t : v[i]->getTerritories())
+        //     {
+        //         cout << t->getName() << " -> with armies " << t->getNumArmies() << endl;
+        //     }
+        //     cout << "\n";
+        //     if (v[i]->getTerritories().size() < 9)
+        //     {
+        //         armies = 3;
+        //         v[i]->setReinforcementPool(armies);
+        //     }
+        //     else
+        //     {
+        //         armies = v[i]->getTerritories().size() / 3;
+        //     }
+
+        //     cout << v[i]->getPlayerName() << " has " << armies << " armies before any bonus" << endl;
+        //     for (Continent *c : map->getContinents())
+        //     {
+        //         int count = 0;
+        //         for (int n = 0; n < v[i]->getTerritories().size(); n++)
+        //         {
+        //             for (Territory *t : c->getTerritories())
+        //             {
+        //                 if (t->getName().compare(v[i]->getTerritories()[n]->getName()) == 0)
+        //                 {
+        //                     count++;
+        //                 }
+        //             }
+        //         }
+        //         if (count == c->getTerritories().size())
+        //         {
+        //             armies += static_cast<int>(std::floor(c->getBonus()));
+        //             cout << v[i]->getPlayerName() << " has concurred continent: " << c->getName() << "\nbonus added for that continent: " << c->getBonus() << endl;
+        //             cout << v[i]->getPlayerName() << " now has " << armies << " armies after bonus of " << c->getBonus() << "\n" << endl;
+        //         }
+        //     }
+        //     v[i]->setReinforcementPool(armies);
+        // }
+        if (v[i]->getPlayerName().compare("Neutral") == 0)
+        {
+            continue;
+        }
+        if (round == 3 && i == 0)
+        {
+            cout << v[i]->getPlayerName() << " has concurred 0 territories total !\n"
+                 << endl;
+        }
+        else
+            cout << v[i]->getPlayerName() << " has concurred " << v[i]->getTerritories().size() << " territories total !\n"
+                 << endl;
+
+        for (Territory *t : v[i]->getTerritories())
+        {
+            cout << t->getName() << endl;
+        }
+        cout << "\n";
         if (v[i]->getTerritories().size() < 9)
         {
             armies = 3;
@@ -480,7 +580,7 @@ void GameEngine::reinforcementPhase(vector<Player *> v, Map *map)
             armies = v[i]->getTerritories().size() / 3;
         }
 
-        cout << v[i]->getPlayerName() << " originally has " << armies << " armies" << endl;
+        cout << v[i]->getPlayerName() << " has " << armies << " armies before any bonus" << endl;
         for (Continent *c : map->getContinents())
         {
             int count = 0;
@@ -507,8 +607,22 @@ void GameEngine::reinforcementPhase(vector<Player *> v, Map *map)
 }
 
 // everything works except for the commented part !!!
-void GameEngine::issueOrdersPhase(vector<Player *> v)
+void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
 {
+    cout << "\n~~~~~~ISSUE ORDERING PHASE~~~~~~\n"
+         << endl;
+
+    for (Player *p : v)
+    {
+        if (!p)
+        {
+            std::cerr << "Error: Null Player in vector!" << std::endl;
+            continue;
+        }
+        std::cout << "Player at address: " << p << std::endl;
+        std::cout << "Player territories: " << p->getTerritories().size() << std::endl;
+    }
+
     // vector to keep track of the count of each player for the Advance order
     // this is done so that the advance order is done a maximum of 3 times
     // each box from this vector is of each player and represents the number of times they advanced
@@ -526,6 +640,13 @@ void GameEngine::issueOrdersPhase(vector<Player *> v)
     // 1 represents the fact that there are no more orders left
     // if every value in the vector is 1, then no more orders for the player
     vector<int> outOfOrder(v.size());
+
+    for (Player *p : v)
+    {
+        // might change so that it saves the drawn card from the advance
+        p->getOrderList()->clearOrders();
+    }
+    resetNegotiatePairs();
 
     // boolean moreOrder to continue this loop until there are no more orders
     bool moreOrder = true;
@@ -548,7 +669,7 @@ void GameEngine::issueOrdersPhase(vector<Player *> v)
             }
 
             // the player is allowed to advance order a maximum of 3 times, else move to the next
-            else if (countAdvanceTerritories[i] != 3)
+            else if (countAdvanceTerritories[i] != 3 && round != 1)
             {
                 Advance *a = new Advance();
                 v[i]->issueOrder(a);
@@ -559,7 +680,7 @@ void GameEngine::issueOrdersPhase(vector<Player *> v)
             }
 
             // // if it arrives at the end of the player's cardsInHand array, skip this statement
-            else if (v[i]->getHand()->cardsInHand.size() != 0 && indexHandVector[i] != v[i]->getHand()->cardsInHand.size())
+            else if (v[i]->getHand()->cardsInHand.size() != 0 && indexHandVector[i] != v[i]->getHand()->cardsInHand.size() && round != 1)
             {
                 if (v[i]->getHand()->cardsInHand[indexHandVector[i]]->getCardType().compare("Bomb") == 0)
                 {
@@ -585,6 +706,8 @@ void GameEngine::issueOrdersPhase(vector<Player *> v)
                     v[i]->issueOrder(a);
                 }
 
+                // remove the card from the hand if the order is issued !
+                v[i]->getHand()->cardsInHand.erase(v[i]->getHand()->cardsInHand.begin() + indexHandVector[i]);
                 indexHandVector[i]++;
                 continue;
             }
@@ -592,6 +715,8 @@ void GameEngine::issueOrdersPhase(vector<Player *> v)
             // when all of the previous possible orders are done, change the value to 1 for that player
             else if (outOfOrder[i] != 1)
             {
+                cout << "\n"
+                     << v[i]->getPlayerName() << " is out of orders !" << endl;
                 outOfOrder[i] = 1;
             }
         }
@@ -609,7 +734,10 @@ void GameEngine::issueOrdersPhase(vector<Player *> v)
         // if all players are done, the loop is done !
         if (countDone == v.size())
         {
+            cout << "\nNo more orders to issue for all players !\n"
+                 << endl;
             moreOrder = false;
+            break;
         }
     }
     // checks all the orders of the players:
@@ -629,6 +757,8 @@ void GameEngine::issueOrdersPhase(vector<Player *> v)
 
 void GameEngine::executeOrdersPhase(vector<Player *> v)
 {
+    cout << "\n~~~~~~ISSUE EXECUTING PHASE~~~~~~\n"
+         << endl;
 
     // vector to keep track of the index of each player for their OrderList vector
     // this is done so that the orders from their OrderList can be kept track and used
@@ -681,17 +811,19 @@ void GameEngine::executeOrdersPhase(vector<Player *> v)
 void GameEngine::mainGameLoop(vector<Player *> v, Map *map)
 {
     cout << "Starting the main game loop..." << endl;
+    int round = 1;
     bool noWinner = true;
     do
     {
-        reinforcementPhase(v, map);
-        issueOrdersPhase(v);
-        executeOrdersPhase(v);
+        // reinforcementPhase(v, map);
+        // issueOrdersPhase(v);
+        // executeOrdersPhase(v);
 
         for (int i; i < v.size(); i++)
         {
             if (v[i]->getTerritories().size() == 0)
             {
+                cout << v[i]->getPlayerName() << " has " << v[i]->getTerritories().size() << " territories !\nRemoving " << v[i]->getPlayerName() << " ..." << endl;
                 v.erase(v.begin() + i);
             }
         }
@@ -699,11 +831,32 @@ void GameEngine::mainGameLoop(vector<Player *> v, Map *map)
         if (v.size() == 1)
         {
             noWinner = false;
+            cout << "One Player Left !\nEnd of game !\n"
+                 << endl;
+            break;
         }
+
+        cout << "\nRound " << round << endl;
+
+        if (round != 1)
+        {
+            reinforcementPhase(v, map, round);
+        }
+        issueOrdersPhase(v, round);
+        executeOrdersPhase(v);
+
+        for (Player *p : v)
+        {
+            p->roundReset();
+        }
+        round++;
+
     } while (noWinner);
 
-    string answer;
-    cout << "Winner ! Player: " << v[0]->getPlayerName() << endl;
-    cout << "\nWould you like to play again ?\n<replay> if you want to replay !\n<quit> if you want to end the game..." << endl;
-    cin >> answer;
+    return;
+
+    // string answer;
+    // cout << "Winner ! Player: " << v[0]->getPlayerName() << endl;
+    // cout << "\nWould you like to play again ?\n<replay> if you want to replay !\n<quit> if you want to end the game..." << endl;
+    // cin >> answer;
 }
