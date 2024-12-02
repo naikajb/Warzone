@@ -4,8 +4,13 @@
 #include "OrdersDriver.h"
 #include "LoggingObserver.h"
 #include "GameEngine.h"
+#include "PlayerStrategies.h"
+#include "PlayerDriver.h"
 
 #include "MapDriver.h"
+
+// Declare the testTournamentMode function
+
 // #include "GameEngine.h"
 // // #include "GameEngineDriver.cpp"
 
@@ -41,7 +46,9 @@ int main(int argc, char **argv)
                 std::cout << "2. Game Play Phase" << std::endl;
                 std::cout << "3. Order Execution Implementation" << std::endl;
                 std::cout << "4. Game Log Observer" << std::endl;
-                std::cout << "5. Exit" << std::endl;
+                std::cout << "5. Player Strategies Pattern" << std::endl;
+                std::cout << "6. Tournament Mode" << std::endl;
+                std::cout << "7. Exit" << std::endl;
                 std::cout << "Enter your choice: ";
                 std::cin >> choice;
 
@@ -82,6 +89,16 @@ int main(int argc, char **argv)
                     testLoggingObserver();
                     break;
                 case 5:
+                    std::cout << "\nTesting Part 5 - Player Strategies Pattern\n--------------------------------------\n"
+                              << std::endl;
+                    testPlayerStrategies();
+                    break;
+                case 6: 
+                    std::cout << "\nTesting Part 6 - Tournament Mode\n--------------------------------------\n"
+                              << std::endl;
+                    testTournament();
+                    break;
+                case 7:
                     // exit the program
                     std::cout << "Exiting the program..." << std::endl;
                     running = false;

@@ -1,4 +1,9 @@
 #include "PlayerStrategies.h"
+// #include "Player.h"
+// #include "Orders.h"
+// #include "Map.h"
+// #include <iostream>
+
 
 void testPlayerStrategies(){
 
@@ -106,11 +111,11 @@ void testPlayerStrategies(){
 
 } 
 
-int mai(){
+// int mai(){
 
-    testPlayerStrategies();
+//     testPlayerStrategies();
 
-    return 0;
-}
+//     return 0;
+// }
 
 
