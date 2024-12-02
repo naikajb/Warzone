@@ -7,7 +7,8 @@ class Continent; // forward declaration of Continent class
 Territory::Territory(string name, Continent *continent) : name(name),
                                                           continent(continent), 
                                                           numArmies(0),
-                                                          numArmiesTemp(0)
+                                                          numArmiesTemp(0),
+                                                          owner(nullptr)
 {
 }
 

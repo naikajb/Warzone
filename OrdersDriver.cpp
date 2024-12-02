@@ -9,7 +9,7 @@
 //     // Create an instance of OrdersList to manage orders
 //     OrdersList ordersList;
 
-//     // Create different TYPES of orders 
+//     // Create different TYPES of orders
 //     Order* deploy = new Deploy();
 //     Order* advance = new Advance();
 //     Order* bomb = new Bomb();
@@ -48,25 +48,26 @@
 //     std::cout << ordersList << std::endl;
 // }
 
+void testOrderExecution()
+{
 
-void testOrderExecution(){
+    clearPlayerList();
+    Observer *ob = new LogObserver();
 
-    Observer* ob = new LogObserver();
-
-    Player* p1 = new Player(ob,"Jake");
-    Player* p2 = new Player(ob,"Joop");
-    Player* p3 = new Player(ob,"Tanya");
+    Player *p1 = new Player(ob, "Jake");
+    Player *p2 = new Player(ob, "Joop");
+    Player *p3 = new Player(ob, "Tanya");
 
     addToPlayerList(p1);
     addToPlayerList(p2);
     addToPlayerList(p3);
 
-    Territory* t1 = new Territory("1",new Continent("C",0));
-    Territory* t2 = new Territory("2",new Continent("C",0));
-    Territory* t3 = new Territory("3",new Continent("C",0));
-    Territory* t4 = new Territory("4",new Continent("C",0));
-    Territory* t5 = new Territory("5",new Continent("C",0));
-    Territory* t6 = new Territory("6",new Continent("C",0));
+    Territory *t1 = new Territory("1", new Continent("C", 0));
+    Territory *t2 = new Territory("2", new Continent("C", 0));
+    Territory *t3 = new Territory("3", new Continent("C", 0));
+    Territory *t4 = new Territory("4", new Continent("C", 0));
+    Territory *t5 = new Territory("5", new Continent("C", 0));
+    Territory *t6 = new Territory("6", new Continent("C", 0));
 
     t1->addAdjTerritories(t2);
     t2->addAdjTerritories(t1);
@@ -98,103 +99,115 @@ void testOrderExecution(){
 
     p3->addTerritory(t4);
 
-    //Deploy Test Works
+    // Deploy Test Works
 
-    cout << "Deploy Order Test" << endl << endl;
+    cout << "Deploy Order Test" << endl
+         << endl;
 
-    Order* deployTest = new Deploy(ob,p1,4,t1);
+    Order *deployTest = new Deploy(ob, p1, 4, t1);
 
     deployTest->Attach(ob);
 
     deployTest->execute();
 
-    cout << endl << endl;
+    cout << endl
+         << endl;
 
-    //Advance Test Works -> Tried everything
-    
-    cout << "Advance Order Test (Battle)" << endl << endl;
+    // Advance Test Works -> Tried everything
+
+    cout << "Advance Order Test (Battle)" << endl
+         << endl;
 
     t1->setNumArmies(10);
     t2->setNumArmies(2);
     t3->setNumArmies(3);
 
-    Order* advanceTest = new Advance(ob,p1,6,t1,t3);
+    Order *advanceTest = new Advance(ob, p1, 6, t1, t3);
 
     advanceTest->Attach(ob);
 
     advanceTest->execute();
 
-    cout << endl << endl;
+    cout << endl
+         << endl;
 
-    cout << "Advance Order Test (Friendly)" << endl << endl;
+    cout << "Advance Order Test (Friendly)" << endl
+         << endl;
 
     t1->setNumArmies(10);
     t2->setNumArmies(2);
     t3->setNumArmies(3);
 
-    Order* advanceTest2 = new Advance(ob,p1,6,t1,t2);
+    Order *advanceTest2 = new Advance(ob, p1, 6, t1, t2);
 
     advanceTest2->Attach(ob);
 
     advanceTest2->execute();
 
-    cout << endl << endl;
+    cout << endl
+         << endl;
 
+    // Airlift Test Works
 
-    //Airlift Test Works
+    cout << "Airlift Order Test" << endl
+         << endl;
 
-    cout << "Airlift Order Test" << endl << endl;
-    
     t1->setNumArmies(12);
     t6->setNumArmies(2);
 
-    Order* airliftTest = new Airlift(ob,p1,12,t1,t6);
+    Order *airliftTest = new Airlift(ob, p1, 12, t1, t6);
 
     airliftTest->Attach(ob);
 
     airliftTest->execute();
 
-    cout << endl << endl;
+    cout << endl
+         << endl;
 
-    //Bomb Test Works
+    // Bomb Test Works
 
-    cout << "Bomb Order Test" << endl << endl;
+    cout << "Bomb Order Test" << endl
+         << endl;
 
     t5->setNumArmies(10);
 
-    Order* bombTest = new Bomb(ob,p3,t1);
+    Order *bombTest = new Bomb(ob, p3, t1);
 
     bombTest->Attach(ob);
 
     bombTest->execute();
 
-    cout << endl << endl;
+    cout << endl
+         << endl;
 
-    //Blockade Test Works
+    // Blockade Test Works
 
-    cout << "Blockade Order Test" << endl << endl;
+    cout << "Blockade Order Test" << endl
+         << endl;
 
-    Order* blockadeTest = new Blockade(ob,p1,t6);
+    Order *blockadeTest = new Blockade(ob, p1, t6);
 
     blockadeTest->Attach(ob);
 
     blockadeTest->execute();
 
-    cout << endl << endl;
+    cout << endl
+         << endl;
 
     // Negotiate Test Works
 
-    cout << "Negotiate Order Test" << endl << endl;
+    cout << "Negotiate Order Test" << endl
+         << endl;
 
-    Order* o = new Negotiate(ob,p1,p2);
+    Order *o = new Negotiate(ob, p1, p2);
     o->Attach(ob);
-    Order* o2 = new Negotiate(ob,p1,p3);
+    Order *o2 = new Negotiate(ob, p1, p3);
     o2->Attach(ob);
 
     o->execute();
     o2->execute();
 
-    Order* boomboom = new Bomb(ob,p3,t2);
+    Order *boomboom = new Bomb(ob, p3, t2);
 
     boomboom->Attach(ob);
 
@@ -205,10 +218,13 @@ void testOrderExecution(){
     resetNegotiatePairs();
 
     boomboom->execute();
+
+    clearPlayerList();
 }
 
 // Main function to run the test
-int main_OrdersDriver() {
+int main_OrdersDriver()
+{
     testOrderExecution();
     return 0;
 }

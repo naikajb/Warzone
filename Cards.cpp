@@ -68,13 +68,11 @@ Deck::Deck() {
     //Add 5 of each card type to the deck
     for (int i = 0; i < 5; i++) {
         Card* bomb = new Card(Card::BOMB);
-        Card* reinforcement = new Card(Card::REINFORCEMENT);
         Card* blockade = new Card(Card::BLOCKADE);
         Card* airlift = new Card(Card::AIRLIFT);
         Card* negotiate = new Card(Card::NEGOTIATE);
 
         cardsInDeck.push_back(bomb);
-        cardsInDeck.push_back(reinforcement);
         cardsInDeck.push_back(blockade);
         cardsInDeck.push_back(airlift);
         cardsInDeck.push_back(negotiate);

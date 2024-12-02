@@ -9,6 +9,7 @@
 #include <map>
 using namespace std;
 
+void testCommandProcessor();
 class CommandProcessor: public Subject, public ILoggable {
     public:
         CommandProcessor(Observer* o);

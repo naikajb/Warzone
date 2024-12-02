@@ -10,11 +10,9 @@
 #include <map>
 #include <cmath>
 #include <random>
+#include <typeinfo>
 #include "LoggingObserver.h"
-#include "Player.h" //added
-#include "Map.h"
-#include "Orders.h"
-#include "Cards.h"
+
 #include "Map.h"
 #include "Player.h"
 #include "Cards.h"
@@ -24,6 +22,7 @@ using std::vector; // added
 using std::floor;
 
 void testStartupPhase();
+void testMainGameLoop();
 class GameEngine : public Subject, public ILoggable  {
 public:
     // declaring constructor
