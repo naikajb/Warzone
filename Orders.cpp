@@ -8,17 +8,11 @@ Order::Order()
 {
     Attach(NULL);
     orderDescription = "undefined";
-Order::Order()
-{
-    Attach(NULL);
-    orderDescription = "undefined";
     orderEffect = "none";
     executed = false;
 }
 
 // constructor --> initializes an Order with default values
-Order::Order(Observer *o) : orderDescription("undefined"), orderEffect("none"), executed(false)
-{
 Order::Order(Observer *o) : orderDescription("undefined"), orderEffect("none"), executed(false)
 {
     Attach(o);
@@ -43,20 +37,10 @@ Order &Order::operator=(const Order &original)
         this->orderDescription = original.orderDescription; // copy order description
         this->orderEffect = original.orderEffect;           // copy order effect
         this->executed = original.executed;                 // copy execution status
-Order &Order::operator=(const Order &original)
-{
-    if (this != &original)
-    {                                                       // check for self-assignment
-        this->orderDescription = original.orderDescription; // copy order description
-        this->orderEffect = original.orderEffect;           // copy order effect
-        this->executed = original.executed;                 // copy execution status
     }
     return *this;
 }
 
-// Overloaded stream isnertion operator for printing order details
-std::ostream &operator<<(std::ostream &outputStream, const Order &order)
-{
 // Overloaded stream isnertion operator for printing order details
 std::ostream &operator<<(std::ostream &outputStream, const Order &order)
 {
@@ -65,17 +49,12 @@ std::ostream &operator<<(std::ostream &outputStream, const Order &order)
     // if the order has been executed, print its effect
     if (order.executed)
     {
-    // if the order has been executed, print its effect
-    if (order.executed)
-    {
         outputStream << " ~~~ The effect: " << order.orderEffect;
     }
     return outputStream; // return the output stream
-    return outputStream; // return the output stream
 }
 
-std::string Order::stringToLog()
-{
+
 std::string Order::stringToLog()
 {
     return orderDescription + " had effect " + orderEffect;
@@ -86,8 +65,7 @@ std::string Order::stringToLog()
 // Deploy Order - derived class Deploy implementation
 
 // Constructor sets the order description specific to deploy
-Deploy::Deploy()
-{
+
 Deploy::Deploy()
 {
     orderDescription = "Deploy order - place armies on a territory";
@@ -97,13 +75,8 @@ Deploy::Deploy(Observer *o, Player *p, int a, Territory *t) : Order(o), player(p
 {
     orderDescription = "Deploy order ";
 } // parameterized constructor
-Deploy::Deploy(Observer *o, Player *p, int a, Territory *t) : Order(o), player(p), armies(a), target(t)
-{
-    orderDescription = "Deploy order ";
-} // parameterized constructor
 
-Deploy::~Deploy()
-{ // Deploy Destructor
+
 Deploy::~Deploy()
 { // Deploy Destructor
 
@@ -112,7 +85,6 @@ Deploy::~Deploy()
     delete target;
     target = NULL;
 
-} // destructor
 } // destructor
 
 // Validate if the deploy order can be executed
@@ -163,8 +135,6 @@ void Deploy::execute()
 // Constructor sets the porder description to advance
 Advance::Advance()
 {
-Advance::Advance()
-{
     orderDescription = "Advance Order";
 }
 
@@ -172,13 +142,7 @@ Advance::Advance(Observer *o, Player *p, int a, Territory *s, Territory *t) : Or
 {
     orderDescription = "Advance Order ";
 } // parameterized constructor
-Advance::Advance(Observer *o, Player *p, int a, Territory *s, Territory *t) : Order(o), player(p), armies(a), source(s), target(t)
-{
-    orderDescription = "Advance Order ";
-} // parameterized constructor
 
-Advance::~Advance()
-{ // Advance destructor
 Advance::~Advance()
 { // Advance destructor
 
@@ -190,14 +154,13 @@ Advance::~Advance()
     target = NULL;
 
 } // destructor
-} // destructor
+
 
 // Validate if the advance order can be executed
 bool Advance::validateOrder()
 {
 
     bool validOwnership = false; // verify if the source Territory is owned by the player issuing the Order
-    bool validAdj = false;       // target Territory needs to be adjacent to source Territory
     bool validAdj = false;       // target Territory needs to be adjacent to source Territory
 
     for (Territory *t : player->getTerritories())
