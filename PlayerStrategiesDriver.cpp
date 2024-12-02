@@ -122,7 +122,7 @@ void testPlayerStrategies(){
 cout << "\n----------Main Game Loop Phase Test----------"
      << endl;
 
-g->mainGameLoop(pList, ml->getMap());
+g->mainGameLoop(pList, ml->getMap(), 100);
 
 // ~~~~~test for toDefend() and toAttack()
 

@@ -309,8 +309,8 @@ void GameEngine::tournamentPhase()
 
                     mainGameLoop(playersTourn, mapP, maxTurns);
 
-                    // std::string result = "\nGame " + std::to_string(game) + " on map " + map + " finished.";
-                    // mapResults.push_back(result);
+                    std::string result = "\nGame " + std::to_string(game) + " on map " + map + " finished.";
+                    mapResults.push_back(result);
                     cout << "\nAre you ready for the next map ? (y/n)" << endl;
                     cin >> answer;
 
