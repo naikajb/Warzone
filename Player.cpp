@@ -764,24 +764,36 @@ void Player::assignStrategies(std::vector<Player *>& players) {
     std::mt19937 gen(rd());
     std::uniform_int_distribution<> dist(0, 4); // Five strategies: 0-4
 
+    Benevolent *b = new Benevolent();
+    Cheater *c = new Cheater();
+    Aggressive *a = new Aggressive();
+    Neutral *n = new Neutral();
+    Human *h = new Human();
+    
+
     for (Player* player : players) {
         int strategyType = dist(gen);
 
         switch (strategyType) {
             case 0:
-                player->setPlayerStrategy(new Human());
+                h->setPlayer(player);
+                player->setPlayerStrategy(h);
                 break;
             case 1:
-                player->setPlayerStrategy(new Aggressive());
+                a->setPlayer(player);
+                player->setPlayerStrategy(a);
                 break;
             case 2:
-                player->setPlayerStrategy(new Benevolent());
+                b->setPlayer(player);
+                player->setPlayerStrategy(b);
                 break;
             case 3:
-                player->setPlayerStrategy(new Neutral());
+                n->setPlayer(player);
+                player->setPlayerStrategy(n);
                 break;
             case 4:
-                player->setPlayerStrategy(new Cheater());
+                c->setPlayer(player);
+                player->setPlayerStrategy(c);
                 break;
         }
 
