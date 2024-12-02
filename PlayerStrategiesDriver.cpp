@@ -1,113 +1,186 @@
 #include "PlayerStrategies.h"
-// #include "Player.h"
-// #include "Orders.h"
-// #include "Map.h"
-// #include <iostream>
-
+#include "GameEngine.h"
 
 void testPlayerStrategies(){
 
-    Benevolent* b = new Benevolent();
-    Cheater* c = new Cheater();
-    Aggressive* a = new Aggressive();
-    Neutral* n = new Neutral();
-    Human* h = new Human();
+    MapLoader *ml = new MapLoader("MapTextFiles/South America.map");
+    Observer *o = new LogObserver();
+    Player *p1 = new Player(o, "Ihana");
+    Player *p2 = new Player(o, "Shamma");
+    Player *p3 = new Player(o, "Tanya");
+    Player *p4 = new Player(o, "Naika");
+    Player *p5 = new Player(o, "MahJoup");
+    GameEngine *g = new GameEngine(o);
 
-    Observer* obs = new LogObserver();
+    Benevolent *b = new Benevolent();
+    Cheater *c = new Cheater();
+    Aggressive *a = new Aggressive();
+    Neutral *n = new Neutral();
+    Human *h = new Human();
 
-    b->setPlayer(new Player(obs,"B"));
-    c->setPlayer(new Player(obs,"C"));
-    a->setPlayer(new Player(obs,"A"));
-    n->setPlayer(new Player(obs,"N"));
-    h->setPlayer(new Player(obs,"H"));
+    b->setPlayer(p1);
+    c->setPlayer(p2);
+    a->setPlayer(p3);
+    n->setPlayer(p4);
+    // h->setPlayer(p5);
 
-    b->getPlayer()->setPlayerStrategy(b);
-    c->getPlayer()->setPlayerStrategy(c);
-    a->getPlayer()->setPlayerStrategy(a);
-    n->getPlayer()->setPlayerStrategy(n);
-    h->getPlayer()->setPlayerStrategy(h);
-    
-    Territory* t1 = new Territory("1",new Continent("C",1));
-    Territory* t2 = new Territory("2",new Continent("C",1));
-    Territory* t3 = new Territory("3",new Continent("C",1));
-    Territory* t4 = new Territory("4",new Continent("C",1));
-    Territory* t5 = new Territory("5",new Continent("C",1));
-    Territory* t6 = new Territory("6",new Continent("C",1));
+    p1->setPlayerStrategy(b);
+    p2->setPlayerStrategy(c);
+    p3->setPlayerStrategy(a);
+    p4->setPlayerStrategy(n);
+    // p5->setPlayerStrategy(h);
 
-    t1->setNumArmies(90);
-    t2->setNumArmies(40);
-    t3->setNumArmies(30);
-    t4->setNumArmies(31);
-    t5->setNumArmies(20);
-    t6->setNumArmies(21);
+    cout << "\nplayer 1: " << p1->getPlayerName() << endl;
+    cout << "\nplayer 2: " << p2->getPlayerName() << endl;
+    cout << "\nplayer 3: " << p3->getPlayerName() << endl;
+    cout << "\nplayer 4: " << p4->getPlayerName() << endl;
+    // cout << "\nPlayer 5: " << p5->getPlayerName() << endl;
 
-    addToPlayerList(b->getPlayer());
-    addToPlayerList(c->getPlayer());
-    addToPlayerList(a->getPlayer());
-    addToPlayerList(n->getPlayer());
-    addToPlayerList(h->getPlayer());
+    vector<Player *> pList = getPlayerList();
+    // pList.push_back(p1);
+    pList.push_back(p2);
+    pList.push_back(p3);
+    pList.push_back(p4);
+    pList.push_back(p1);
 
-    t1->addAdjTerritories(t2);
-    t2->addAdjTerritories(t1);
-
-    t1->addAdjTerritories(t3);
-    t3->addAdjTerritories(t1);
-
-    t2->addAdjTerritories(t4);
-    t4->addAdjTerritories(t2);
-
-    t3->addAdjTerritories(t4);
-    t4->addAdjTerritories(t3);
-
-    t3->addAdjTerritories(t5);
-    t5->addAdjTerritories(t3);
-
-    t4->addAdjTerritories(t6);
-    t6->addAdjTerritories(t6);
-
-    t5->addAdjTerritories(t6);
-    t6->addAdjTerritories(t5);
-
-    //
-
-    t1->setPlayer(h->getPlayer());
-    h->getPlayer()->addTerritory(t1);
-
-    t2->setPlayer(h->getPlayer());
-    h->getPlayer()->addTerritory(t2);
-
-    t3->setPlayer(n->getPlayer());
-    n->getPlayer()->addTerritory(t3);
-
-    t4->setPlayer(c->getPlayer());
-    c->getPlayer()->addTerritory(t4);
-    
-    t5->setPlayer(a->getPlayer());
-    a->getPlayer()->addTerritory(t5);
-
-    t6->setPlayer(b->getPlayer());
-    b->getPlayer()->addTerritory(t6);
-
-    //
-
-    Order* o = new Advance();
-
-    a->issueOrder(o);
-    c->issueOrder(o);
-
-    for(Order* x : a->getPlayer()->getOrderList()->getOrders()){
-
-        x->execute();
-
+    // add a random loop to deisgnate territories to the players (this is usually done at startup)
+    for (Territory *t : ml->getMap()->getTerritories())
+    {
+        if (t->getContinent()->getName().compare("Central America") == 0)
+        {
+            p2->addTerritory(t);
+            t->setPlayer(p2);
+        }
+        else if (t->getContinent()->getName().compare("The Andes") == 0)
+        {
+            p1->addTerritory(t);
+            t->setPlayer(p5);
+        }
+        else if (t->getContinent()->getName().compare("The Highlands") == 0)
+        {
+            p3->addTerritory(t);
+            t->setPlayer(p3);
+        }
+        else
+        {
+            p4->addTerritory(t);
+            t->setPlayer(p4);
+        }
     }
 
-    c->getPlayer()->getOrderList()->getOrders()[0]->execute();
+// cout << "\nreinforcement pool at the start of the game for " << p1->getPlayerName() << " is: " << p1->getReinforcementPool() << endl;
+// cout << "\nreinforcement pool at the start of the game for " << p2->getPlayerName() << " is: " << p2->getReinforcementPool() << endl;
 
-    c->getPlayer()->getOrderList()->getOrders()[0]->execute();
+// cout << "\n----------Reinforcement Phase Test----------\n\n"
+//      << endl;
+// g->reinforcementPhase(pList, ml->getMap(),1);
+// cout << "\n"
+//      << p1->getPlayerName() << " has " << p1->getReinforcementPool() << " many armies to deploy for this round !" << endl;
+// cout << "\n"
+//      << p2->getPlayerName() << " has " << p2->getReinforcementPool() << " many armies to deploy for this round !" << endl;
 
-    c->getPlayer()->roundReset();
+// cout << "\n----------Issue Ordering Phase Test----------"
+//      << endl;
 
-    c->getPlayer()->getOrderList()->getOrders()[0]->execute();
+// add cards for each player (usually done in startup)
+// Card *bomb = new Card(Card::BOMB);
+// Card *blockade = new Card(Card::BLOCKADE);
+// Card *airlift = new Card(Card::AIRLIFT);
+// Card *negotiate = new Card(Card::NEGOTIATE);
+
+// p1->addCard(bomb);
+// p2->addCard(bomb);
+// p1->addCard(blockade);
+// p2->addCard(blockade);
+// p1->addCard(airlift);
+// p2->addCard(airlift);
+// p1->addCard(negotiate);
+// p2->addCard(negotiate);
+
+// // checks for the first round is only deploy
+// cout << "\nFirst round ! " << endl;
+// g->issueOrdersPhase(pList, 1);
+// g->executeOrdersPhase(pList);
+
+// // test for a bunch another round in the game with a bunch of random values of armies in the territories
+// for (Territory *t : p1->getTerritories())
+// {
+//     t->setNumArmies(t->getName().length());
+// }
+// for (Territory *t : p2->getTerritories())
+// {
+//     t->setNumArmies(t->getName().length());
+// }
+// cout << "\nSecond round ! " << endl;
+// g->reinforcementPhase(pList, ml->getMap());
+// g->issueOrdersPhase(pList, 2);
+
+// cout << "\n----------Issue Executing Phase Test----------"
+//      << endl;
+// g->executeOrdersPhase(pList);
+
+cout << "\n----------Main Game Loop Phase Test----------"
+     << endl;
+
+g->mainGameLoop(pList, ml->getMap());
+
+// ~~~~~test for toDefend() and toAttack()
+
+// cout << "Territories owned by " << p1->getPlayerName() << " before sorting based on priority are:\n"
+//      << endl;
+
+// for (Territory *t : p1->getTerritories())
+// {
+//     cout << t->getName() << endl;
+//     t->setNumArmies(t->getName().length());
+// }
+
+// p1->toDefend();
+
+// cout << "\nTerritories owned by " << p1->getPlayerName() << " after sorting based on priority are:\n"
+//      << endl;
+
+// for (Territory *t : p1->getTerritories())
+// {
+//     cout << t->getName() << endl;
+// }
+
+// cout << "\nEnemy territories of " << p1->getPlayerName() << " before sorting based on priority are:\n"
+//      << endl;
+
+// vector<Territory *> toAttackTest;
+// vector<Territory *> p1Territories = p1->getTerritories();
+
+// for (Territory *t : p1Territories)
+// {
+//     for (Territory *tadj : t->getAdjTerritories())
+//     {
+
+//         if (std::find(toAttackTest.begin(), toAttackTest.end(), tadj) == toAttackTest.end() && std::find(p1Territories.begin(), p1Territories.end(), tadj) == p1Territories.end())
+//         {
+//             toAttackTest.push_back(tadj);
+//             tadj->setNumArmies(tadj->getName().length());
+//         }
+//     }
+// }
+
+// for (Territory *t : toAttackTest)
+// {
+//     cout << t->getName() << endl;
+// }
+
+// toAttackTest = p1->toAttack();
+
+// cout << "\nEnemy territories of " << p1->getPlayerName() << " after sorting based on priority are:\n"
+//      << endl;
+
+// for (Territory *t : toAttackTest)
+// {
+//     cout << t->getName() << endl;
+// }
+
+// return 0;
+
 
 } 
 

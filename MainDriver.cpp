@@ -43,12 +43,11 @@ int main(int argc, char **argv)
                 std::cout << "Welcome Warzone Testing Menu:" << std::endl;
                 std::cout << "\nEnter the number of the component you would like to test:" << std::endl;
                 std::cout << "1. Game Startup Phase" << std::endl;
-                std::cout << "2. Game Play Phase" << std::endl;
-                std::cout << "3. Order Execution Implementation" << std::endl;
-                std::cout << "4. Game Log Observer" << std::endl;
-                std::cout << "5. Player Strategies Pattern" << std::endl;
-                std::cout << "6. Tournament Mode" << std::endl;
-                std::cout << "7. Exit" << std::endl;
+                std::cout << "2. Order Execution Implementation" << std::endl;
+                std::cout << "3. Game Log Observer" << std::endl;
+                std::cout << "4. Player Strategies Pattern" << std::endl;
+                std::cout << "5. Tournament Mode" << std::endl;
+                std::cout << "6. Exit" << std::endl;
                 std::cout << "Enter your choice: ";
                 std::cin >> choice;
 
@@ -70,35 +69,35 @@ int main(int argc, char **argv)
                               << std::endl;
                     testStartupPhase();
                     break;
-                case 2:
-                    // test the player component
-                    std::cout << "\nTesting Part 2 - Game Play Implementation :\n--------------------------------------\n"
-                              << std::endl;
+                // case 2:
+                //     // test the player component
+                //     std::cout << "\nTesting Part 2 - Game Play Implementation :\n--------------------------------------\n"
+                //               << std::endl;
 
-                    break;
-                case 3:
+                //     break;
+                case 2:
                     // test the orders list component
-                    std::cout << "\nTesting Part 3 - Order Execution Implemetation :\n--------------------------------------\n"
+                    std::cout << "\nTesting Part 2 - Order Execution Implemetation :\n--------------------------------------\n"
                               << std::endl;
                     testOrderExecution();
                     break;
-                case 4:
+                case 3:
                     // test the game log observer
-                    std::cout << "\nTesting Part 4 - Game Log Observer\n--------------------------------------\n"
+                    std::cout << "\nTesting Part 3 - Game Log Observer\n--------------------------------------\n"
                               << std::endl;
                     testLoggingObserver();
                     break;
-                case 5:
-                    std::cout << "\nTesting Part 5 - Player Strategies Pattern\n--------------------------------------\n"
+                case 4:
+                    std::cout << "\nTesting Part 4 - Player Strategies Pattern\n--------------------------------------\n"
                               << std::endl;
                     testPlayerStrategies();
                     break;
-                case 6: 
-                    std::cout << "\nTesting Part 6 - Tournament Mode\n--------------------------------------\n"
+                case 5: 
+                    std::cout << "\nTesting Part 5 - Tournament Mode\n--------------------------------------\n"
                               << std::endl;
                     testTournament();
                     break;
-                case 7:
+                case 6:
                     // exit the program
                     std::cout << "Exiting the program..." << std::endl;
                     running = false;

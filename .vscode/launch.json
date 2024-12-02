@@ -1,11 +1,16 @@
 {
     "configurations": [
+        
         {
             "name": "C/C++: g++.exe build and debug active file",
             "type": "cppdbg",
             "request": "launch",
             "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
-            "args": [],
+            "args": [
+                "-test",
+                "-mconsole",
+                "-o"
+            ],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             // "cwd": "${workspaceFolder}",
@@ -32,15 +37,17 @@
             "name": "(gdb) Launch",
             "type": "cppdbg",
             "request": "launch",
-            "program": "enter program name, for example ${workspaceFolder}/a.exe",
-            "args": [],
+            "program": "${workspaceFolder}/program.exe",
+            // "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
+            // "program": "${fileDirname}\\${fileBasenameNoExtension}",
+            "args": ["-test"],
             "stopAtEntry": false,
-            "cwd": "${fileDirname}",
-            // "cwd": "${workspaceFolder}",
+            // "cwd": "${fileDirname}",
+            "cwd": "${workspaceFolder}",
             "environment": [],
             "externalConsole": false,
             "MIMode": "gdb",
-            "miDebuggerPath": "/path/to/gdb",
+            "miDebuggerPath": "C:\\msys64\\ucrt64\\bin\\gdb.exe",
             "setupCommands": [
                 {
                     "description": "Enable pretty-printing for gdb",
@@ -58,7 +65,9 @@
             "name": "(Windows) Launch",
             "type": "cppvsdbg",
             "request": "launch",
-            "program": "enter program name, for example ${workspaceFolder}/a.exe",
+            // "program": "enter program name, for example ${workspaceFolder}/a.exe",
+            // "program": "${fileDirname}\\${fileBasenameNoExtension}.exe",
+            "program":"${workspaceFolder}",
             "args": [],
             "stopAtEntry": false,
             // "cwd": "${fileDirname}",
