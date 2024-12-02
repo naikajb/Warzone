@@ -278,6 +278,7 @@ void GameEngine::tournamentPhase()
             }
         }
         std::vector<std::string> mapResults;
+        string answer;
         for (const std::string &map : mapFiles)
         {
             std::string mapPath = "MapTextFiles/" + map;
@@ -308,15 +309,25 @@ void GameEngine::tournamentPhase()
 
                     mainGameLoop(playersTourn, mapP, maxTurns);
 
-                    std::string result = "\nGame " + std::to_string(game) + " on map " + map + " finished.";
-                    mapResults.push_back(result);
+                    // std::string result = "\nGame " + std::to_string(game) + " on map " + map + " finished.";
+                    // mapResults.push_back(result);
+                    cout << "\nAre you ready for the next map ? (y/n)" << endl;
+                    cin >> answer;
+
+                    if (answer.compare("n")){
+                        cout << "End of Tournament Early !! Goodbye" << endl;
+                        break;
+                    }
                 }
             }
             else
             {
                 std::cerr << "Error: Failed to load map " << map << ". Skipping...\n";
             }
-
+            for (Player *p : playersTourn)
+            {
+                p->clearTerritories();
+            }
             // delete ml; // Clean up map loader
             // delete mapP;
         }
@@ -804,7 +815,7 @@ void GameEngine::startupPhase()
                                 players[playersOrder[i]]->addCard(deck.draw());
                             }
 
-                            engine.mainGameLoop(players, mapP,50);
+                            engine.mainGameLoop(players, mapP, 50);
                         }
                         else
                         {
@@ -1168,15 +1179,13 @@ void GameEngine::mainGameLoop(vector<Player *> v, Map *map, int maxRound)
         issueOrdersPhase(v, round);
         executeOrdersPhase(v);
 
-
-
         // added so that a player can draw a card in the next round
         for (Player *p : v)
         {
             p->roundReset();
         }
         resetNegotiatePairs();
-        round++;        
+        round++;
         if (round > maxRound)
         {
             cout << "Max Round achieved !\nEnd of game !\nIt's a Draw !!!" << endl;
