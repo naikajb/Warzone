@@ -1,4 +1,6 @@
 #include "GameEngine.h"
+#include <iostream>
+
 
 void testTournament() {
     Observer* o = new LogObserver();

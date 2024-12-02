@@ -17,6 +17,7 @@
 class Order;
 class Territory;
 class Player;
+void testPlayerStrategies();
 
 using namespace std;
 class PlayerStrategy

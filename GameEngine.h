@@ -23,7 +23,8 @@ using std::vector; // added
 using std::floor;
 
 void testStartupPhase();
-void testMainGameLoop();
+// void testMainGameLoop();
+void testTournament();
 class GameEngine : public Subject, public ILoggable  {
 public:
     // declaring constructor
@@ -68,6 +69,7 @@ public:
     void mainGameLoop(vector <Player*>, Map *map);
     void setupPlayers(std::vector<Player*>& player);
     bool parseTournamentArguments(const std::string& args, std::map<std::string, std::string>& result);
+    // void testTournament();
 
     // function to get the random numbers
     vector<int> getRandomizedNumbers(int n);
