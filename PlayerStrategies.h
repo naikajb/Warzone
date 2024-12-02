@@ -7,6 +7,7 @@
 #include <list>     // import library to use list features
 #include <sstream>  // import library to use string streams
 #include <fstream>  // import library to input and output stream class to operate on files
+#include <climits>  // import library to use integer limits
 #include "Player.h"
 #include "Orders.h"
 #include "Map.h"
