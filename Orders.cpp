@@ -231,6 +231,7 @@ void Advance::executeOrder()
         else
         {
             cout << "Battle begins!" << endl;
+            checkNeutralAttack(target);
 
             source->setNumArmies(source->getNumArmies() - armies);
 
@@ -331,7 +332,6 @@ void Advance::executeOrder()
 
 void Advance::execute()
 {
-    // NOTE CHECK THIS OUT
     if (player->getPlayerStrategy()->getPlayerType() == "Cheater" && armies == -99)
     {
 
@@ -426,6 +426,8 @@ void Bomb::executeOrder()
 
     cout << target->getName() << " now has " << target->getNumArmies() << " armies before BOMB" << endl;
 
+    checkNeutralAttack(target);
+
     executed = true;
     orderEffect = "Territory " + target->getName() + " has been bombed by " + player->getPlayerName();
     Notify(this);
@@ -493,7 +495,7 @@ void Blockade::executeOrder()
 {
     target->setNumArmies(target->getNumArmies() * 2); // doubles the number of units on the target Territory
 
-    cout << "\nBlockade Order is valid - > " << player->getPlayerName() << " is transferring the ownership of Territory " << target->getName() << " to the Neutral player, army units doubled to: " << target->getNumArmies() << endl;
+    cout << "\nBlockade Order is valid - > " << player->getPlayerName() << " is blockading Territory " << target->getName() << " army units doubled to: " << target->getNumArmies() << endl;
 
     player->removeTerritory(target); // removes target Territory from the territory list of the player issuing the Order
     target->setPlayer(nullptr);

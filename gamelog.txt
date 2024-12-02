@@ -6,61 +6,86 @@ Deploy order  had effect none
 Deploy order  had effect none
 Deploy order  had effect none
 Deploy order  had effect none
-Deploy order  had effect 26 units have been deployed to Brazil by Ihana
-Deploy order  had effect 46 units have been deployed to Columbia by Tanya
-Deploy order  had effect 13 units have been deployed to Suriname by Ihana
-Deploy order  had effect 3 units have been deployed to Nicaragua by Tanya
-Deploy order  had effect 11 units have been deployed to Uruguay by Ihana
+Deploy order  had effect none
+Deploy order  had effect 24 units have been deployed to Panama by Ihana
+Deploy order  had effect 20 units have been deployed to Ecuador by Tanya
+Deploy order  had effect 21 units have been deployed to Costa Rica by Ihana
+Deploy order  had effect 29 units have been deployed to Columbia by Tanya
+Deploy order  had effect 1 units have been deployed to Costa Rica by Ihana
+Deploy order  had effect 1 units have been deployed to Ecuador by Tanya
+Deploy order  had effect 4 units have been deployed to Nicaragua by Ihana
+Deploy order  had effect none
+Advance Order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Deploy order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Deploy order  had effect 2 units have been deployed to Nicaragua by Ihana
+Deploy order  had effect 3 units have been deployed to Ecuador by Tanya
+Deploy order  had effect 2 units have been deployed to Nicaragua by Ihana
 Deploy order  had effect 1 units have been deployed to Columbia by Tanya
-Deploy order  had effect none
-Advance Order  had effect none
-Deploy order  had effect none
-Deploy order  had effect none
-Advance Order  had effect none
-Advance Order  had effect none
-Advance Order  had effect none
-Advance Order  had effect none
-Advance Order  had effect none
-Advance Order  had effect none
-Deploy order  had effect 6 units have been deployed to Guyana by Ihana
-Deploy order  had effect 6 units have been deployed to Nicaragua by Tanya
-Deploy order  had effect 1 units have been deployed to French Guiana by Ihana
-Advance Order  had effect 3 units have been advanced from Columbia to Brazil by Tanya
-Advance Order  had effect 5 units have been advanced from Columbia to Brazil by Tanya
+Advance Order  had effect 5 units have been advanced from Costa Rica to Nicaragua by Ihana
+Deploy order  had effect 1 units have been deployed to Columbia by Tanya
+Advance Order  had effect 12 units have been advanced from Costa Rica to Nicaragua by Ihana
+Advance Order  had effect 8 units have been advanced from Columbia to Brazil by Tanya
+Advance Order  had effect 1 units have been advanced from Costa Rica to Nicaragua by Ihana
+Advance Order  had effect 10 units have been advanced from Columbia to Brazil by Tanya
 Advance Order  had effect 1 units have been advanced from Columbia to Brazil by Tanya
 Deploy order  had effect none
 Advance Order  had effect none
 Deploy order  had effect none
 Deploy order  had effect none
-Advance Order  had effect none
 Deploy order  had effect none
 Advance Order  had effect none
 Advance Order  had effect none
 Advance Order  had effect none
 Advance Order  had effect none
 Advance Order  had effect none
-Deploy order  had effect 1 units have been deployed to Suriname by Ihana
-Deploy order  had effect 4 units have been deployed to Nicaragua by Tanya
 Advance Order  had effect none
+Blockade Order  had effect none
+Deploy order  had effect 3 units have been deployed to Costa Rica by Ihana
+Deploy order  had effect 1 units have been deployed to Costa Rica by Ihana
+Advance Order  had effect 11 units have been advanced from Nicaragua to Costa Rica by Ihana
+Advance Order  had effect 8 units have been advanced from Nicaragua to Costa Rica by Ihana
+Advance Order  had effect 7 units have been advanced from Nicaragua to Costa Rica by Ihana
+Deploy order  had effect none
+Advance Order  had effect none
+Deploy order  had effect none
+Deploy order  had effect none
 Deploy order  had effect none
 Deploy order  had effect none
 Advance Order  had effect none
 Advance Order  had effect none
 Advance Order  had effect none
-Deploy order  had effect 2 units have been deployed to Nicaragua by Tanya
-Deploy order  had effect 2 units have been deployed to Costa Rica by Tanya
-Advance Order  had effect 8 units have been advanced from Nicaragua to Costa Rica by Tanya
-Advance Order  had effect 1 units have been advanced from Nicaragua to Costa Rica by Tanya
-Advance Order  had effect 2 units have been advanced from Nicaragua to Costa Rica by Tanya
-Advance Order  had effect none
-Deploy order  had effect none
+Deploy order  had effect 2 units have been deployed to Panama by Ihana
+Deploy order  had effect 1 units have been deployed to Nicaragua by Ihana
+Advance Order  had effect 16 units have been advanced from Costa Rica to Nicaragua by Ihana
+Advance Order  had effect 18 units have been advanced from Costa Rica to Nicaragua by Ihana
 Deploy order  had effect none
 Advance Order  had effect none
 Advance Order  had effect none
 Advance Order  had effect none
 Advance Order  had effect none
+Deploy order  had effect 3 units have been deployed to Costa Rica by Ihana
+Advance Order  had effect 1 units have been advanced from Nicaragua to Costa Rica by Ihana
+Advance Order  had effect 7 units have been advanced from Nicaragua to Costa Rica by Ihana
+Advance Order  had effect 8 units have been advanced from Nicaragua to Costa Rica by Ihana
 Deploy order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Advance Order  had effect none
+Blockade Order  had effect none
+Deploy order  had effect 3 units have been deployed to Costa Rica by Ihana
+Advance Order  had effect 17 units have been advanced from Nicaragua to Costa Rica by Ihana
+Advance Order  had effect 2 units have been advanced from Nicaragua to Costa Rica by Ihana
 Deploy order  had effect none
 Advance Order  had effect none
-Advance Order  had effect none
-Advance Order  had effect none
+Deploy order  had effect none
+Deploy order  had effect 2 units have been deployed to Nicaragua by Ihana

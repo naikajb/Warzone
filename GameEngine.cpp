@@ -610,20 +610,27 @@ void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
                 if (outOfOrder[i] != 1)
                 {
                     cout << "\n"
-                         << v[i]->getPlayerName() << " is a " << v[i]->getPlayerStrategy()->getPlayerType() << " and is about to cheat ! out of orders !" << endl;
+                         << v[i]->getPlayerName() << " is a " << v[i]->getPlayerStrategy()->getPlayerType() << " player and is about to cheat ! out of orders !" << endl;
                     outOfOrder[i] = 1;
                 }
                 cheaterCount++;
                 continue;
             }
 
-            // if(v[i]->getPlayerStrategy()->getPlayerType() == "Neutral"){
-            //     continue;
-            // }
+            if (v[i]->getPlayerStrategy()->getPlayerType() == "Neutral" && round != 1)
+            {
+                if (outOfOrder[i] != 1)
+                {
+                    cout << "\n"
+                         << v[i]->getPlayerName() << " is a " << v[i]->getPlayerStrategy()->getPlayerType() << " player and does not make any orders ! out of orders !" << endl;
+                    outOfOrder[i] = 1;
+                }
+                continue;
+            }
 
             // if the player still has armies in reinforcement, deploy order
             // temp is used to avoid modifying the original reinforcement pool values until order execution
-            if (v[i]->getReinforcementTemp() != 0 && v[i]->getPlayerStrategy()->getPlayerType() != "Cheater")
+            if (v[i]->getReinforcementTemp() != 0 && v[i]->getPlayerStrategy()->getPlayerType() != "Cheater" && v[i]->getPlayerStrategy()->getPlayerType() != "Neutral")
             {
                 Deploy *d = new Deploy();
                 v[i]->issueOrder(d);
@@ -631,7 +638,7 @@ void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
             }
 
             // the player is allowed to advance order a maximum of 3 times, else move to the next
-            else if (countAdvanceTerritories[i] != 3 && round != 1 && v[i]->getPlayerStrategy()->getPlayerType() != "Cheater")
+            else if (countAdvanceTerritories[i] != 3 && round != 1 && v[i]->getPlayerStrategy()->getPlayerType() != "Cheater" && v[i]->getPlayerStrategy()->getPlayerType() != "Neutral")
             {
                 Advance *a = new Advance();
                 v[i]->issueOrder(a);
@@ -640,7 +647,7 @@ void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
             }
 
             // // if it arrives at the end of the player's cardsInHand array, skip this statement
-            else if (v[i]->getHand()->cardsInHand.size() != 0 && indexHandVector[i] != v[i]->getHand()->cardsInHand.size() && round != 1 && v[i]->getPlayerStrategy()->getPlayerType() != "Cheater")
+            else if (v[i]->getHand()->cardsInHand.size() != 0 && indexHandVector[i] != v[i]->getHand()->cardsInHand.size() && round != 1 && v[i]->getPlayerStrategy()->getPlayerType() != "Cheater" && v[i]->getPlayerStrategy()->getPlayerType() != "Neutral")
             {
                 if (v[i]->getHand()->cardsInHand[indexHandVector[i]]->getCardType().compare("Bomb") == 0)
                 {
@@ -839,7 +846,7 @@ int main()
     Player *p1 = new Player(o, "Ihana");
     Player *p2 = new Player(o, "Shamma");
     Player *p3 = new Player(o, "Tanya");
-    // Player *p4 = new Player(o, "Naika");
+    Player *p4 = new Player(o, "Naika");
     GameEngine *g = new GameEngine(o);
 
     Benevolent *b = new Benevolent();
@@ -851,47 +858,46 @@ int main()
     b->setPlayer(p1);
     c->setPlayer(p2);
     a->setPlayer(p3);
-    // n->setPlayer(p4);
+    n->setPlayer(p4);
 
     p1->setPlayerStrategy(b);
     p2->setPlayerStrategy(c);
     p3->setPlayerStrategy(a);
-    // p4->setPlayerStrategy(n);
+    p4->setPlayerStrategy(n);
 
     cout << "\nplayer 1: " << p1->getPlayerName() << endl;
     cout << "\nplayer 2: " << p2->getPlayerName() << endl;
     cout << "\nplayer 3: " << p3->getPlayerName() << endl;
-    // cout << "\nplayer 4: " << p4->getPlayerName() << endl;
+    cout << "\nplayer 4: " << p4->getPlayerName() << endl;
 
     vector<Player *> pList = getPlayerList();
     pList.push_back(p1);
     pList.push_back(p2);
     pList.push_back(p3);
-    // pList.push_back(p4);
+    pList.push_back(p4);
 
     // add a random loop to deisgnate territories to the players (this is usually done at startup)
     for (Territory *t : ml->getMap()->getTerritories())
     {
-        if (t->getContinent()->getName().compare("Central America") == 0 || t->getContinent()->getName().compare("The Highlands") == 0)
+        if (t->getContinent()->getName().compare("Central America") == 0)
         {
-            p3->addTerritory(t);
-            t->setPlayer(p3);
+            p1->addTerritory(t);
+            t->setPlayer(p1);
         }
         else if (t->getContinent()->getName().compare("The Andes") == 0)
         {
             p2->addTerritory(t);
             t->setPlayer(p2);
         }
-        // else if (t->getContinent()->getName().compare("The Andes") == 0)
-        else
+        else if (t->getContinent()->getName().compare("The Highlands") == 0)
         {
-            p1->addTerritory(t);
-            t->setPlayer(p1);
+            p3->addTerritory(t);
+            t->setPlayer(p3);
         }
-        // else {
-        //     p4->addTerritory(t);
-        //     t->setPlayer(p4);
-        // }
+        else {
+            p4->addTerritory(t);
+            t->setPlayer(p4);
+        }
     }
 
     // cout << "\nreinforcement pool at the start of the game for " << p1->getPlayerName() << " is: " << p1->getReinforcementPool() << endl;

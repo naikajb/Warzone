@@ -32,22 +32,21 @@ void PlayerStrategy::becomeAggressive()
 
     angyBoi->getPlayer()->setPlayerStrategy(angyBoi);
 
-    for (Territory *t : angyBoi->getPlayer()->getTerritories())
-    {
-        t->setPlayer(angyBoi->getPlayer());
-    }
+    // for (Territory *t : angyBoi->getPlayer()->getTerritories())
+    // {
+    //     t->setPlayer(angyBoi->getPlayer());
+    // }
 
-    removePlayerFromList(this->getPlayer());
+    // removePlayerFromList(this->getPlayer());
 
-    addToPlayerList(angyBoi->getPlayer());
+    // addToPlayerList(angyBoi->getPlayer());
 }
 
 void checkNeutralAttack(Territory *t)
 {
+    // Neutral *temp = new Neutral();
 
-    Neutral *temp = new Neutral();
-
-    if (t->getPlayer()->getPlayerStrategy()->getPlayerType() == "Neutral")
+    if (t->getPlayer() != nullptr && t->getPlayer()->getPlayerStrategy()->getPlayerType() == "Neutral")
     {
 
         cout << "Someone has Attacked a Neutral Player!" << endl;
@@ -55,8 +54,8 @@ void checkNeutralAttack(Territory *t)
         t->getPlayer()->getPlayerStrategy()->becomeAggressive();
     }
 
-    delete temp;
-    temp = NULL;
+    // delete temp;
+    // temp = NULL;
 }
 
 // HUMAN PLAYER STRATEGY
@@ -378,7 +377,7 @@ void Aggressive::issueOrder(Order *order)
                 std::sort(adjT.begin(), adjT.end(), compareArmiesBenevolent);
                 Territory *target = adjT.at(0);
 
-                int min = 0;
+                int min = 1;
                 int max = randoA->getNumArmiesTemp();
 
                 std::uniform_int_distribution<> distRandArmiesDeploy(min, max);
@@ -838,9 +837,10 @@ bool compareArmiesAggressive(Territory *a, Territory *b)
     return a->getNumArmies() > b->getNumArmies();
 }
 
-string Neutral::getPlayerType() { return "Neutral"; }
+
 
 // NEUTRAL PLAYER STRATEGY
+string Neutral::getPlayerType() { return "Neutral"; }
 
 void Neutral::issueOrder(Order *)
 {
@@ -908,7 +908,7 @@ vector<Territory *> Cheater::toAttack()
 
     if (this->cheaterCanConquer())
     {
-        cout << ""
+        cout << "\n"
              << endl;
         for (Territory *t : potentialAttack)
         {
