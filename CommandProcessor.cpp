@@ -5,11 +5,12 @@ CommandProcessor::CommandProcessor(Observer* o) {
     Attach(o);
     createMap();
     stateCommands = {
-        {"startState", {"loadmap <mapname>"}},
+        {"startState", {"loadmap <mapname>", "tournament -M <listofmapfiles> -P <listofplayerstrategies> -G <numberofgames> -D <maxnumberofturns>"}},
         {"mapLoadedState", {"loadmap <mapname>", "validatemap"}},
         {"mapValidated", {"addplayer <name>"}},
         {"playersAdded", {"addplayer <name>", "gamestart"}},
-        {"win", {"replay", "quit"}}
+        {"win", {"replay", "quit"}},
+        // {"tournamentmode", {"tournament -M <listofmapfiles> -P <listofplayerstrategies> -G <numberofgames> -D <maxnumberofturns>"}}
     };
 }
 
@@ -63,6 +64,7 @@ Command* CommandProcessor::getCommand(std::string& commandstr) {
 // Create the map of commands and states in which they are valid
 void CommandProcessor::createMap() {
     commandStateMap.insert(std::make_pair("loadmap", "startState"));
+    commandStateMap.insert(std::make_pair("tournament", "startState"));
     commandStateMap.insert(std::make_pair("loadmap", "mapLoadedState"));
     commandStateMap.insert(std::make_pair("validatemap", "mapLoadedState"));
     commandStateMap.insert(std::make_pair("addplayer", "mapValidated"));
@@ -74,9 +76,9 @@ void CommandProcessor::createMap() {
 
 // Validate the command with the current state
 bool CommandProcessor::validate(Command* cmd, const char* state) {
-    // std::cout << "Validating command: " << *cmd << " against state: " << state << std::endl;
-    
+  
     std::string commandStr = cmd->getCommandStr();
+
     auto range = commandStateMap.equal_range(commandStr);
 
     // iterate over the range to check if any state matches the desired state

@@ -7,6 +7,7 @@
 #include <sstream>
 #include <string>
 #include <vector> 
+#include <set>
 #include <map>
 #include <cmath>
 #include <random>
@@ -30,6 +31,9 @@ public:
 
     // function to handle the startup phase
     void startupPhase();
+
+    // function to handle the tournament phase
+    void tournamentPhase();
     
     // copy constructor
     GameEngine(const GameEngine& game_engine);
@@ -44,6 +48,8 @@ public:
     bool processConsoleCommand(std::string& command, CommandProcessor* commandProcessor);
 
     std::string stringToLog() override;
+
+    std::map<std::string, std::string> tournamentArguments;
 
     // function that handles changing states
     void stateTransition(Command* cmd);
@@ -61,6 +67,7 @@ public:
     void executeOrdersPhase(vector <Player*>);
     void mainGameLoop(vector <Player*>, Map *map);
     void setupPlayers(std::vector<Player*>& player);
+    bool parseTournamentArguments(const std::string& args, std::map<std::string, std::string>& result);
 
     // function to get the random numbers
     vector<int> getRandomizedNumbers(int n);
