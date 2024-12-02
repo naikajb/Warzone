@@ -16,14 +16,16 @@ class CommandProcessor: public Subject, public ILoggable {
         virtual ~CommandProcessor();
         virtual Command* getCommand(std::string& commandstr);
         virtual bool validate(Command* cmd, const char* state);
-
+        multimap<std::string, std::string> commandStateMap;
         std::string stringToLog() override;
+        void displayCommands(const std::string& state);
     private:
         virtual Command* readCommand(std::string& commandstr);
         virtual void saveCommand(Command* cmd);
         std::vector<Command*> commands;
         void createMap();
-        multimap<std::string, std::string> commandStateMap;
+        std::map<std::string, std::vector<std::string>> stateCommands;
+        // multimap<std::string, std::string> commandStateMap;
 };
 
 

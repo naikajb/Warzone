@@ -4,6 +4,13 @@
 CommandProcessor::CommandProcessor(Observer* o) {
     Attach(o);
     createMap();
+    stateCommands = {
+        {"startState", {"loadmap <mapname>"}},
+        {"mapLoadedState", {"loadmap <mapname>", "validatemap"}},
+        {"mapValidated", {"addplayer <name>"}},
+        {"playersAdded", {"addplayer <name>", "gamestart"}},
+        {"win", {"replay", "quit"}}
+    };
 }
 
 // Copy Constructor
@@ -45,7 +52,15 @@ Command* CommandProcessor::getCommand(std::string& commandstr) {
     return cmd;
 }
 
-// Create the map of commands and states
+// std::map<std::string,std::vector<std::string>> stateCommands = {    //associative containers that stores key-value pairs (states and commands))
+//     {"startState", {"loadmap <mapname>"}},
+//     {"mapLoadedState", {"loadmap <mapname>", "validatemap"}},
+//     {"mapValidated", {"addplayer <name>"}},
+//     {"playersAdded", {"addplayer <name>", "gamestart"}},
+//     {"win", {"replay", "quit"}}
+// };
+
+// Create the map of commands and states in which they are valid
 void CommandProcessor::createMap() {
     commandStateMap.insert(std::make_pair("loadmap", "startState"));
     commandStateMap.insert(std::make_pair("loadmap", "mapLoadedState"));
@@ -73,6 +88,22 @@ bool CommandProcessor::validate(Command* cmd, const char* state) {
     }
     cmd->saveEffect("Invalid command " + commandStr + " for current state " + state);
     return false;
+}
+
+// Display the commands for the current state
+void CommandProcessor::displayCommands(const std::string& state) {
+    
+    auto commands = stateCommands.find(state);
+    std::cout << "Type a command from the following: \n";
+    
+    if (commands != stateCommands.end()) {
+       for (const std::string& command : commands->second) {
+           std::cout << "- "<< command << "\n";
+       }
+    } else {
+        std::cout << "No commands available for state " << state << std::endl;
+    }
+    
 }
 
 // Convert the command processor to a string
