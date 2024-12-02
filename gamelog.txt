@@ -1,5 +1,11 @@
 Game Log
 ---------------------------------------------
-Advance Order  had effect none
-Advance Order  had effect none
-Advance Order  had effect 12 units have been advanced from 5 to 6 by A
+Deploy order  had effect 4 units have been deployed to 1 by Jake
+Advance Order  had effect 6 units have been advanced from 1 to 3 by Jake
+Advance Order  had effect 6 units have been advanced from 1 to 2 by Jake
+Airlift Order  had effect Armies have been airlifted from 1 to 6 by Jake
+Blockade Order  had effect Territory 6has been blockaded by Jake
+Negotiate Order  had effect Truce has been negotiated between Jake and Joop
+Negotiate Order  had effect Truce has been negotiated between Jake and Tanya
+Bomb Order  had effect Territory 2 has been bombed by Tanya
+Bomb Order  had effect Territory 2 has been bombed by Tanya
