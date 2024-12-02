@@ -843,10 +843,11 @@ int main()
 {
     MapLoader *ml = new MapLoader("MapTextFiles/South America.map");
     Observer *o = new LogObserver();
-    Player *p1 = new Player(o, "Ihana");
+    // Player *p1 = new Player(o, "Ihana");
     Player *p2 = new Player(o, "Shamma");
     Player *p3 = new Player(o, "Tanya");
     Player *p4 = new Player(o, "Naika");
+    Player *p5 = new Player(o, "MahJoup");
     GameEngine *g = new GameEngine(o);
 
     Benevolent *b = new Benevolent();
@@ -855,39 +856,43 @@ int main()
     Neutral *n = new Neutral();
     Human *h = new Human();
 
-    b->setPlayer(p1);
+    // b->setPlayer(p1);
     c->setPlayer(p2);
     a->setPlayer(p3);
     n->setPlayer(p4);
+    h->setPlayer(p5);
 
-    p1->setPlayerStrategy(b);
+    // p1->setPlayerStrategy(b);
     p2->setPlayerStrategy(c);
     p3->setPlayerStrategy(a);
     p4->setPlayerStrategy(n);
+    p5->setPlayerStrategy(h);
 
-    cout << "\nplayer 1: " << p1->getPlayerName() << endl;
+    // cout << "\nplayer 1: " << p1->getPlayerName() << endl;
     cout << "\nplayer 2: " << p2->getPlayerName() << endl;
     cout << "\nplayer 3: " << p3->getPlayerName() << endl;
     cout << "\nplayer 4: " << p4->getPlayerName() << endl;
+    cout << "\nPlayer 5: " << p5->getPlayerName() << endl;
 
     vector<Player *> pList = getPlayerList();
-    pList.push_back(p1);
+    // pList.push_back(p1);
     pList.push_back(p2);
     pList.push_back(p3);
     pList.push_back(p4);
+    pList.push_back(p5);
 
     // add a random loop to deisgnate territories to the players (this is usually done at startup)
     for (Territory *t : ml->getMap()->getTerritories())
     {
         if (t->getContinent()->getName().compare("Central America") == 0)
         {
-            p1->addTerritory(t);
-            t->setPlayer(p1);
+            p2->addTerritory(t);
+            t->setPlayer(p2);
         }
         else if (t->getContinent()->getName().compare("The Andes") == 0)
         {
-            p2->addTerritory(t);
-            t->setPlayer(p2);
+            p5->addTerritory(t);
+            t->setPlayer(p5);
         }
         else if (t->getContinent()->getName().compare("The Highlands") == 0)
         {
