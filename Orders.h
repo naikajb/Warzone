@@ -184,6 +184,7 @@ public:
     void addOrder(Order* order); //add a new order to the list
     void move(int fromIndex, int toIndex); //move an order from one position to another within a list
     void remove(int index); //remove an order from the lsit --> using index
+    void clearOrders();
 
     //Overload stream insertion operator for printing the lsit of orders
     friend std::ostream& operator<<(std::ostream& outputStream, const OrdersList& ordersList);
@@ -207,5 +208,9 @@ static vector<Player*> playerList;
 
 vector<Player*> getPlayerList();
 void addToPlayerList(Player*);
+
+void removePlayerFromList(Player*);
+
+void clearPlayerList();
 
 #endif // ORDERS_H
