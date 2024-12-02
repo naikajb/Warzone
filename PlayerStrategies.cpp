@@ -215,8 +215,6 @@ void Human::issueOrder(Order *order)
         // Select the number of armies to advance
         while (true)
         {
-            cout << source->getNumArmiesTemp() << endl;
-
             std::cout << "\nYou can currently advance " << source->getNumArmiesTemp() << " armies." << std::endl;
             std::cout << "How many armies would you like to advance: ";
             if (std::cin >> armies && armies > 0 && armies <= source->getNumArmiesTemp())
