@@ -179,6 +179,10 @@ void Player::removeTerritory(Territory *territory)
     }
 }
 
+void Player::clearTerritories(){
+    territories.clear();
+}
+
 // attach observer to player's order list
 void Player::AttachObserver(Observer *observer)
 {
