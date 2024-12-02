@@ -65,7 +65,7 @@ public:
     void reinforcementPhase(vector <Player*>, Map *map, int round);
     void issueOrdersPhase(vector <Player*>, int round);
     void executeOrdersPhase(vector <Player*>);
-    void mainGameLoop(vector <Player*>, Map *map);
+    void mainGameLoop(vector <Player*>, Map *map, int maxRound);
     void setupPlayers(std::vector<Player*>& player);
     bool parseTournamentArguments(const std::string& args, std::map<std::string, std::string>& result);
 

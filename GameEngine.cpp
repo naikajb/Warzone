@@ -119,36 +119,57 @@ bool GameEngine::processFileCommand(std::string &command, CommandProcessor *comm
 bool GameEngine::parseTournamentArguments(const std::string &args, std::map<std::string, std::string> &result)
 {
     std::istringstream iss(args);
-    std::string flag, value;
+    std::string token;
 
-    // supported flags for tournament command
+    // Supported flags for tournament command
     std::set<std::string> validFlags = {"-M", "-P", "-G", "-D"};
 
-    while (iss >> flag)
-    {
-        if (validFlags.find(flag) == validFlags.end())
-        {
-            std::cout << "Invalid flag: " << flag << std::endl;
-            return false;
-        }
+    std::string currentFlag;
+    std::string currentValue;
 
-        if (iss >> value)
+    while (iss >> token)
+    {
+        if (token[0] == '-') // New flag detected
         {
-            result[flag] = value;
+            if (!currentFlag.empty()) // Save the previous flag and value
+            {
+                result[currentFlag] = currentValue;
+            }
+            currentFlag = token;
+            currentValue.clear();
         }
         else
         {
-            std::cout << "Missing value for flag: " << flag << std::endl;
-            return false;
+            if (!currentValue.empty())
+            {
+                currentValue += " "; // Preserve spaces between tokens
+            }
+            currentValue += token;
         }
     }
 
-    // check if all required flags are present
+    // Save the last flag and value
+    if (!currentFlag.empty())
+    {
+        result[currentFlag] = currentValue;
+    }
+
+    // Validate all required flags are present
     for (const std::string &requiredFlag : validFlags)
     {
         if (result.find(requiredFlag) == result.end())
         {
             std::cout << "Missing required flag: " << requiredFlag << std::endl;
+            return false;
+        }
+    }
+
+    // Validate flags
+    for (const auto &entry : result)
+    {
+        if (validFlags.find(entry.first) == validFlags.end())
+        {
+            std::cout << "Invalid flag: " << entry.first << std::endl;
             return false;
         }
     }
@@ -163,77 +184,154 @@ void GameEngine::tournamentPhase()
     std::vector<std::string> playerStrategies;
     int numberOfGames;
     int maxTurns;
+    vector<Player *> playersTourn;
+    string pname;
+    Observer *o = new LogObserver();
 
-    try {
-    // Split maps and strategies by comma
-    std::istringstream mapStream(tournamentArguments["-M"]);
-    std::istringstream playerStream(tournamentArguments["-P"]);
-    std::string map, strategy;
-
-    while (std::getline(mapStream, map, ','))
+    try
     {
-        mapFiles.push_back(map);
-    }
+        // Split maps and strategies by comma
+        std::istringstream mapStream(tournamentArguments["-M"]);
+        std::istringstream playerStream(tournamentArguments["-P"]);
+        std::string map, strategy;
 
-    while (std::getline(playerStream, strategy, ','))
-    {
-        playerStrategies.push_back(strategy);
-    }
-
-    // Convert number arguments
-    numberOfGames = std::stoi(tournamentArguments["-G"]);
-    maxTurns = std::stoi(tournamentArguments["-D"]);
-
-    //validate range of parameters
-    if (mapFiles.size() < 1 || mapFiles.size() > 5 || 
-        playerStrategies.size() < 2 || playerStrategies.size() > 4 || 
-        numberOfGames < 1 || numberOfGames > 5 || 
-        maxTurns < 10 || maxTurns > 50) {
-        throw std::invalid_argument("Invalid tournament parameters.");
-    }
-    
-    for (const std::string &map : mapFiles) {
-        std::string mapargument = "MapTextFiles/" + map;
-        std::cout << "Loading map from: " << mapargument << std::endl;
-        MapLoader *ml = new MapLoader(mapargument);
-        Map *mapP = ml->getMap();
-
-        if (mapP != nullptr) {
-            std::cout << "Map loaded successfully!" << std::endl;
-        }
-        else {
-            std::cerr << "Error: Failed to load map " << map << ". Skipping...\n";
-            continue;
+        while (std::getline(mapStream, map, ','))
+        {
+            // Validate if the file has a `.map` extension
+            if (map.size() > 4 && map.substr(map.size() - 4) == ".map")
+            {
+                mapFiles.push_back(map);
+            }
+            else
+            {
+                std::cerr << "Invalid map file extension: " << map << ". Skipping...\n";
+            }
         }
 
+        while (std::getline(playerStream, strategy, ','))
+        {
+            playerStrategies.push_back(strategy);
+        }
+
+        // Convert number arguments
+        numberOfGames = std::stoi(tournamentArguments["-G"]);
+        maxTurns = std::stoi(tournamentArguments["-D"]);
+
+        // Validate range of parameters
+        if (mapFiles.size() < 1 || mapFiles.size() > 5 ||
+            playerStrategies.size() < 2 || playerStrategies.size() > 4 ||
+            numberOfGames < 1 || numberOfGames > 5 ||
+            maxTurns < 10 || maxTurns > 50)
+        {
+            throw std::invalid_argument("Invalid tournament parameters.");
+        }
+
+        for (int i = 0; i < playerStrategies.size(); i++)
+        {
+            std::cout << "Enter a name for the player with strategy [" << playerStrategies[i] << "]: ";
+            std::cin >> pname;
+
+            if (playerStrategies[i].compare("neutral") == 0)
+            {
+                Neutral *n = new Neutral();
+                Player *p = new Player(observer, pname);
+                p->setPlayerStrategy(n);
+                n->setPlayer(p);
+                playersTourn.push_back(p);
+            }
+            else if (playerStrategies[i].compare("benevolent") == 0)
+            {
+                Benevolent *b = new Benevolent();
+                Player *p = new Player(observer, pname);
+                p->setPlayerStrategy(b);
+                b->setPlayer(p);
+                playersTourn.push_back(p);
+            }
+            else if (playerStrategies[i].compare("aggressive") == 0)
+            {
+                Aggressive *a = new Aggressive();
+                Player *p = new Player(observer, pname);
+                p->setPlayerStrategy(a);
+                a->setPlayer(p);
+                playersTourn.push_back(p);
+            }
+            else if (playerStrategies[i].compare("cheater") == 0)
+            {
+                Cheater *c = new Cheater();
+                Player *p = new Player(observer, pname);
+                p->setPlayerStrategy(c);
+                c->setPlayer(p);
+                playersTourn.push_back(p);
+            }
+            else if (playerStrategies[i].compare("human") == 0)
+            {
+                Human *h = new Human();
+                Player *p = new Player(observer, pname);
+                p->setPlayerStrategy(h);
+                h->setPlayer(p);
+                playersTourn.push_back(p);
+                cout << "Succes" << endl;
+            }
+            else
+            {
+                cout << "INVALID INPUT" << endl;
+            }
+        }
         std::vector<std::string> mapResults;
+        for (const std::string &map : mapFiles)
+        {
+            std::string mapPath = "MapTextFiles/" + map;
+            std::cout << "Loading map from: " << mapPath << std::endl;
 
-        for (int game = 1; game <= numberOfGames; ++game) {
-            std::cout << "Starting game " << game << " on map " << map << std::endl;
+            MapLoader *ml = new MapLoader(mapPath);
+            Map *mapP = ml->getMap();
 
-            std::vector<Player *> players;
-            for (const std::string &strategy : playerStrategies) {
-                Player *p = new Player(observer, strategy);
-                players.push_back(p);
+            if (mapP != nullptr)
+            {
+                std::cout << "Map loaded successfully!" << std::endl;
+
+                for (int game = 1; game <= numberOfGames; ++game)
+                {
+                    std::cout << "\nStarting game " << game << " on map " << map << std::endl;
+
+                    std::random_device rd;
+                    std::mt19937 gen(rd());
+                    std::uniform_int_distribution<> dist(0, playersTourn.size() - 1);
+
+                    for (Territory *t : mapP->getTerritories())
+                    {
+                        int randomTerri = dist(gen);
+
+                        playersTourn[randomTerri]->addTerritory(t);
+                        t->setPlayer(playersTourn[randomTerri]);
+                    }
+
+                    mainGameLoop(playersTourn, mapP, maxTurns);
+
+                    std::string result = "\nGame " + std::to_string(game) + " on map " + map + " finished.";
+                    mapResults.push_back(result);
+                }
+            }
+            else
+            {
+                std::cerr << "Error: Failed to load map " << map << ". Skipping...\n";
             }
 
-            setupPlayers(players);
-
-            mainGameLoop(players, mapP);
-
-            std::string result = "Game " + std::to_string(game) + " on map " + map + " finished.";
-            mapResults.push_back(result);
+            // delete ml; // Clean up map loader
+            // delete mapP;
         }
 
-
+        cout << "The final results of winners in order: \n"
+             << endl;
+        for (int i = 0; i < mapResults.size(); i++)
+        {
+            cout << mapResults[i] << endl;
+        }
     }
-
-    } catch (std::invalid_argument &e)
+    catch (std::invalid_argument &e)
     {
-        std::cerr << e.what() << std::endl;
+        std::cerr << "Error: " << e.what() << std::endl;
     }
-
-
 }
 
 // function to process console or file commands
@@ -522,7 +620,7 @@ void GameEngine::startupPhase()
                         players[playersOrder[i]]->addCard(deck.draw());
                     }
 
-                    mainGameLoop(players, mapP);
+                    mainGameLoop(players, mapP, 50);
                 }
                 else
                 {
@@ -706,7 +804,7 @@ void GameEngine::startupPhase()
                                 players[playersOrder[i]]->addCard(deck.draw());
                             }
 
-                            engine.mainGameLoop(players, mapP);
+                            engine.mainGameLoop(players, mapP,50);
                         }
                         else
                         {
@@ -823,7 +921,7 @@ void GameEngine::reinforcementPhase(vector<Player *> v, Map *map, int round)
 void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
 {
     cout << "\n~~~~~~ISSUE ORDERING PHASE~~~~~~\n"
-        
+
          << endl;
 
     // vector to keep track of the count of each player for the Advance order
@@ -846,8 +944,6 @@ void GameEngine::issueOrdersPhase(vector<Player *> v, int round)
     // empties list of orders at the start of every round
     for (Player *p : v)
     {
-        cout << p->getPlayerStrategy() << endl;
-        // might change so that it saves the drawn card from the advance
         p->getOrderList()->clearOrders();
         // if (p->getPlayerStrategy()->getPlayerType() == "Cheater"){
 
@@ -1033,7 +1129,7 @@ void GameEngine::executeOrdersPhase(vector<Player *> v)
         }
     }
 }
-void GameEngine::mainGameLoop(vector<Player *> v, Map *map)
+void GameEngine::mainGameLoop(vector<Player *> v, Map *map, int maxRound)
 {
     cout << "Starting the main game loop..." << endl;
     int round = 1;
@@ -1072,13 +1168,20 @@ void GameEngine::mainGameLoop(vector<Player *> v, Map *map)
         issueOrdersPhase(v, round);
         executeOrdersPhase(v);
 
+
+
         // added so that a player can draw a card in the next round
         for (Player *p : v)
         {
             p->roundReset();
         }
         resetNegotiatePairs();
-        round++;
+        round++;        
+        if (round > maxRound)
+        {
+            cout << "Max Round achieved !\nEnd of game !\nIt's a Draw !!!" << endl;
+            break;
+        }
 
     } while (noWinner);
     // cout << "Game ending successfully. Returning from mainGameLoop." << endl;
